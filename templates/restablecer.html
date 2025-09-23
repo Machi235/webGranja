@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/registro.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/restablecer.css') }}">
     <title>Inicio</title>
 </head>
 <body>
-    <nav class="navbar bg-body-tertiary fixed-top">
+    <nav class="navbar fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
   </svg>Granja machis</a>
@@ -24,7 +24,7 @@
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="{{ url_for('auth.formulario') }}">Inicio Sesion</a>
+            <a class="nav-link" aria-current="page" href="{{ url_for('auth.formulario') }}">Inicio Sesiónn</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.registro') }}">Registro</a>
@@ -36,58 +36,19 @@
 </nav>
 
 
+<form id="formRegistro" method="POST">
 
-<div class="contenedor">
-        <h2>Registro</h2>
-        <form id="formRegistro" method="POST" action="{{ url_for('auth.registro') }}">
-
-        <div>
-    <label>Nombre de usuario</label>
-    <input type="text" name="nombre" required>
-    {% if mensaje_usuario %}
-        <p style="color:red">{{ mensaje_usuario }}</p>
-    {% endif %}
-</div>
-         <div class="form-group">
+  <div class="form-group">
+    <h2>Restablecer contraseña</h2>
         <label for="password">Contraseña*</label>
         <input type="password" name="password" id="password" class="form-control" required>
         <small id="passwordHelp" class="text-danger"></small>
+    
+    <button type="submit">Registrarme</button>
     </div>
-        <label>Rol:</label>
-        <select name="rol" required>
-            <option value="">Selecciona un rol</option>
-            <option value="admin">Administrador</option>
-            <option value="Guia">Guia</option>
-            <option value="Cuidador">Cuidador</option>
-        </select><br>
-
-        <label>Apellido:</label>
-        <input type="text" name="apellido"><br>
-
-        <label>Documento:</label>
-        <input type="text" name="documento"><br>
-
-        <label>Teléfono:</label>
-        <input type="text" name="telefono"><br>
-
-        <div>
-    <label>Correo</label>
-    <input type="email" name="correo" required>
-    {% if mensaje_correo %}
-        <p style="color:red">{{ mensaje_correo }}</p>
-    {% endif %}
-</div>
-
-        <button type="submit">Registrarme</button>
-    </form>
-    </div>
-
-    {% if mensaje %}
-        <p style="color:green">{{ mensaje }}</p>
-    {% endif %}
-
-<script src="{{ url_for('static', filename='js/Contraseña.js') }}"></script>
+</form>
+<p style="color:red;">{{ mensaje }}</p>
+<script src="{{ url_for('static', filename='js/contraseña.js') }}"></script>
 
 </body>
 </html>
-

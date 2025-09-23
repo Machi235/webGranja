@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- bootstrap css y js -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <!-- google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+     <!-- Iconos de bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!-- estilo ccs -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/horario.css') }}">
+    <title>CREAR HABITAT</title>
+</head>
+  <body>
+     <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+            </svg>CREAR ANIMAL</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="../moduloAnimal/crearAnimal.html">Crear animal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../moduloHabitat/habitat.html">Crear Habitat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="EliminarH.html">Eliminar Habitat</a>
+                    </li><li class="nav-item">
+                    <a class="nav-link" href="#">Alerta Comida Diaria</a>
+                    </li>
+                    <div class="mt-4 text-center">
+        <a href="{{ url_for('main.bienvenida') }}" class="btn btn-outline-primary w-100">
+            <i class="bi bi-house-door"></i> Volver al Menú Principal
+        </a>
+    </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<div>
+  <div class="menu">
+    <select id="filtroArea">
+  <option value="">Buscar por</option>
+  <option value="Guia">Guias</option>
+  <option value="Cuidador">Cuidadores</option>
+</select>
+    <button><i class="bi bi-calendar-plus" id="crearHorario"></i></button>
+<!--------------------------------asignar Turno --------------------------------------------->
+    <!-- Formulario para asignar turno -->
+<dialog id="nuevoHorario">
+  <form method="post" action="{{ url_for('turnos_bp.asignar_turno') }}" id="formAsignarTurno">
+    <div class="campo">
+      <label for="empleado">Empleado:</label>
+      <input type="text" class="form-control" id="empleado" name="usuario" required>
+    </div>
+    <div class="campo">
+      <label for="idHorario">Turno:</label>
+      <select class="form-control" id="idHorario" name="idHorario" required>
+        <option value="">Selecciona un turno</option>
+        {% for turno in turnos %}
+          <option value="{{ turno.idHorario }}">{{ turno.horaInicio }} - {{ turno.horaFin }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="campo">
+      <label>Fecha inicio:</label>
+      <input type="date" name="fechaInicio" required>
+    </div>
+    <div class="campo">
+      <label>Fecha fin:</label>
+      <input type="date" name="fechaFin" required>
+    </div>
+    <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
+  </form>
+</dialog>
+
+
+
+<!----------------------------------------------------------------------------------------------> 
+    <button><i class="bi bi-alarm" id="crearTurno"></i></button>
+<!------------------------------------agregar un turno ------------------------------------------>
+    <!-- Formulario para crear turno -->
+<dialog id="nuevoTurno">
+  <form method="post" action="{{ url_for('turnos_bp.crear_turno') }}" id="formCrearTurno">
+    <div class="campo">
+      <label>Horas:</label>
+      <div class="horas">
+        <input type="time" class="horas" name="horaInicio" placeholder="Hora de inicio" required>
+        <input type="time" class="horas" name="horaFin" placeholder="Hora de fin" required>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
+  </form>
+</dialog>
+
+
+<!-----------------------------------------------------------------------------------------------> 
+ <table class="table table-striped br-4">
+  <thead>
+    <tr>
+      <th>EMPLEADO</th>
+      <th>AREA</th>
+      <th>TURNO</th>
+    </tr>
+  </thead>
+  <tbody id="data">
+    {% for turno in asignaciones %}
+      <tr>
+        <td>{{ turno.empleado }}</td>
+        <td>{{ turno.area }}</td>
+        <td>{{ turno.turno }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+
+   
+    <script src="{{ url_for('static', filename='js/horario.js') }}"></script>
+   
+  </body>
+</html>

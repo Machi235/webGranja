@@ -8,7 +8,7 @@
     flex-direction: column;
 }
 .container-fluid{
-    background-color: #AD46FF;
+    background-color: #982f2f;
 }
 body {
     font-family: Arial, sans-serif;
@@ -37,18 +37,18 @@ button {
     background-color: rgb(19, 18, 18);
 }
 a.nav-link{
-    color: #AD46FF;
+    color: #982f2f;
 }
 a.nav-link:hover{
-    color: #f946ff;
+    color: #9d0707;
     font-size: large;
 }
 .offcanvas-header{
     background-color: rgb(19, 18, 18);
 }
 h5.offcanvas-title{
-    color: #AD46FF;
+    color: #982f2f;
 }
 .btn-close{
-    background-color: #AD46FF;
+    background-color: #982f2f;
 }

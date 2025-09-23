@@ -1,0 +1,90 @@
+nav{
+    border-bottom: 1px solid black;
+}
+
+.buscar{
+    display: flex;
+    justify-content: space-between;
+    margin-block: 20px;
+}
+.buscador{
+    display: flex;
+}
+.form-control{
+    width: 400px;
+    border-color: green;
+}
+
+.bi-search{
+    font-size: 20px;
+    color: green;
+}
+.filtros{
+    display: flex;
+    gap: 15px;
+    margin-right: 10px;
+}
+.filtrar{
+    height: 45px;
+    border-radius: 10px;
+    border-color: green;
+}
+
+.listaAnimales{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-inline: 40px;
+}
+
+.card{
+    display: flex;
+    flex-direction: row;
+    border: 2px solid green;
+    margin-inline: 70px;
+    gap: 40px;
+}
+
+img{
+    width: 120px;
+    margin: 10px;
+    border-radius:17px ;
+}
+
+.informacion{
+    display: flex;
+    padding-right: 50px;
+    justify-content: space-between;
+    /* background-color: blueviolet; */
+    width: 100%;
+    align-items: center;
+    margin-block: 15px;
+}
+.datos{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.dato{
+    display: flex;
+    flex-direction: column;
+}
+.titulo {
+    color: black;
+    font-size: x-large;
+    font-weight: 500;
+    font-family: "Delius", cursive;
+}
+
+p{
+    margin: 0;
+}
+.texto{
+    font-size: larger;
+    font-family: "Sour Gummy", sans-seri;
+    font-weight: lighter;
+}
+.filtro{
+   display: none; 
+}

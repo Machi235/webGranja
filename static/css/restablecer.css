@@ -1,0 +1,77 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url("../img/Fondo3.jpg"); 
+    background-size: cover;    
+    background-repeat: no-repeat; 
+    background-position: center;  
+    height: 100vh;   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-group{
+    background: rgba(236, 233, 233, 0.562);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+input {
+    width: 100%;
+    padding: 10px 5px;
+    margin: 10px 0;
+    border: none;                 /* Quitamos el borde normal */
+    border-bottom: 1px solid #982f2f; /* Línea inferior gris */
+    background: transparent;       /* Fondo transparente (para que se vea el fondo detrás) */
+    color: #383737;                  /* Color del texto */
+    font-size: 16px;
+    outline: none;                 /* Quitamos el borde azul al hacer focus */
+}
+
+/* Efecto al hacer focus */
+.navbar{
+    background-color: #982f2f;
+}
+input:focus {
+    border-bottom: 2px solid #9d0707; /* Línea verde más gruesa */
+    transition: 0.3s;
+}
+input::placeholder {
+    color: #982f2f;     /* Color del placeholder */
+    opacity: 1;      /* Asegura que no se vea transparente */
+    font-weight: bold;
+}
+
+
+button {
+    padding: 10px;
+    background: #9d0707;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.mensaje {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.offcanvas-body{
+    background-color: rgb(19, 18, 18);
+}
+a.nav-link{
+    color: #982f2f;
+}
+a.nav-link:hover{
+    color: #9d0707;
+    font-size: large;
+}
+.offcanvas-header{
+    background-color: rgb(19, 18, 18);
+}
+h5.offcanvas-title{
+    color: #982f2f;
+}
+.btn-close{
+    background-color: #982f2f;
+}

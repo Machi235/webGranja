@@ -1,0 +1,79 @@
+.navbar {
+    border-bottom: 1px solid black;
+}
+
+.menu{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    margin-right: 150px;
+    margin-top: 40px;
+    gap: 20px;
+}
+
+button{
+    background: none;
+    border: none;
+}
+
+.bi{
+    font-size: 30px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.campo label {
+  font-size: 18px;
+  font-family: "Delius", cursive;
+}
+
+.campo input{
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  font-family: "Sour Gummy", sans-seri;
+  font-weight: 200;
+}
+
+#nuevoHorario, #nuevoTurno{
+  width: 30%;
+  text-align: left;
+  border-radius: 15px;
+  border: none;
+  font-family: "Montserrat", sans-serif;
+  background-color: #2a2a606b;
+  color: white;
+  padding: 30px;
+} 
+
+#nuevoTurno::backdrop{
+    background-color:rgba(0, 0, 0, .56);
+}
+#nuevoHorario::backdrop{
+    background-color:rgba(0, 0, 0, .56);
+}
+
+select{
+    width: 150px;
+    height: 30px;
+}
+
+.horarios{
+    display: flex;
+    margin-top: 50px;
+    /* background-color: #1b1b44d8; */
+
+}
+
+.table{
+    border-radius: 20px;
+    border-collapse: separate;
+    overflow: hidden;
+    box-shadow: 0px 15px 20px rgba(59, 59, 59, 0.5);
+    padding: 0;
+    border: 1px solid black;
+}

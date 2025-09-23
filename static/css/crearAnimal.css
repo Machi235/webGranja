@@ -1,0 +1,127 @@
+
+.navbar {
+    background-color: #982f2f;
+}
+
+.select{
+  appearance: a;
+}
+
+#miFormulario{
+  display: flex;
+  max-width: 53%;
+  width: 90%;
+  background: #1a1a4034;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  margin: 30px auto;
+  min-height: 600px;
+}
+
+.form-container{
+  flex: 1;
+  padding: 30px;
+  background: #2a2a606b;
+  color: white;
+}
+
+.form-box{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.campo label {
+  font-size: 18px;
+  font-family: "Delius", cursive;
+}
+
+.campo input,
+.campo select, .campo textarea {
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  font-family: "Sour Gummy", sans-seri;
+  font-weight: 200;
+}
+.campo input{
+  padding: 8px;
+ }
+
+.campo select{
+  appearance: auto; 
+}
+
+.btn {
+  border-radius: 6px;
+}
+
+.form-side {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; 
+}
+
+.boton{
+    border: none;
+    text-align: left;
+    background: none;
+    color: #af1c1c;
+    font-size: x-large;
+    margin-top: 5px;
+    font-family: "Delius", cursive;
+}
+
+.obligatorio {
+    color: #af1c1c;
+    font-weight: bold;
+    margin-left: 3px;
+}
+
+#myDropzone { 
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 12px;
+    background-color: #f9fff9;
+    height: 400px;
+    cursor: pointer;
+    font-size:25px;
+}
+
+#camposVacios::backdrop{
+    background-color:rgba(0, 0, 0, .56);
+}
+#camposVacios, #camposCompletos {
+    max-width: 70ch;
+    text-align: left;
+    border-radius: 10px;
+    border: 2px solid #af1c1c;
+    font-family: "Montserrat", sans-serif;
+}
+
+#camposCompletos{
+  padding: 40px;
+}
+
+
+#volver {
+    max-height: 30px;
+    max-width: 50px;
+    width: 50px;
+    border-radius: 10px;
+    margin-left: 90%;
+    background: none;
+    border: none;
+    color: #af1c1c;
+    font-size: x-large;
+}

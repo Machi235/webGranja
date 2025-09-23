@@ -1,0 +1,62 @@
+
+.navbar{
+  border-bottom: 1px solid black;
+  justify-content: space-between;
+}
+.accesos{
+  display: flex;
+  margin-right: 20px;
+  gap: 20px;
+  align-items: center;
+}
+form{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.campo label {
+  font-size: 18px;
+  font-family: "Delius", cursive;
+}
+
+.campo input,.campo select, .campo textarea {
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  font-family: "Sour Gummy", sans-seri;
+  font-weight: 200;
+}
+
+.descripcion{
+  overflow: hidden;
+  resize: none;
+}
+
+                               
+.crearNotificacion{
+  background: none;
+  border: none;
+}
+
+.bi{
+  font-size: 30px;
+  color: #af1c1c;
+}
+
+
+#notificacion{
+  width: 30%;
+  text-align: left;
+  border-radius: 15px;
+  border: none;
+  font-family: "Montserrat", sans-serif;
+  background-color: #2a2a606b;
+  color: white;
+  padding: 30px;
+} 

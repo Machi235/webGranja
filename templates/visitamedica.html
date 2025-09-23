@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>proyecto Granja</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/eventosClinicos.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16"></svg>
+      Bienvenido a la sección visita médica
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    
+    <div class="offcanvas offcanvas-end custom-offcanvas" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{{ url_for('animales.registro_animal') }}">Crear Animal</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="EditarD.html">Categorías</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="EliminarH.html">Servicios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Contactanos.html">Contáctanos</a>
+          </li>
+          <div class="mt-4 text-center">
+        <a href="{{ url_for('main.bienvenida') }}" class="btn btn-outline-primary w-100">
+            <i class="bi bi-house-door"></i> Volver al Menú Principal
+        </a>
+    </div>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+<div class="form-container">
+
+  <div class="form-box">
+  
+    <form action="{{ url_for('eventos.registro_visita') }}" method="POST">
+
+        <div class="mb-3">
+            <label for="idAnimal" class="form-label">Animal*</label>
+            <select class="form-control" name="idAnimal" id="idAnimal" required>
+                <option value="">-- Seleccione un animal --</option>
+                {% for animal in animales %}
+                    <option value="{{ animal.idAnimal }}">{{ animal.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="veterinario" class="form-label">Veterinario*</label>
+            <input type="text" class="form-control" name="veterinario" id="veterinario" placeholder="Nombre del veterinario" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="motivo" class="form-label">Motivo de Consulta*</label>
+            <input type="text" class="form-control" name="motivo" id="motivo" placeholder="Ej: chequeo, dolor, etc." required>
+        </div>
+
+        <div class="mb-3">
+            <label for="diagnostico" class="form-label">Diagnóstico*</label>
+            <input type="text" class="form-control" name="diagnostico" id="diagnostico" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="tratamiento" class="form-label">Tratamiento*</label>
+            <select class="form-control" name="tratamiento" id="tratamiento" required>
+                <option value="medicacion">Medicación</option>
+                <option value="terapia">Terapia</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="fecha" class="form-label">Próxima Visita*</label>
+            <input type="date" class="form-control" name="fecha" id="fecha" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="estado" class="form-label">Estado de Salud*</label>
+            <select class="form-control" name="estado" id="estado" required>
+                <option value="sano">Sano</option>
+                <option value="enfermo">Enfermo</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-danger w-100">Guardar Visita</button>
+    </form>
+  </div>
+
+  <div class="form-side">
+   
+    <img src= "./views/imagen1.png">
+  </div>
+</div>
+
+</dialog>
+<script src="./models/scritp.js"></script>
+<script src="./models/radios.js"></script>
+<script src="{{ url_for('static', filename='js/activacionbotones.js') }}"></script>
+<script src="./models/alertavisitamedica.js"></script>
+
+
+</body>
+</html>
