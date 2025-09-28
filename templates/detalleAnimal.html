@@ -11,7 +11,7 @@
     <!-- google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <!-- estilo ccs -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/verAnimal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/detalleAnimal.css') }}">
   
 </head>
 <body>
@@ -52,76 +52,56 @@
     </div>
   </nav>
 
- <div class="buscar container-fluid">
-  <div class="buscador">
-    <input class="form-control" type="search" placeholder="Nombre del animal" id="buscador">
-  </div>  
-  <div class="filtros">
-    <select id="filtroEspecie">
-      <option value="">Todas las especies</option>
-      {% for especie in especies %}
-        <option value="{{ especie }}">{{ especie }}</option>
-      {% endfor %}
-    </select>
+<div class="animal">
+    <div class="form-container" enctype="multipart/form-data">
+            <div class="campo">
+                <p class="titulo">Nombre</p>
+                <p class="dato">{{animal.nombre }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Especie:</p>
+                <p p class="dato">{{ animal.especie }}</p>
+            </div>
 
-    <select id="filtroSalud">
-      <option value="">Todos los estados de salud</option>
-      {% for estado in estados %}
-        <option value="{{ estado }}">{{ estado }}</option>
-      {% endfor %}
-    </select>
-  </div>
-</div>
+            <div class="campo">
+                <p class="titulo">Edad:</p>
+                <p p class="dato">{{ animal.edad }}</p>
+            </div>
 
-<div class="listaAnimales">
-  {% for animal in animales %}
-    <a href="{{url_for('animales.ver_animal', idAnimal=animal.idAnimal) }}" class="card ">
+            <div class="campo">
+                <p class="titulo">Fecha de nacimiento:</p>
+                <p class="dato">{{ animal.fechaNacimiento }}</p>
+            </div>
+
+            <div class="campo">
+                <p class="titulo">Fecha de ingreso:</p>
+                <p class="dato">{{ animal.fechaLlegada }}</p>
+            </div>
+
+            <div class="campo">
+                <p class="titulo">Sexo:</p>
+                <p class="dato">{{ animal.sexo }}</p>
+            </div>
+            <div class="campo">
+               <p class="titulo">Estado de salud:</p>
+               <p class="dato">{{ animal.estadoSalud}}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Observaciones:</p>
+                <p class="dato">{{ animal.observaciones}}</p>
+            </div>
+
+            <div class="campo">
+                <p class="titulo">Habitat:</p>
+                <p class="dato">{{ animal.habitat}}</p>
+            </div>
+            <a href="{{url_for('animales.generar_pdf', idAnimal=animal.idAnimal) }}" class="btn btn-danger w-100">imprimir</a>  
+    </div>
+    <div class="form-side">
         {% if animal.imagen %}
-          <img src="{{ url_for('static', filename='uploads/' + animal.imagen) }}">
+          <img src="{{ url_for('static', filename='uploads/' + animal.imagen) }}" alt="imagen {{ animal.nombre }}" class="img-fluid">
         {% endif %}
-                <div class="informacion">
-                    <div class="datos">
-                      <div class="dato">
-                        <p class="titulo">Nombre</p>
-                        <p class="texto nombre">{{animal.nombre }}</p>
-                      </div>
-                      <div class="dato">
-                        <p class="titulo">Especie:</p>
-                        <p class="texto especie">{{ animal.especie }}</p>
-                      </div>
-                    </div>
-                    <div class="datos">
-                      <div class="dato">
-                        <p class="titulo">Edad:</p>
-                        <p class="texto edad">{{ animal.edad }}</p>
-                      </div>
-                      <div class="dato">
-                        <p class="titulo">Fecha de nacimiento:</p>
-                        <p class="texto">{{ animal.fechaNacimiento }}</p>
-                      </div>
-                    </div>
-                    <div class="datos">
-                      <div class="dato">
-                        <p class="titulo">Fecha de ingreso:</p>
-                        <p class="texto">{{ animal.fechaLlegada }}</p>
-                      </div>
-                      <div class="dato">
-                        <p class="titulo">Estado de salud:</p>
-                        <p class="texto salud">{{ animal.estadoSalud }}</p>
-                      </div>
-                    </div>
-                    <div class="datos">
-                      <div class="dato">
-                        <p class="titulo">Habitat:</p>
-                        <p class="texto">{{ animal.habitat }}</p>
-                      </div>
-                    </div>
-                </div>
-    </a>
-  {% endfor %}
+    </div>
 </div>
-
-
-<script src="{{ url_for('static', filename='js/verAnimal.js') }}"></script>
 </body>
 </html>

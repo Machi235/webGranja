@@ -18,10 +18,15 @@ def formulario():
         usuario = request.form.get("usuario")
         password = request.form.get("password")
 
+        #verificamos campos vacios
+        if not usuario or not password:
+            mensaje="Por favor, completar todos los campos"
+            return render_template("login.html", mensaje=mensaje)
+
         conn = get_connection()
         cur = conn.cursor()
         # Traemos contraseña y rol
-        cur.execute("SELECT contraseña, rol FROM usuarios WHERE nombre = %s LIMIT 1", (usuario,))
+        cur.execute("SELECT contraseña, rol FROM usuarios WHERE correo = %s LIMIT 1", (usuario,))
         result = cur.fetchone()
         cur.close()
         conn.close()

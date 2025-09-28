@@ -71,43 +71,38 @@
     <div class="form-container">
             <div class="campo">
                 <label for="nombre">Nombre:<span class="obligatorio">*</span></label>
-                <input type="text" id="nombre" name="nombre" required>
+                <input type="text" id="nombre" name="nombre" value="{{animal.nombre }}" >
             </div>
 
             <div class="campo">
                 <label for="especie">Especie:<span class="obligatorio">*</span></label>
-                <input type="text" id="especie" name="especie" required>
+                <input type="text" id="especie" name="especie" value="{{ animal.especie }}">
             </div>
 
             <div class="campo">
                 <label for="edad">Edad:<span class="obligatorio">*</span></label>
-                <input type="number" id="edad" name="edad" min="0" required>
+                <input type="number" id="edad" name="edad" min="0" value="{{ animal.edad }}" >
             </div>
 
             <div class="campo">
                 <label for="nacimiento">Fecha de nacimiento:</label>
-                <input type="date" id="nacimiento" name="fechaNacimiento">
+                <input type="date" id="nacimiento" name="fechaNacimiento" value="{{ animal.fechaNacimiento }}">
             </div>
 
             <div class="campo">
                 <label for="ingreso">Fecha de ingreso:</label>
-                <input type="date" id="ingreso" name="fechaLlegada">
+                <input type="date" id="ingreso" name="fechaLlegada" value="{{ animal.fechaLlegada }}">
             </div>
 
             <div class="campo">
                 <label>Sexo:<span class="obligatorio">*</span></label>
-                <div class="sexos">
-                    <input type="radio" id="macho" name="sexo" value="macho">
-                    <label for="macho">Macho</label>
-                    <input type="radio" id="hembra" name="sexo" value="hembra">
-                    <label for="hembra">Hembra</label>
-                </div>
+                <input type="radio" id="macho" name="sexo" value="{{ animal.sexo }}">
             </div>
 
             <div class="campo">
                 <label for="salud">Estado de Salud:<span class="obligatorio">*</span></label>
-                <select id="salud" name="salud" required>
-                    <option value="">Seleccione...</option>
+                <select id="salud" name="salud">
+                    <option value="{{ animal.estadoSalud }}">Seleccione...</option>
                     <option value="Sano">Sano</option>
                     <option value="Enfermo">Enfermo</option>
                     <option value="En recuperación">En recuperación</option>
@@ -116,22 +111,23 @@
 
             <div class="campo">
                 <label for="observaciones">Observaciones:<span class="obligatorio">*</span></label>
-                <textarea id="observaciones" name="observaciones" required></textarea>
+                <textarea id="observaciones" name="observaciones">{{ animal.observaciones}}</textarea>
             </div>
 
             <div class="campo">
                 <label for="habitat">Hábitat:<span class="obligatorio">*</span></label>
-                <input type="text" id="habitat" name="habitat" required>
+                <input type="text" id="habitat" name="habitat" value="{{ animal.habitat}}">
             </div>
 
-            <button class="btn btn-danger w-100" id="btnRegistrar" type="button">Registrar</button>
+            <button class="btn btn-danger w-100" id="btnRegistrar" type="button">actualizar</button>
             <button class="btn btn-secondary mt-3 w-100" type="button" onclick="vaciarFormulario()">
                 <i class="bi bi-x-circle"></i> Vaciar
             </button>
     </div>
     <div class="form-side">
         <label for="imagen"></label>
-        <div class="dropzone" id="myDropzone"></div>
+        <div class="dropzone" id="myDropzone">
+        </div>
     </div>
 </form>
 

@@ -28,20 +28,6 @@ document.getElementById("btnRegistrar").addEventListener("click", function () {
     }
   });
 
-  // // Validar sexo
-  // const sexo = document.querySelector('input[name="sexo"]:checked');
-  // if (!sexo) {
-  //   isValid = false;
-  //   Swal.fire({
-  //     icon: "warning",
-  //     title: "Sexo no seleccionado",
-  //     text: "Debe seleccionar el sexo del animal.",
-  //     confirmButtonColor: "#d33",
-  //     confirmButtonText: "Entendido"
-  //   });
-  //   return;
-  // }
-
   // Si faltan campos, mostrar ventana de advertencia
   if (!isValid) {
     Swal.fire({

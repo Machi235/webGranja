@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>verAnimal</title>
+</head>
+<body>
+
+<div class="animal">
+    <div class="form-container">
+            <div class="campo">
+                <p class="titulo">Nombre</p>
+                <p class="dato">{{animal.nombre }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Especie:</p>
+                <p p class="dato">{{ animal.especie }}</p>
+            </div>
+
+            <div class="campo">
+                <p class="titulo">Edad:</p>
+                <p p class="dato">{{ animal.edad }}</p>
+            </div>
+
+            <div class="campo">
+                <p class="titulo">Fecha de nacimiento:</p>
+                <p class="dato">{{ animal.fechaNacimiento }}</p>
+            </div>
+
+            <div class="campo">
+                <p class="titulo">Fecha de ingreso:</p>
+                <p class="dato">{{ animal.fechaLlegada }}</p>
+            </div>
+
+            <div class="campo">
+                <p class="titulo">Sexo:</p>
+                <p class="dato">{{ animal.sexo }}</p>
+            </div>
+            <div class="campo">
+               <p class="titulo">Estado de salud:</p>
+               <p class="dato">{{ animal.estadoSalud}}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Observaciones:</p>
+                <p class="dato">{{ animal.observaciones}}</p>
+            </div>
+
+            <div class="campo">
+                <p class="titulo">Habitat:</p>
+                <p class="dato">{{ animal.habitat}}</p>
+            </div>
+    </div>
+    <div class="form-side">
+        {% if animal.imagen %}
+          <img src="{{ img_url }}" class="img-fluid">
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

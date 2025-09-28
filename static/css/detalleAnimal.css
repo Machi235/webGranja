@@ -3,11 +3,7 @@
     background-color: #982f2f;
 }
 
-.select{
-  appearance: a;
-}
-
-#miFormulario{
+.animal{
   display: flex;
   max-width: 53%;
   width: 90%;
@@ -21,7 +17,7 @@
 
 .form-container{
   display: flex;
-  width: 60%;
+  width: 50%;
   flex-direction: column;
   gap: 10px;
   padding: 30px;
@@ -33,34 +29,25 @@
 .form-box{
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
 }
 
 .campo {
   display: flex;
   flex-direction: column;
-  gap: 5px;
 }
 
-.campo label {
-  font-size: 18px;
+.titulo {
+  font-size: 24px;
   font-family: "Delius", cursive;
+  font-weight: 300;
 }
 
-.campo input,
-.campo select, .campo textarea {
-  border: none;
-  border-radius: 6px;
-  outline: none;
+.dato{  
   font-family: "Sour Gummy", sans-seri;
+  font-size: 20px;
   font-weight: 200;
-}
-.campo input{
-  padding: 8px;
- }
-
-.campo select{
-  appearance: auto; 
+  color: black;
 }
 
 .btn {
@@ -69,9 +56,17 @@
 
 .form-side {
   display: flex;
+  width: 50%;
   justify-content: center;
   align-items: center;
   padding-inline: 20px;
+}
+
+.img-fluid{
+    display: flex;
+    height: 400px;
+    border-radius: 12px;
+    border: 1px solid white;
 }
 
 .boton{
@@ -88,17 +83,6 @@
     color: #af1c1c;
     font-weight: bold;
     margin-left: 3px;
-}
-
-#myDropzone { 
-    display: flex;
-    align-items: center;
-    border: none;
-    border-radius: 12px;
-    background-color: #f9fff9;
-    height: 400px;
-    cursor: pointer;
-    font-size:25px;
 }
 
 #camposVacios::backdrop{
@@ -126,4 +110,7 @@
     border: none;
     color: #af1c1c;
     font-size: x-large;
+}
+p{
+    margin: 0;
 }
