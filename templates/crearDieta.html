@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Dieta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-4">
+    <h2>Crear Dieta</h2>
+
+<form id="formCrearDieta" method="POST">
+    <!-- Selección de Animal -->
+    <div class="campo">
+        <label for="idAnimal">Animal:</label>
+        <select id="idAnimal" name="idAnimal" required>
+            <option value="">-- Seleccionar --</option>
+            {% for animal in animales %}
+                <option value="{{ animal.idAnimal }}">{{ animal.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Tipo de Dieta -->
+    <div class="campo">
+        <label for="tipoDieta">Tipo de Dieta:</label>
+        <input type="text" id="tipoDieta" name="tipoDieta" placeholder="Ejemplo: Balanceada, Proteica..." required>
+    </div>
+
+    <!-- Definitivo -->
+    <div class="campo">
+        <label for="definitivo">¿Definitivo?</label>
+        <input type="checkbox" id="definitivo" name="definitivo" value="1">
+    </div>
+
+    <!-- Alimentos de la Dieta -->
+    <h3>Alimentos</h3>
+    <div id="contenedorAlimentos">
+        <div class="fila-alimento">
+            <select id="idAlimento" name="idAlimento">
+    <option value="">Seleccione un alimento</option>
+</select>
+            <input type="text" name="cantidadAlimento[]" placeholder="Cantidad" required>
+            <input type="text" name="frecuenciaAlimento[]" placeholder="Frecuencia" required>
+            <button type="button" class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-secondary mt-2" onclick="agregarFila()">+ Agregar alimento</button>
+
+    <br><br>
+ <button type="button" id="btnGuardarDieta" class="btn btn-primary">Guardar Dieta</button>
+
+</form>
+
+<script src="{{ url_for('static', filename='js/dietas.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+</body>
+</html>

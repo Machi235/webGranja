@@ -67,44 +67,56 @@
     </nav>
 
     <!-- Formulario -->
-    <form id="miFormulario" enctype="multipart/form-data">
+<form id="miFormulario" enctype="multipart/form-data">
     <div class="form-container">
         <div class="form-box">
+            <!-- Nombre -->
             <div class="campo">
                 <label for="nombre">Nombre:<span class="obligatorio">*</span></label>
                 <input type="text" id="nombre" name="nombre" required>
             </div>
 
+            <!-- Especie (select dinámico) -->
             <div class="campo">
                 <label for="especie">Especie:<span class="obligatorio">*</span></label>
-                <input type="text" id="especie" name="especie" required>
+                <select id="especie" name="especie" required>
+                    <option value="">Seleccione una especie</option>
+                    {% for especie in especies %}
+                        <option value="{{ especie.idEspecie }}">{{ especie.tipoEspecie }}</option>
+                    {% endfor %}
+                </select>
             </div>
 
+            <!-- Edad -->
             <div class="campo">
                 <label for="edad">Edad:<span class="obligatorio">*</span></label>
                 <input type="number" id="edad" name="edad" min="0" required>
             </div>
 
+            <!-- Fecha de nacimiento -->
             <div class="campo">
                 <label for="nacimiento">Fecha de nacimiento:</label>
                 <input type="date" id="nacimiento" name="fechaNacimiento">
             </div>
 
+            <!-- Fecha de ingreso -->
             <div class="campo">
                 <label for="ingreso">Fecha de ingreso:</label>
                 <input type="date" id="ingreso" name="fechaLlegada">
             </div>
 
+            <!-- Sexo -->
             <div class="campo">
                 <label>Sexo:<span class="obligatorio">*</span></label>
                 <div class="sexos">
-                    <input type="radio" id="macho" name="sexo" value="macho">
+                    <input type="radio" id="macho" name="sexo" value="Macho" required>
                     <label for="macho">Macho</label>
-                    <input type="radio" id="hembra" name="sexo" value="hembra">
+                    <input type="radio" id="hembra" name="sexo" value="Hembra" required>
                     <label for="hembra">Hembra</label>
                 </div>
             </div>
 
+            <!-- Estado de salud -->
             <div class="campo">
                 <label for="salud">Estado de Salud:<span class="obligatorio">*</span></label>
                 <select id="salud" name="salud" required>
@@ -115,22 +127,31 @@
                 </select>
             </div>
 
+            <!-- Observaciones -->
             <div class="campo">
                 <label for="observaciones">Observaciones:<span class="obligatorio">*</span></label>
                 <textarea id="observaciones" name="observaciones" required></textarea>
             </div>
 
+            <!-- Hábitat (select dinámico) -->
             <div class="campo">
                 <label for="habitat">Hábitat:<span class="obligatorio">*</span></label>
-                <input type="text" id="habitat" name="habitat" required>
+                <select id="habitat" name="habitat" required>
+                    <option value="">Seleccione un hábitat</option>
+                    {% for habitat in habitats %}
+                        <option value="{{ habitat.idHabitat }}">{{ habitat.nombreHabitat }}</option>
+                    {% endfor %}
+                </select>
             </div>
 
+            <!-- Botones -->
             <button class="btn btn-danger w-100" id="btnRegistrar" type="button">Registrar</button>
             <button class="btn btn-secondary mt-3 w-100" type="button" onclick="vaciarFormulario()">
-    <i class="bi bi-x-circle"></i> Vaciar
-</button>
+                <i class="bi bi-x-circle"></i> Vaciar
+            </button>
         </div>
 
+        <!-- Imagen -->
         <div class="form-side">
             <label for="imagen">Imagen del animal:</label>
             <div class="dropzone" id="myDropzone"></div>

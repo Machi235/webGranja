@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, jsonify
 from werkzeug.utils import secure_filename
 from db import get_connection
 
@@ -8,13 +8,15 @@ animales = Blueprint("animales", __name__)
 # Carpeta donde se guardarán las imágenes
 UPLOAD_FOLDER = os.path.join("static", "uploads")
 
-# Crear la carpeta si no existe
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 
 @animales.route("/registro_animal", methods=["GET", "POST"])
 def registro_animal():
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
     if request.method == "POST":
         try:
             # 1. Datos del formulario
@@ -28,20 +30,30 @@ def registro_animal():
             observaciones = request.form.get("observaciones")
             sexo = request.form.get("sexo")
 
-            # 2. Validación rápida
-            if not nombre or not especie or not edad or not salud or not habitat or not observaciones or not sexo:
+            # 2. Validación de campos obligatorios
+            if not nombre or not especie or not salud or not edad or not habitat or not sexo:
                 return jsonify({"error": "Faltan campos obligatorios"}), 400
 
-            # 3. Guardar imagen
+            # 3. Validar especie
+            cur.execute("SELECT COUNT(*) AS total FROM especie WHERE idEspecie = %s", (especie,))
+            result = cur.fetchone()
+            if result['total'] == 0:
+                return jsonify({"error": "La especie seleccionada no existe en la base de datos"}), 400
+
+            # 4. Validar hábitat
+            cur.execute("SELECT COUNT(*) AS total FROM habitat WHERE idHabitat = %s", (habitat,))
+            result = cur.fetchone()
+            if result['total'] == 0:
+                return jsonify({"error": "El hábitat seleccionado no existe en la base de datos"}), 400
+
+            # 5. Guardar imagen
             archivo = request.files.get("imagen")
             filename = None
             if archivo and archivo.filename != "":
                 filename = secure_filename(archivo.filename)
                 archivo.save(os.path.join(UPLOAD_FOLDER, filename))
 
-            # 4. Guardar en la base de datos
-            conn = get_connection()
-            cur = conn.cursor()
+            # 6. Guardar el animal en la base de datos
             sql = """
             INSERT INTO animal 
             (nombre, especie, estadoSalud, edad, fechaNacimiento, fechaLlegada, habitat, observaciones, sexo, imagen)
@@ -49,18 +61,24 @@ def registro_animal():
             """
             cur.execute(sql, (nombre, especie, salud, edad, nacimiento, llegada, habitat, observaciones, sexo, filename))
             conn.commit()
-            cur.close()
-            conn.close()
 
             return jsonify({"mensaje": "✅ Animal registrado con éxito"}), 200
 
         except Exception as e:
             print("Error al registrar animal:", str(e))
-            return jsonify({"error": "Ocurrió un error en el servidor"}), 500
+            return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
 
-    # GET: mostrar el formulario
-    return render_template("crearAnimal.html")
+    # === GET: cargar especies y hábitats desde la BD ===
+    cur.execute("SELECT idEspecie, tipoEspecie FROM especie ORDER BY tipoEspecie")
+    especies = cur.fetchall()
 
+    cur.execute("SELECT idHabitat, nombreHabitat FROM habitat ORDER BY nombreHabitat")
+    habitats = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template("crearAnimal.html", especies=especies, habitats=habitats)
 
 @animales.route("/ver_animales", methods=["GET"])
 def ver_animales():
