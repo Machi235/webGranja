@@ -15,27 +15,27 @@ auth = Blueprint("auth", __name__)
 def formulario():
     mensaje = ""
     if request.method == "POST":
-        usuario = request.form.get("usuario")
+        correo = request.form.get("usuario")
         password = request.form.get("password")
 
         #verificamos campos vacios
-        if not usuario or not password:
+        if not correo or not password:
             mensaje="Por favor, completar todos los campos"
             return render_template("login.html", mensaje=mensaje)
 
         conn = get_connection()
-        cur = conn.cursor()
+        cur = conn.cursor(dictionary=True)
         # Traemos contraseña y rol
-        cur.execute("SELECT contraseña, rol FROM usuarios WHERE correo = %s LIMIT 1", (usuario,))
+        cur.execute("""SELECT idUsuario, contraseña, rol FROM usuarios WHERE correo = %s LIMIT 1""", (correo,))
         result = cur.fetchone()
         cur.close()
         conn.close()
 
-        if result and check_password_hash(result[0], password):
-            # Guardamos en sesión
-            session["usuario"] = usuario
-            session["rol"] = result[1]
-            return redirect(url_for("main.bienvenida"))  # Redirige a bienvenida según rol
+        if result and check_password_hash(result["contraseña"], password):
+            session["idUsuario"] = result["idUsuario"]
+            session["rol"] = result["rol"]
+            return redirect(url_for("main.bienvenida"))
+
         else:
             mensaje = "Usuario o contraseña incorrectos."
 
@@ -155,7 +155,6 @@ def ver_usuarios():
     cur.close()
     conn.close()
     return render_template("verUsuario.html", usuarios=usuarios, roles=roles)
-
 
 @auth.route("/logout")
 def logout():
