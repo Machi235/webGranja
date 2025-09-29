@@ -142,20 +142,14 @@ def generar_pdf(idAnimal):
     return response
 
 
-@animales.route("/ver_animales/<int:idAnimal>", methods=["DELETE"])
-def eliminar_animal():
+@animales.route("/eliminar_animal/<int:idAnimal>", methods=["POST"])
+def eliminar_animal(idAnimal):
     conn = get_connection()
-    cur = conn.cursor(dictionary=True)
-
-    # Traer todos los animales
-    cur.execute("""
-        DELETE idAnimal, nombre, especie, estadoSalud, edad, fechaNacimiento, fechaLlegada, habitat, sexo, imagen
-        FROM animal
-        WHERE idAnimal=%s
-    """)
-    animal = cur.fetchall()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM animal WHERE idAnimal=%s",(idAnimal,))
+    conn.commit()
 
     cur.close()
     conn.close()
 
-    return render_template("verAnimal.html", animal=animal)
+    return redirect(url_for("animales.ver_animales"))
