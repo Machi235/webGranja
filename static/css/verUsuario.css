@@ -43,6 +43,7 @@ nav{
     border: 2px solid green;
     margin-inline: 70px;
     gap: 40px;
+    text-decoration: none;
 }
 
 img{
@@ -54,13 +55,11 @@ img{
 .informacion{
     display: flex;
     padding-right: 50px;
-    justify-content: space-between;
     /* background-color: blueviolet; */
-    /* gap: 20%; */
+    gap: 200px;
     width: 100%;
     align-items: center;
     margin-block: 15px;
-    margin-right: 20%;
 }
 .datos{
     display: flex;

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, current_app
+from flask import Blueprint, flash, render_template, request, redirect, url_for, session, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from db import get_connection
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
@@ -164,7 +164,7 @@ def restablecer_password_token(token):
 def ver_usuarios():
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
-    cur.execute("SELECT idUsuario, nombre, apellido, rol, documento, telefono, correo FROM usuarios ORDER BY nombre")
+    cur.execute("SELECT idUsuario, nombre, apellido, rol, documento, telefono, correo FROM usuarios WHERE activo = 1 ORDER BY nombre")
     usuarios = cur.fetchall()
     cur.execute("SELECT DISTINCT rol FROM usuarios")
     roles = [row['rol'] for row in cur.fetchall()]
@@ -172,6 +172,86 @@ def ver_usuarios():
     conn.close()
     return render_template("verUsuario.html", usuarios=usuarios, roles=roles)
 
+# ---------------- VER USUARIO ----------------
+@auth.route("/detalle_usuario/<int:idUsuario>")
+def ver_usuario(idUsuario):
+    """Muestra la informacion completa de un solo usuario"""
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    cur.execute("""
+        SELECT idUsuario, nombre, apellido, rol, documento, telefono, correo
+        FROM usuarios
+        WHERE idUsuario = %s
+    """,(idUsuario,)) 
+    usuario = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    if not usuario:
+        return "usuario no encontrado", 404
+    return render_template("detalleUsuario.html", usuario=usuario)
+
+# ---------------- EDITAR USUARIO ----------------
+@auth.route("/editar_usuario/<int:idUsuario>", methods=["GET"])
+def editar_usuario(idUsuario):
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    cur.execute("""
+        SELECT idUsuario, nombre, apellido, rol, documento, telefono, correo
+        FROM usuarios
+        WHERE idUsuario = %s
+    """,(idUsuario,)) 
+    usuario = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    if not usuario:
+        return "usuario no encontrado", 404
+    return render_template("editarUsuario.html", usuario=usuario)
+
+# ---------------- ACTUALIZAR USUARIO ----------------
+@auth.route("/actualizar_usuario/<int:idUsuario>", methods=["POST"])
+def actualizar_usuario(idUsuario):
+    nombre = request.form["nombre"]
+    rol = request.form["rol"]
+    apellido = request.form["apellido"]
+    documento = request.form["documento"]
+    telefono = request.form["telefono"]
+    correo = request.form["correo"]
+
+    if not all([nombre, rol, apellido, documento, telefono, correo]):
+        flash("Todos los campos son obligatorios")
+        return redirect(url_for("auth.ver_usuarios"))
+
+    conn = get_connection()
+    cur=conn.cursor()
+
+    cur.execute(""" UPDATE usuarios SET nombre=%s, rol=%s, apellido=%s, documento=%s, telefono=%s, correo=%s WHERE idUsuario=%s """,
+    (nombre,rol,apellido,documento,telefono,correo, idUsuario))
+
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for("auth.ver_usuario",idUsuario=idUsuario))
+
+# ---------------- ELIMINAR USUARIO ----------------
+@auth.route("/eliminar_usuario/<int:idUsuario>", methods=["POST"])
+def eliminar_usuario(idUsuario):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("UPDATE usuarios SET activo = 0 WHERE idUsuario=%s",(idUsuario,))
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return redirect(url_for("auth.ver_usuarios"))
 
 # ---------------- LOGOUT ----------------
 @auth.route("/logout")

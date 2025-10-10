@@ -50,4 +50,6 @@ function validar() {
     } else {
       confirmacion();
     }
+
+     document.getElementById('miFormulario').submit();
 }

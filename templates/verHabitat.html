@@ -11,7 +11,7 @@
     <!-- google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <!-- estilo ccs -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/verUsuario.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/verAnimal.css') }}">
   
 </head>
 <body>
@@ -52,65 +52,77 @@
     </div>
   </nav>
 
-  <div class="buscar container-fluid">
+ <div class="buscar container-fluid">
   <div class="buscador">
-    <input class="form-control" type="search" placeholder="Nombre del usuario" id="buscador">
+    <input class="form-control" type="search" placeholder="Nombre del habitat" id="buscador">
   </div>  
   <div class="filtros">
-    <select id="filtroRol">
-      <option value="">Todos los roles</option>
-      {% for rol in roles %}
-        <option value="{{ rol }}">{{ rol }}</option>
+    <select id="filtroTipo">
+      <option value="">Todas los tipos</option>
+      {% for tipo in tipos %}
+        <option value="{{ tipo }}">{{ tipo }}</option>
+      {% endfor %}
+    </select>
+
+    <select id="filtroEstado">
+      <option value="">Todos los estados</option>
+      {% for estado in estados %}
+        <option value="{{ estado }}">{{ estado }}</option>
       {% endfor %}
     </select>
   </div>
 </div>
 
-<div class="listaUsuarios" id="data">
-  {% for usuario in usuarios %}
-     <a href="{{url_for('auth.ver_usuario', idUsuario=usuario.idUsuario) }}" class="card">
-        <div class="informacion">
-          <div class="datos">
-            <div class="dato">
-              <p class="titulo">Nombres:</p>
-              <p class="texto nombre">{{ usuario.nombre }}</p>
-            </div>
-            <div class="dato">
-              <p class="titulo">Apellidos:</p>
-              <p class="texto">{{ usuario.apellido }}</p>
-            </div>
-          </div>
-          <div class="datos">
-            <div class="dato">
-              <p class="titulo">Rol:</p>
-              <p class="texto rol">{{ usuario.rol }}</p>
-            </div>
-            <div class="dato">
-              <p class="titulo">Numero de documento:</p>
-              <p class="texto">{{ usuario.documento }}</p>
-            </div>
-          </div>
-          <div class="datos">
-            <div class="dato">
-              <p class="titulo">Telefono:</p>
-              <p class="texto">{{ usuario.telefono }}</p>
-            </div>
-            <div class="dato">
-              <p class="titulo">Correo:</p>
-              <p class="texto">{{ usuario.correo }}</p>
-            </div>
-          </div>
-          <form action="{{url_for('auth.eliminar_usuario', idUsuario=usuario.idUsuario) }}" method="POST">
-            <button type="submit" class="boton" onclick="return confirm('estas seguro de que quieres eliminar este animal');">
-              <i class="bi bi-trash3"></i>
-            </button>
-          </form>
-        </div>
-      </a> 
+<div class="listaAnimales" id="data">
+  {% for habitat in habitats %}
+    <a href="{{url_for('habitat_bp.ver_habitat', idHabitat=habitat.idHabitat)}}" class="card">
+                <div class="informacion">
+                    <div class="datos">
+                      <div class="dato">
+                        <p class="titulo">Nombre</p>
+                        <p class="texto nombre">{{habitat.nombreHabitat }}</p>
+                      </div>
+                      <div class="dato">
+                        <p class="titulo">maxima temperatura:</p>
+                        <p class="texto">{{ habitat.maxTemperatura }}</p>
+                      </div>
+                    </div>
+                    <div class="datos">
+                      <div class="dato">
+                        <p class="titulo">estado:</p>
+                        <p class="texto estado">{{ habitat.estado }}</p>
+                      </div>
+                      <div class="dato">
+                        <p class="titulo">humedad:</p>
+                        <p class="texto">{{ habitat.humedad }}</p>
+                      </div>
+                    </div>
+                    <div class="datos">
+                      <div class="dato">
+                        <p class="titulo">tipo</p>
+                        <p class="texto tipo">{{ habitat.tipo }}</p>
+                      </div>
+                      <div class="dato">
+                        <p class="titulo">tamaño:</p>
+                        <p class="texto">{{ habitat.tamaño }}</p>
+                      </div>
+                    </div>
+                    <div class="datos">
+                      <div class="dato">
+                        <p class="titulo">capacidad:</p>
+                        <p class="texto">{{ habitat.capacidad }}</p>
+                      </div>
+                    </div>
+                    <form action="{{url_for('habitat_bp.eliminar_habitat', idHabitat=habitat.idHabitat) }}" method="POST">
+                      <button type="submit" onclick="return confirm('estas seguro de eliminar el habitat');">
+                        <i class="bi bi-trash3"></i>
+                      </button>
+                    </form>
+                </div>
+    </a> 
   {% endfor %}
 </div>
 
-
-<script src="{{ url_for('static', filename='js/verUsuario.js') }}"></script>
+<script src="{{ url_for('static', filename='js/verHabitat.js') }}"></script>
 </body>
 </html>

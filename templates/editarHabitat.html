@@ -51,24 +51,24 @@
     </div>
   </div>
 </nav>
-<form id="miFormulario" method="post" action="{{ url_for('habitat_bp.crear_habitat') }}">
+<form id="miFormulario" method="post" action="{{ url_for('habitat_bp.actualizar_habitat', idHabitat=habitat.idHabitat) }}">
     <div class="form-container">
         <div class="form-box">
             <div class="campo">
                 <label for="nombreHabitat">Nombre de habitat:<span class="obligatorio">*</span></label>
-                <input type="text" id="nombreHabitat" name="nombreHabitat">
+                <input type="text" id="nombreHabitat" name="nombreHabitat" value="{{ habitat.nombreHabitat }}">
             </div>
             <div class="campo"> 
                 <label>Temperatura:</label>
                 <div class="temperaturas">
-                    <input type="text" class="temperatura" name="minTemperatura" placeholder="Min" id="minTemperatura">
-                    <input type="text" class="temperatura" name="maxTemperatura" placeholder="Max" id="maxTemperatura">
+                    <input type="text" class="temperatura" name="minTemperatura" placeholder="Min" value="{{ habitat.minTemperatura }}">
+                    <input type="text" class="temperatura" name="maxTemperatura" placeholder="Max" value="{{ habitat.maxTemperatura }}">
                 </div>
             </div>
             <div class="campo">
                 <label for="estado">Estado:<span class="obligatorio">*</span></label>
                 <select id="estado" name="estado" class="form-control">
-                    <option value=""></option>
+                    <option value="{{ habitat.estado }}">{{ habitat.estado }}</option>
                     <option value="Activo">Activo</option>
                     <option value="Mantenimiento">Mantenimiento</option>
                     <option value="Cerrado">Cerrado</option>
@@ -76,56 +76,38 @@
             </div>
             <div class="campo">
                 <label for="humedad">Humedad relativa:</label>
-                <input type="text" id="humedad" name="humedad">
+                <input type="text" id="humedad" name="humedad" value="{{ habitat.humedad }}">
             </div> 
             <div class="campo">
                 <label for="tipo">Tipo de habitat:<span class="obligatorio">*</span></label>
                 <select id="tipo" name="tipo" class="form-control">
-                    <option value=""></option>
+                    <option value="{{ habitat.tipo }}">{{ habitat.tipo }}</option>
                     <option value="Prado">Prado</option>
                     <option value="Corral">Corral</option>
                 </select>
             </div>
             <div class="campo">
                 <label for="tamaño">Tamaño en mt<sup>2</sup>:</label>
-                <input type="text" id="tamaño" name="tamaño">
+                <input type="text" id="tamaño" name="tamaño" value="{{ habitat.tamaño }}">
             </div>
             <div class="campo">
                 <label for="capacidad">Capacidad:<span class="obligatorio">*</span></label>
-                <input type="number" id="capacidad" name="capacidad">
+                <input type="number" id="capacidad" name="capacidad" value="{{ habitat.capacidad }}">
             </div> 
+            
         </div>
 
         <!-- Botones -->
-        <button id="registrar" class="btn btn-danger mt-3 w-100" type="button" onclick="validar()">Registrar</button>
+        <button id="registrar" class="btn btn-danger mt-3 w-100" type="submit" >actualizar</button>
         <button class="btn btn-secondary mt-2 w-100" type="button" onclick="vaciarFormulario()">Vaciar</button>
     </div>
 </form>
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script src="{{ url_for('static', filename='js/habitat.js') }}"></script>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <script>
-      {% for category, message in messages %}
-        Swal.fire({
-          icon: '{{ category }}',
-          title: '{{ message }}',
-          showConfirmButton: false,
-          timer: 2000,
-
-          timerProgressBar: true
-        }).then(() => {
-          window.location.href = "{{ url_for('habitat_bp.ver_habitats') }}";
-        });
-      {% endfor %}
-    </script>
-  {% endif %}
-{% endwith %}
-
+<script src=""></script>
 
 
 </body>

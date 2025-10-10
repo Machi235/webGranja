@@ -6,17 +6,17 @@ function filtrarUsuarios() {
     const nombre = buscador.value.toLowerCase();
     const rol = filtroRol.value.toLowerCase();
 
-    const cards = lista.getElementsByClassName('usuario');
+    const cards = lista.getElementsByClassName('card');
 
     for (let card of cards) {
-        const nombreUsuario = card.querySelector('.card-title').textContent.toLowerCase();
-        const rolUsuario = card.querySelector('.card-rol').textContent.toLowerCase();
+        const nombreUsuario = card.querySelector('.nombre').textContent.toLowerCase();
+        const rolUsuario = card.querySelector('.rol').textContent.toLowerCase();
 
         if (
             (nombre === "" || nombreUsuario.includes(nombre)) &&
             (rol === "" || rolUsuario.includes(rol))
         ) {
-            card.style.display = "";
+            card.style.display = "flex";
         } else {
             card.style.display = "none";
         }
@@ -25,3 +25,4 @@ function filtrarUsuarios() {
 
 buscador.addEventListener('input', filtrarUsuarios);
 filtroRol.addEventListener('change', filtrarUsuarios);
+

@@ -11,7 +11,7 @@
     <!-- google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <!-- estilo ccs -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/verUsuario.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/detalleAnimal.css') }}">
   
 </head>
 <body>
@@ -52,65 +52,43 @@
     </div>
   </nav>
 
-  <div class="buscar container-fluid">
-  <div class="buscador">
-    <input class="form-control" type="search" placeholder="Nombre del usuario" id="buscador">
-  </div>  
-  <div class="filtros">
-    <select id="filtroRol">
-      <option value="">Todos los roles</option>
-      {% for rol in roles %}
-        <option value="{{ rol }}">{{ rol }}</option>
-      {% endfor %}
-    </select>
-  </div>
+<div class="animal">
+    <div class="form-container" >
+            <div class="campo">
+                <p class="titulo">Nombre:</p>
+                <p class="dato">{{habitat.nombreHabitat }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Temperatura Maxima:</p>
+                <p p class="dato">{{ habitat.maxTemperatura }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Temperatura Minima:</p>
+                <p p class="dato">{{ habitat.minTemperatura }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Estado:</p>
+                <p p class="dato">{{ habitat.estado }}</p>
+            </div>
+
+            <div class="campo">
+                <p class="titulo">Humedad:</p>
+                <p class="dato">{{ habitat.humedad }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Tipo:</p>
+                <p class="dato">{{ habitat.tipo }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Tamaño:</p>
+                <p class="dato">{{ habitat.tamaño }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Capacidad:</p>
+                <p class="dato">{{ habitat.capacidad }}</p>
+            </div>
+            <a href="{{url_for('habitat_bp.editar_habitat',idHabitat=habitat. idHabitat)}}" class="btn btn-danger w-100">Editar</a>
+    </div>  
 </div>
-
-<div class="listaUsuarios" id="data">
-  {% for usuario in usuarios %}
-     <a href="{{url_for('auth.ver_usuario', idUsuario=usuario.idUsuario) }}" class="card">
-        <div class="informacion">
-          <div class="datos">
-            <div class="dato">
-              <p class="titulo">Nombres:</p>
-              <p class="texto nombre">{{ usuario.nombre }}</p>
-            </div>
-            <div class="dato">
-              <p class="titulo">Apellidos:</p>
-              <p class="texto">{{ usuario.apellido }}</p>
-            </div>
-          </div>
-          <div class="datos">
-            <div class="dato">
-              <p class="titulo">Rol:</p>
-              <p class="texto rol">{{ usuario.rol }}</p>
-            </div>
-            <div class="dato">
-              <p class="titulo">Numero de documento:</p>
-              <p class="texto">{{ usuario.documento }}</p>
-            </div>
-          </div>
-          <div class="datos">
-            <div class="dato">
-              <p class="titulo">Telefono:</p>
-              <p class="texto">{{ usuario.telefono }}</p>
-            </div>
-            <div class="dato">
-              <p class="titulo">Correo:</p>
-              <p class="texto">{{ usuario.correo }}</p>
-            </div>
-          </div>
-          <form action="{{url_for('auth.eliminar_usuario', idUsuario=usuario.idUsuario) }}" method="POST">
-            <button type="submit" class="boton" onclick="return confirm('estas seguro de que quieres eliminar este animal');">
-              <i class="bi bi-trash3"></i>
-            </button>
-          </form>
-        </div>
-      </a> 
-  {% endfor %}
-</div>
-
-
-<script src="{{ url_for('static', filename='js/verUsuario.js') }}"></script>
 </body>
 </html>

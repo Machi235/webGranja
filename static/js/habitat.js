@@ -19,6 +19,8 @@ function validar() {
   let estado = document.getElementById('estado').value.trim();
   let tipo = document.getElementById('tipo').value.trim();
   let capacidad = document.getElementById('capacidad').value.trim();
+  let max_temp = document.getElementById('maxTemperatura').value.trim();
+  let min_temp = document.getElementById('minTemperatura').value.trim();
 
   // Validar campos obligatorios
   if (nombreHabitat === '' || estado === '' || tipo === '' || capacidad === '') {
@@ -32,20 +34,18 @@ function validar() {
     return;
   }
 
-  // Si todo está bien, confirmar registro
-  Swal.fire({
-    title: '¿Registrar este hábitat?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, registrar',
-    cancelButtonText: 'Cancelar',
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      document.getElementById("miFormulario").submit();
-    }
-  });
+ if (min_temp >= max_temp){
+    Swal.fire({
+      icon: 'error',
+      title: 'La temperatura minima no puede ser superior a la temperatura maxima',
+      confirmButtonText: 'Entendido',
+      confirmButtonColor: '#d33'
+    });
+    return;
+
+  }
+
+  document.getElementById('miFormulario').submit();
 }
 
 // =====================
