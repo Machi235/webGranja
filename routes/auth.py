@@ -1,42 +1,42 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, session, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from db import get_connection
-
-auth = Blueprint("auth", __name__)  # Recuerda registrarlo con url_prefix si quieres
-
-
-from flask import Blueprint, render_template, request, redirect, url_for, session
-from werkzeug.security import check_password_hash
-from db import get_connection
+from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
+from flask_mail import Message
 
 auth = Blueprint("auth", __name__)
 
+
+# ---------------- LOGIN ----------------
 @auth.route("/login", methods=["GET", "POST"])
 def formulario():
     mensaje = ""
     if request.method == "POST":
-        usuario = request.form.get("usuario")
+        correo = request.form.get("usuario")
         password = request.form.get("password")
 
+        if not correo or not password:
+            mensaje = "Por favor, completa todos los campos."
+            return render_template("login.html", mensaje=mensaje)
+
         conn = get_connection()
-        cur = conn.cursor()
-        # Traemos contraseña y rol
-        cur.execute("SELECT contraseña, rol FROM usuarios WHERE nombre = %s LIMIT 1", (usuario,))
+        cur = conn.cursor(dictionary=True)
+        cur.execute("SELECT idUsuario, contraseña, rol FROM usuarios WHERE correo = %s LIMIT 1", (correo,))
         result = cur.fetchone()
         cur.close()
         conn.close()
 
-        if result and check_password_hash(result[0], password):
-            # Guardamos en sesión
-            session["usuario"] = usuario
-            session["rol"] = result[1]
-            return redirect(url_for("main.bienvenida"))  # Redirige a bienvenida según rol
+        if result and check_password_hash(result["contraseña"], password):
+            session["idUsuario"] = result["idUsuario"]
+            session["rol"] = result["rol"]
+            return redirect(url_for("main.bienvenida"))
         else:
             mensaje = "Usuario o contraseña incorrectos."
 
     return render_template("login.html", mensaje=mensaje)
 
 
+# ---------------- REGISTRO ----------------
 @auth.route("/registro", methods=["GET", "POST"])
 def registro():
     mensaje_usuario = ""
@@ -55,7 +55,6 @@ def registro():
         conn = get_connection()
         cur = conn.cursor(dictionary=True)
 
-        # Verificar duplicados de usuario y correo
         cur.execute("""
             SELECT nombre, correo
             FROM usuarios
@@ -69,7 +68,6 @@ def registro():
             if r['correo'] == correo:
                 mensaje_correo = "Este correo ya está registrado."
 
-        # Insertar solo si no hay duplicados
         if not mensaje_usuario and not mensaje_correo:
             cur.execute("""
                 INSERT INTO usuarios
@@ -84,12 +82,10 @@ def registro():
         cur.close()
         conn.close()
 
-    return render_template(
-        "registro.html",
-        mensaje_usuario=mensaje_usuario,
-        mensaje_correo=mensaje_correo
-    )
+    return render_template("registro.html", mensaje_usuario=mensaje_usuario, mensaje_correo=mensaje_correo)
 
+
+# ---------------- RECUPERAR CONTRASEÑA ----------------
 @auth.route("/recuperar", methods=["GET", "POST"])
 def recuperar_password():
     mensaje = ""
@@ -98,29 +94,62 @@ def recuperar_password():
 
         conn = get_connection()
         cur = conn.cursor()
-        sql = "SELECT * FROM usuarios WHERE correo = %s"
-        cur.execute(sql, (correo,))
+        cur.execute("SELECT * FROM usuarios WHERE correo = %s", (correo,))
         result = cur.fetchone()
         cur.close()
         conn.close()
 
         if result:
-            return redirect(url_for("auth.restablecer_password", correo=correo))
+            from flask import current_app
+            s = URLSafeTimedSerializer(current_app.secret_key)
+
+            token = s.dumps(correo, salt='recuperar-password')
+            link = url_for('auth.restablecer_password_token', token=token, _external=True)
+
+            # Enviar correo
+            msg = Message(
+                subject="Restablecer tu contraseña - Granja Machis",
+                recipients=[correo],
+                body=f"Hola,\n\nHaz clic en el siguiente enlace para restablecer tu contraseña:\n{link}\n\nSi no solicitaste este cambio, ignora este mensaje."
+            )
+
+            try:
+    # ✅ Importar mail aquí dentro y usar current_app
+                from servidor import mail
+                with current_app.app_context():
+                    mail.send(msg)
+                mensaje = "✅ Se ha enviado un correo con las instrucciones para restablecer tu contraseña."
+            except Exception as e:
+                print("❌ Error al enviar correo:", e)
+                mensaje = "Error al enviar el correo. Verifica tu conexión o configuración de Gmail."
+
         else:
-            mensaje = "El correo no está registrado."
+            mensaje = "⚠️ El correo no está registrado."
 
     return render_template("recuperar.html", mensaje=mensaje)
 
-@auth.route("/restablecer/<correo>", methods=["GET", "POST"])
-def restablecer_password(correo):
+
+# ---------------- RESTABLECER CONTRASEÑA ----------------
+@auth.route("/restablecer_token/<token>", methods=["GET", "POST"])
+def restablecer_password_token(token):
+    from flask import current_app
+    s = URLSafeTimedSerializer(current_app.secret_key)
+
+
+    try:
+        correo = s.loads(token, salt='recuperar-password', max_age=3600)
+    except SignatureExpired:
+        return "El enlace ha expirado. Vuelve a solicitar la recuperación.", 400
+    except BadSignature:
+        return "El enlace no es válido.", 400
+
     if request.method == "POST":
         nueva_password = request.form.get("password")
         hashed_password = generate_password_hash(nueva_password)
 
         conn = get_connection()
         cur = conn.cursor()
-        sql = "UPDATE usuarios SET contraseña = %s WHERE correo = %s"
-        cur.execute(sql, (hashed_password, correo))
+        cur.execute("UPDATE usuarios SET contraseña = %s WHERE correo = %s", (hashed_password, correo))
         conn.commit()
         cur.close()
         conn.close()
@@ -130,31 +159,22 @@ def restablecer_password(correo):
     return render_template("restablecer.html", correo=correo)
 
 
+# ---------------- VER USUARIOS ----------------
 @auth.route("/ver_usuarios", methods=["GET"])
 def ver_usuarios():
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
-
-    # Traer todos los usuarios
-    cur.execute("""
-        SELECT idUsuario, nombre, apellido, rol, documento, telefono, correo
-        FROM usuarios
-        ORDER BY nombre
-    """)
+    cur.execute("SELECT idUsuario, nombre, apellido, rol, documento, telefono, correo FROM usuarios ORDER BY nombre")
     usuarios = cur.fetchall()
-
-    # Traer roles distintos para filtro
     cur.execute("SELECT DISTINCT rol FROM usuarios")
     roles = [row['rol'] for row in cur.fetchall()]
-
     cur.close()
     conn.close()
     return render_template("verUsuario.html", usuarios=usuarios, roles=roles)
 
 
+# ---------------- LOGOUT ----------------
 @auth.route("/logout")
 def logout():
-    # Eliminar todas las variables de la sesión
     session.clear()
-    # Redirigir al formulario de login
     return redirect(url_for("auth.formulario"))

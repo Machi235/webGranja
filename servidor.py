@@ -9,6 +9,8 @@ from routes.eventosClinicos import eventos
 from routes.actividades import actividad_bp
 from routes.dietas import dietas
 
+from flask_mail import Mail
+
 
 app = Flask(__name__)
 app.secret_key = "super_clave_ultra_secreta_123"  
@@ -23,6 +25,17 @@ app.register_blueprint(habitat_bp, url_prefix="/habitat")
 app.register_blueprint(turnos_bp, url_prefix="/turnos")
 app.register_blueprint(actividad_bp, url_prefix="/actividad")
 app.register_blueprint(dietas)
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'santyenglish333@gmail.com'  # <-- tu Gmail
+app.config['MAIL_PASSWORD'] = 'wrakngwivfpvffmb'   # <-- usa una "contraseña de aplicación" de Google
+app.config['MAIL_DEFAULT_SENDER'] = ('Granja Machis', 'santyenglish333@gmail.com')
+
+mail = Mail(app)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

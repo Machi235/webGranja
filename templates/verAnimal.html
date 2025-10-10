@@ -63,6 +63,7 @@
         <option value="{{ especie }}">{{ especie }}</option>
       {% endfor %}
     </select>
+
     <select id="filtroSalud">
       <option value="">Todos los estados de salud</option>
       {% for estado in estados %}
@@ -72,23 +73,58 @@
   </div>
 </div>
 
-<div class="listaAnimales" id="data">
+<div class="listaAnimales">
   {% for animal in animales %}
-    <div class="animal card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">{{ animal.nombre }}</h5>
-        <p class="card-especie">Especie: {{ animal.especie }}</p>
-        <p class="card-salud">Estado de salud: {{ animal.estadoSalud }}</p>
-        <p class="card-edad">Edad: {{ animal.edad }}</p>
-        <p class="card-habitat">Habitat: {{ animal.habitat }}</p>
+    <a href="{{url_for('animales.ver_animal', idAnimal=animal.idAnimal) }}" class="card ">
         {% if animal.imagen %}
-          <img src="{{ url_for('static', filename='uploads/' + animal.imagen) }}" alt="imagen {{ animal.nombre }}" class="img-fluid" style="max-width:150px;">
+          <img src="{{ url_for('static', filename='uploads/' + animal.imagen) }}">
         {% endif %}
-      </div>
-    </div>
+                <div class="informacion">
+                    <div class="datos">
+                      <div class="dato">
+                        <p class="titulo">Nombre</p>
+                        <p class="texto nombre">{{animal.nombre }}</p>
+                      </div>
+                      <div class="dato">
+                        <p class="titulo">Especie:</p>
+                        <p class="texto especie">{{ animal.especie }}</p>
+                      </div>
+                    </div>
+                    <div class="datos">
+                      <div class="dato">
+                        <p class="titulo">Edad:</p>
+                        <p class="texto edad">{{ animal.edad }}</p>
+                      </div>
+                      <div class="dato">
+                        <p class="titulo">Fecha de nacimiento:</p>
+                        <p class="texto">{{ animal.fechaNacimiento }}</p>
+                      </div>
+                    </div>
+                    <div class="datos">
+                      <div class="dato">
+                        <p class="titulo">Fecha de ingreso:</p>
+                        <p class="texto">{{ animal.fechaLlegada }}</p>
+                      </div>
+                      <div class="dato">
+                        <p class="titulo">Estado de salud:</p>
+                        <p class="texto salud">{{ animal.estadoSalud }}</p>
+                      </div>
+                    </div>
+                    <div class="datos">
+                      <div class="dato">
+                        <p class="titulo">Habitat:</p>
+                        <p class="texto">{{ animal.habitat }}</p>
+                      </div>
+                    </div>
+                    <form action="{{url_for('animales.eliminar_animal', idAnimal=animal.idAnimal) }}" method="POST">
+                      <button type="submit" class="boton" onclick="return confirm('estas seguro de que quieres eliminar este animal');">
+                        <i class="bi bi-trash3"></i>
+                      </button>
+                    </form>
+                </div>
+    </a> 
   {% endfor %}
 </div>
-
 
 <script src="{{ url_for('static', filename='js/verAnimal.js') }}"></script>
 </body>

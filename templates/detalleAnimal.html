@@ -11,7 +11,7 @@
     <!-- google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <!-- estilo ccs -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/verUsuario.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/detalleAnimal.css') }}">
   
 </head>
 <body>
@@ -52,35 +52,54 @@
     </div>
   </nav>
 
-  <div class="buscar container-fluid">
-  <div class="buscador">
-    <input class="form-control" type="search" placeholder="Nombre del usuario" id="buscador">
-  </div>  
-  <div class="filtros">
-    <select id="filtroRol">
-      <option value="">Todos los roles</option>
-      {% for rol in roles %}
-        <option value="{{ rol }}">{{ rol }}</option>
-      {% endfor %}
-    </select>
-  </div>
-</div>
+<div class="animal">
+    <div class="form-container" >
+            <div class="campo">
+                <p class="titulo">Nombre</p>
+                <p class="dato">{{animal.nombre }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Especie:</p>
+                <p p class="dato">{{ animal.especie }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Edad:</p>
+                <p p class="dato">{{ animal.edad }}</p>
+            </div>
 
-<div class="listaUsuarios">
-  {% for usuario in usuarios %}
-    <div class="usuario card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">{{ usuario.nombre }} {{ usuario.apellido }}</h5>
-        <p class="card-rol">Rol: {{ usuario.rol }}</p>
-        <p class="card-documento">Documento: {{ usuario.documento }}</p>
-        <p class="card-telefono">Teléfono: {{ usuario.telefono }}</p>
-        <p class="card-correo">Correo: {{ usuario.correo }}</p>
-      </div>
+            <div class="campo">
+                <p class="titulo">Fecha de nacimiento:</p>
+                <p class="dato">{{ animal.fechaNacimiento }}</p>
+            </div>
+
+            <div class="campo">
+                <p class="titulo">Fecha de ingreso:</p>
+                <p class="dato">{{ animal.fechaLlegada }}</p>
+            </div>
+
+            <div class="campo">
+                <p class="titulo">Sexo:</p>
+                <p class="dato">{{ animal.sexo }}</p>
+            </div>
+            <div class="campo">
+               <p class="titulo">Estado de salud:</p>
+               <p class="dato">{{ animal.estadoSalud}}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Observaciones:</p>
+                <p class="dato">{{ animal.observaciones}}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Habitat:</p>
+                <p class="dato">{{ animal.habitat}}</p>
+            </div>
+            <a href="{{url_for('animales.generar_pdf', idAnimal=animal.idAnimal) }}" class="btn btn-danger w-100">imprimir</a>  
     </div>
-  {% endfor %}
+    <div class="form-side">
+        {% if animal.imagen %}
+          <img src="{{ url_for('static', filename='uploads/' + animal.imagen) }}" alt="imagen {{ animal.nombre }}" class="img-fluid">
+        {% endif %}
+    </div>
 </div>
-
-
-<script src="{{ url_for('static', filename='js/verUsuario.js') }}"></script>
 </body>
 </html>

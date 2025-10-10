@@ -38,8 +38,6 @@ margin-top: 10px;
 }
 
 
-
-
 .espacio {
   height: 80px;
   background-color: #F5F5DC;
@@ -324,7 +322,7 @@ form{
 }
 
 
-#notificacion{
+#notificacion, #perfil{
   width: 30%;
   text-align: left;
   border-radius: 15px;

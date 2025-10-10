@@ -67,93 +67,68 @@
     </nav>
 
     <!-- Formulario -->
-<form id="miFormulario" enctype="multipart/form-data">
+    <form id="miFormulario" enctype="multipart/form-data">
     <div class="form-container">
-            <!-- Nombre -->
             <div class="campo">
                 <label for="nombre">Nombre:<span class="obligatorio">*</span></label>
-                <input type="text" id="nombre" name="nombre" required>
+                <input type="text" id="nombre" name="nombre" value="{{animal.nombre }}" >
             </div>
 
-            <!-- Especie (select dinámico) -->
             <div class="campo">
                 <label for="especie">Especie:<span class="obligatorio">*</span></label>
-                <select id="especie" name="especie" required>
-                    <option value="">Seleccione una especie</option>
-                    {% for especie in especies %}
-                        <option value="{{ especie.idEspecie }}">{{ especie.tipoEspecie }}</option>
-                    {% endfor %}
-                </select>
+                <input type="text" id="especie" name="especie" value="{{ animal.especie }}">
             </div>
 
-            <!-- Edad -->
             <div class="campo">
                 <label for="edad">Edad:<span class="obligatorio">*</span></label>
-                <input type="number" id="edad" name="edad" min="0" required>
+                <input type="number" id="edad" name="edad" min="0" value="{{ animal.edad }}" >
             </div>
 
-            <!-- Fecha de nacimiento -->
             <div class="campo">
                 <label for="nacimiento">Fecha de nacimiento:</label>
-                <input type="date" id="nacimiento" name="fechaNacimiento">
+                <input type="date" id="nacimiento" name="fechaNacimiento" value="{{ animal.fechaNacimiento }}">
             </div>
 
-            <!-- Fecha de ingreso -->
             <div class="campo">
                 <label for="ingreso">Fecha de ingreso:</label>
-                <input type="date" id="ingreso" name="fechaLlegada">
+                <input type="date" id="ingreso" name="fechaLlegada" value="{{ animal.fechaLlegada }}">
             </div>
 
-            <!-- Sexo -->
             <div class="campo">
                 <label>Sexo:<span class="obligatorio">*</span></label>
-                <div class="sexos">
-                    <input type="radio" id="macho" name="sexo" value="Macho" required>
-                    <label for="macho">Macho</label>
-                    <input type="radio" id="hembra" name="sexo" value="Hembra" required>
-                    <label for="hembra">Hembra</label>
-                </div>
+                <input type="radio" id="macho" name="sexo" value="{{ animal.sexo }}">
             </div>
 
-            <!-- Estado de salud -->
             <div class="campo">
                 <label for="salud">Estado de Salud:<span class="obligatorio">*</span></label>
-                <select id="salud" name="salud" required>
-                    <option value="">Seleccione...</option>
+                <select id="salud" name="salud">
+                    <option value="{{ animal.estadoSalud }}">Seleccione...</option>
                     <option value="Sano">Sano</option>
                     <option value="Enfermo">Enfermo</option>
                     <option value="En recuperación">En recuperación</option>
                 </select>
             </div>
 
-            <!-- Observaciones -->
             <div class="campo">
                 <label for="observaciones">Observaciones:<span class="obligatorio">*</span></label>
-                <textarea id="observaciones" name="observaciones" required></textarea>
+                <textarea id="observaciones" name="observaciones">{{ animal.observaciones}}</textarea>
             </div>
 
-            <!-- Hábitat (select dinámico) -->
             <div class="campo">
                 <label for="habitat">Hábitat:<span class="obligatorio">*</span></label>
-                <select id="habitat" name="habitat" required>
-                    <option value="">Seleccione un hábitat</option>
-                    {% for habitat in habitats %}
-                        <option value="{{ habitat.idHabitat }}">{{ habitat.nombreHabitat }}</option>
-                    {% endfor %}
-                </select>
+                <input type="text" id="habitat" name="habitat" value="{{ animal.habitat}}">
             </div>
 
-            <!-- Botones -->
-            <button class="btn btn-danger w-100" id="btnRegistrar" type="button">Registrar</button>
+            <button class="btn btn-danger w-100" id="btnRegistrar" type="button">actualizar</button>
             <button class="btn btn-secondary mt-3 w-100" type="button" onclick="vaciarFormulario()">
                 <i class="bi bi-x-circle"></i> Vaciar
             </button>
-         </div>
-        <!-- Imagen -->
-        <div class="form-side">
-            <label for="imagen"></label>
-            <div class="dropzone" id="myDropzone"></div>
+    </div>
+    <div class="form-side">
+        <label for="imagen"></label>
+        <div class="dropzone" id="myDropzone">
         </div>
+    </div>
 </form>
 
 

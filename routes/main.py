@@ -10,17 +10,24 @@ def index():
 
 @main.route("/bienvenida")
 def bienvenida():
-    # 👇 Si no hay sesión, redirigir al login
-    if "usuario" not in session or "rol" not in session:
+    if "idUsuario" not in session or "rol" not in session:
         return redirect(url_for("auth.formulario"))
 
-    usuario = session["usuario"]
+    id_usuario = session["idUsuario"]
     rol = session["rol"]
 
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
 
-    # 👇 Traer notificaciones no leídas según rol
+    # Traer datos del usuario
+    cur.execute("""
+        SELECT idUsuario, nombre, apellido, rol, documento, telefono, correo
+        FROM usuarios
+        WHERE idUsuario = %s
+    """, (id_usuario,))
+    usuario = cur.fetchone()
+
+    # Traer notificaciones no leídas según rol
     cur.execute("""
         SELECT id, leida, titulo, descripcion, fecha
         FROM notificacion
@@ -29,22 +36,23 @@ def bienvenida():
     """, (rol,))
     notificaciones = cur.fetchall()
 
-    # 👇 Contar notificaciones no leídas
     cur.execute("SELECT COUNT(*) AS total FROM notificacion WHERE rol = %s AND leida = 0", (rol,))
     no_leidas = cur.fetchone()["total"]
 
     cur.close()
     conn.close()
 
-    # 👇 Renderizar templates distintos según rol
+    # Elegir template según rol
     if rol == "Admin":
         template = "admininicio.html"
     elif rol == "Guia":
         template = "inicioGuia.html"
     elif rol == "Cuidador":
         template = "inicio.html"
+    elif rol == "RRHH":
+        template = "inicioRrhh.html"
     else:
-        template = "inicio.html"  # fallback
+        template = "inicio.html"
 
     return render_template(
         template,
@@ -53,3 +61,4 @@ def bienvenida():
         notificaciones=notificaciones,
         notificaciones_no_leidas=no_leidas
     )
+

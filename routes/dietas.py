@@ -13,20 +13,18 @@ def crear_dieta():
             # 1. Recoger datos principales
             idAnimal = request.form.get("idAnimal")
             tipoDieta = request.form.get("tipoDieta")
-            definitivo = 1 if request.form.get("definitivo") == "1" else 0
+            definitivo = 1 if request.form.get("definitivo") else 0
 
-            # --- Obtener especie automáticamente del animal ---
-            cur.execute("""
-                SELECT especie FROM animal WHERE idAnimal = %s
-            """, (idAnimal,))
+            # Obtener especie automáticamente
+            cur.execute("SELECT especie FROM animal WHERE idAnimal = %s", (idAnimal,))
             especie_data = cur.fetchone()
 
             if not especie_data:
-                return "Error: Animal no encontrado", 404
+                return jsonify({"error": "Animal no encontrado"}), 404
 
             idEspecie = especie_data["especie"]
 
-            # 2. Insertar en la tabla dieta
+            # 2. Insertar en dieta
             sql_dieta = """
                 INSERT INTO dieta (idAnimal, idEspecie, tipoDieta, definitivo)
                 VALUES (%s, %s, %s, %s)
@@ -34,13 +32,13 @@ def crear_dieta():
             cur.execute(sql_dieta, (idAnimal, idEspecie, tipoDieta, definitivo))
             idDieta = cur.lastrowid
 
-            # 3. Insertar en la tabla dietaalimento
+            # 3. Insertar alimentos
             idAlimentos = request.form.getlist("idAlimento[]")
             cantidades = request.form.getlist("cantidadAlimento[]")
             frecuencias = request.form.getlist("frecuenciaAlimento[]")
 
             for i in range(len(idAlimentos)):
-                if idAlimentos[i]:
+                if idAlimentos[i]:  # Validar que haya un alimento seleccionado
                     sql_dieta_alimento = """
                         INSERT INTO dietaalimento (idDieta, idAlimento, cantidadAlimento, frecuenciaAlimento)
                         VALUES (%s, %s, %s, %s)
@@ -53,19 +51,18 @@ def crear_dieta():
                     ))
 
             conn.commit()
-
-            return "OK", 200  # ✅ Sin JSON, solo un mensaje simple
+            return "OK", 200
 
         except Exception as e:
             conn.rollback()
-            print("Error al crear dieta:", str(e))
-            return "Error interno del servidor", 500
+            print("ERROR DETALLADO:", str(e))
+            return jsonify({"error": str(e)}), 500
 
         finally:
             cur.close()
             conn.close()
 
-    # GET: Mostrar formulario
+    # GET - Mostrar formulario
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
     animales = cur.fetchall()
 
@@ -76,6 +73,7 @@ def crear_dieta():
     conn.close()
 
     return render_template("crearDieta.html", animales=animales, alimentos=alimentos)
+
 
 ALIMENTOS_POR_ESPECIE = {
     "Gallina": ["Maíz", "Sorgo", "Salvado de trigo", "Harina de pescado", "Cáscaras de huevo"],
