@@ -95,13 +95,14 @@
                 <p class="titulo">Habitat:</p>
                 <p class="dato">{{ animal.habitat}}</p>
             </div>
-            <a href="{{url_for('animales.generar_pdf', idAnimal=animal.idAnimal) }}" class="btn btn-danger w-100">imprimir</a>  
+            <a href="{{url_for('animales.generar_pdf', idAnimal=animal.idAnimal) }}" class="btn btn-danger w-100">imprimir</a>      
     </div>
     <div class="form-side">
         {% if animal.imagen %}
           <img src="{{ url_for('static', filename='uploads/' + animal.imagen) }}" alt="imagen {{ animal.nombre }}" class="img-fluid">
         {% endif %}
     </div>
+    
 </div>
 </body>
 </html>

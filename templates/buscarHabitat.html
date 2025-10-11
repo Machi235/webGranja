@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Buscar Hábitat</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/buscarHabitat.css') }}">
+</head>
+<body>
+  <div class="contenedor">
+    <h1>🔍 Buscar Hábitat</h1>
+
+    <form method="POST" class="buscador">
+      <input type="text" name="nombre_habitat" placeholder="Escribe el nombre del hábitat..." required>
+      <button type="submit">Buscar</button>
+    </form>
+
+    {% if busqueda %}
+      <h2>Resultados para: "{{ busqueda }}"</h2>
+
+      {% if resultados %}
+        {% for fila in resultados %}
+          <div class="card">
+            <div class="info">
+              <h3>{{ fila.nombreHabitat }}</h3>
+              <p><b>Tipo:</b> {{ fila.tipo or 'No especificado' }}</p>
+              <p><b>Estado:</b> {{ fila.estado or 'Sin estado' }}</p>
+              <p><b>Ubicación:</b> {{ fila.ubicacion or 'Desconocida' }}</p>
+            </div>
+            {% if fila.nombreAnimal %}
+              <div class="animal">
+                <img src="{{ url_for('static', filename='uploads/' + fila.imagen) if fila.imagen else url_for('static', filename='img/default.png') }}" alt="Animal">
+                <div>
+                  <p><b>Animal:</b> {{ fila.nombreAnimal }}</p>
+                  <p><b>Salud:</b> {{ fila.estadoSalud }}</p>
+                  <p><b>Sexo:</b> {{ fila.sexo }}</p>
+                </div>
+              </div>
+            {% else %}
+              <p class="sin-animales">🐾 No hay animales registrados en este hábitat.</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="sin-animales">❌ No se encontraron resultados.</p>
+      {% endif %}
+    {% endif %}
+  </div>
+</body>
+</html>
+
