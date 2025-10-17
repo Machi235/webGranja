@@ -61,8 +61,8 @@
             <div class="campo"> 
                 <label>Temperatura:</label>
                 <div class="temperaturas">
-                    <input type="text" class="temperatura" name="minTemperatura" placeholder="Min">
-                    <input type="text" class="temperatura" name="maxTemperatura" placeholder="Max">
+                    <input type="text" class="temperatura" name="minTemperatura" placeholder="Min" id="minTemperatura">
+                    <input type="text" class="temperatura" name="maxTemperatura" placeholder="Max" id="maxTemperatura">
                 </div>
             </div>
             <div class="campo">
@@ -106,6 +106,26 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="{{ url_for('static', filename='js/habitat.js') }}"></script>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <script>
+      {% for category, message in messages %}
+        Swal.fire({
+          icon: '{{ category }}',
+          title: '{{ message }}',
+          showConfirmButton: false,
+          timer: 2000,
+
+          timerProgressBar: true
+        }).then(() => {
+          window.location.href = "{{ url_for('habitat_bp.ver_habitats') }}";
+        });
+      {% endfor %}
+    </script>
+  {% endif %}
+{% endwith %}
+
 
 
 </body>

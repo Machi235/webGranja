@@ -68,15 +68,45 @@
 
 <div class="listaUsuarios" id="data">
   {% for usuario in usuarios %}
-    <div class="usuario card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">{{ usuario.nombre }} {{ usuario.apellido }}</h5>
-        <p class="card-rol">Rol: {{ usuario.rol }}</p>
-        <p class="card-documento">Documento: {{ usuario.documento }}</p>
-        <p class="card-telefono">Teléfono: {{ usuario.telefono }}</p>
-        <p class="card-correo">Correo: {{ usuario.correo }}</p>
-      </div>
-    </div>
+     <a href="{{url_for('auth.ver_usuario', idUsuario=usuario.idUsuario) }}" class="card">
+        <div class="informacion">
+          <div class="datos">
+            <div class="dato">
+              <p class="titulo">Nombres:</p>
+              <p class="texto nombre">{{ usuario.nombre }}</p>
+            </div>
+            <div class="dato">
+              <p class="titulo">Apellidos:</p>
+              <p class="texto">{{ usuario.apellido }}</p>
+            </div>
+          </div>
+          <div class="datos">
+            <div class="dato">
+              <p class="titulo">Rol:</p>
+              <p class="texto rol">{{ usuario.rol }}</p>
+            </div>
+            <div class="dato">
+              <p class="titulo">Numero de documento:</p>
+              <p class="texto">{{ usuario.documento }}</p>
+            </div>
+          </div>
+          <div class="datos">
+            <div class="dato">
+              <p class="titulo">Telefono:</p>
+              <p class="texto">{{ usuario.telefono }}</p>
+            </div>
+            <div class="dato">
+              <p class="titulo">Correo:</p>
+              <p class="texto">{{ usuario.correo }}</p>
+            </div>
+          </div>
+          <form action="{{url_for('auth.eliminar_usuario', idUsuario=usuario.idUsuario) }}" method="POST">
+            <button type="submit" class="boton" onclick="return confirm('estas seguro de que quieres eliminar este animal');">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </form>
+        </div>
+      </a> 
   {% endfor %}
 </div>
 

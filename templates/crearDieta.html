@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Dieta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-4">
+    <h2>Crear Dieta</h2>
+
+    <form id="formCrearDieta" method="POST">
+        <!-- Selección de Animal -->
+        <div class="mb-3">
+            <label for="idAnimal" class="form-label">Animal:</label>
+            <select id="idAnimal" name="idAnimal" class="form-select" required>
+                <option value="">-- Seleccionar --</option>
+                {% for animal in animales %}
+                    <option value="{{ animal.idAnimal }}">{{ animal.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Tipo de Dieta -->
+        <div class="mb-3">
+            <label for="tipoDieta" class="form-label">Tipo de Dieta:</label>
+            <input type="text" id="tipoDieta" name="tipoDieta" class="form-control" placeholder="Ejemplo: Balanceada, Proteica..." required>
+        </div>
+
+        <!-- Definitivo -->
+        <div class="mb-3 form-check">
+            <input type="checkbox" id="definitivo" name="definitivo" value="1" class="form-check-input">
+            <label for="definitivo" class="form-check-label">¿Definitivo?</label>
+        </div>
+
+        <!-- Alimentos de la Dieta -->
+        <h3>Alimentos</h3>
+        <div id="contenedorAlimentos">
+            <div class="fila-alimento mb-2 d-flex gap-2">
+                <select name="idAlimento[]" class="form-select alimento-select" required>
+                    <option value="">Seleccione un alimento</option>
+                </select>
+                <input type="text" name="cantidadAlimento[]" class="form-control" placeholder="Cantidad" required>
+                <input type="text" name="frecuenciaAlimento[]" class="form-control" placeholder="Frecuencia" required>
+                <button type="button" class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-secondary mt-2" onclick="agregarFila()">+ Agregar alimento</button>
+
+        <br><br>
+        <button type="submit" id="btnGuardarDieta" class="btn btn-primary">Guardar Dieta</button>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ url_for('static', filename='js/dietas.js') }}"></script>
+</body>
+</html>

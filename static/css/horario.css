@@ -4,14 +4,19 @@
 
 .menu{
     display: flex;
-    justify-content: right;
-    align-items: center;
-    margin-right: 150px;
+    justify-content:space-between ;
+    margin-inline: 200px 150px;
     margin-top: 40px;
-    gap: 20px;
 }
 
-button{
+.verTurnos{
+    border-radius: 17px;
+    padding: 10px 20px;
+    border: none;
+    background-color: rgba(186, 152, 218, 0.747);
+}
+
+.botonesMenu, .botonEditar, #cerrarEditarHorario, #cerrarTurno, #cerrarHorario, #cerrarTurnos{
     background: none;
     border: none;
 }
@@ -20,11 +25,20 @@ button{
     font-size: 30px;
 }
 
+.ladoIzquierdo{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 20px;
+}
+
 .campo {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  margin-bottom:10px ;
 }
+
 
 .campo label {
   font-size: 18px;
@@ -39,16 +53,27 @@ button{
   font-weight: 200;
 }
 
-#nuevoHorario, #nuevoTurno{
-  width: 30%;
-  text-align: left;
-  border-radius: 15px;
-  border: none;
-  font-family: "Montserrat", sans-serif;
-  background-color: #2a2a606b;
-  color: white;
-  padding: 30px;
+#nuevoHorario, #nuevoTurno, #editarAsignacionTurno, #listaTurnos{
+    width: 30%;
+    border-radius: 15px;
+    border: none;
+    font-family: "Montserrat", sans-serif;
+    background-color: #2a2a606b;
+    color: white;
+    
 } 
+.cerrar{
+    display: flex;
+    justify-content: right;
+}
+.bi-x-circle{
+    color: white;
+}
+
+form{
+    text-align: left; 
+    margin: 0px 30px 30px;
+}
 
 #nuevoTurno::backdrop{
     background-color:rgba(0, 0, 0, .56);
@@ -56,24 +81,42 @@ button{
 #nuevoHorario::backdrop{
     background-color:rgba(0, 0, 0, .56);
 }
+#editarAsignacionTurno::backdrop{
+    background-color:rgba(0, 0, 0, .56);
+}
+#listaTurnos::backdrop{
+    background-color:rgba(0, 0, 0, .56);
+}
 
 select{
     width: 150px;
-    height: 30px;
+    height: 40px;
 }
 
 .horarios{
     display: flex;
     margin-top: 50px;
-    /* background-color: #1b1b44d8; */
-
 }
 
-.table{
+.table-striped{
     border-radius: 20px;
     border-collapse: separate;
     overflow: hidden;
     box-shadow: 0px 15px 20px rgba(59, 59, 59, 0.5);
     padding: 0;
-    border: 1px solid black;
+    border-bottom-width:0px;
+
+}
+.table-striped-columns{
+    border-collapse: collapse;
+    border-radius: 200px;
+}
+
+.turno{
+    display: flex;
+    justify-content: space-between;
+}
+
+.bi-pencil-square{
+    font-size: 20px;
 }

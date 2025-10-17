@@ -1,15 +1,37 @@
 body {
-  background: #f9fafc;
+  font-family: 'Delius', sans-serif;
 }
+
 h2 {
+  font-weight: 700;
   color: #2c3e50;
 }
+
 .card {
-  border-radius: 12px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
+  border-radius: 15px;
 }
+
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
+
+.card-title {
+  font-weight: bold;
+}
+
+.btn-primary {
+  border-radius: 10px;
+  background-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  border-radius: 10px;
+}
+
   

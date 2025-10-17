@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ver Dietas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f8f9fa; }
+    .card { border-radius: 15px; }
+    .card-title { font-size: 1.2rem; font-weight: bold; }
+    .badge-definitivo { background-color: #28a745; }
+    .badge-no-definitivo { background-color: #ffc107; }
+  </style>
+</head>
+<body class="container py-4">
+
+  <h1 class="mb-4">Dietas Registradas</h1>
+
+  <!-- FILTROS -->
+  <form class="row mb-4" method="get" action="/ver_dietas">
+    <div class="col-md-4">
+      <select name="idAnimal" class="form-select">
+        <option value="">Filtrar por Animal</option>
+        {% for animal in animales %}
+        <option value="{{ animal.idAnimal }}" {% if request.args.get('idAnimal') == animal.idAnimal|string %}selected{% endif %}>
+          {{ animal.nombre }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4">
+      <select name="idEspecie" class="form-select">
+        <option value="">Filtrar por Especie</option>
+        {% for especie in especies %}
+        <option value="{{ especie.idEspecie }}" {% if request.args.get('idEspecie') == especie.idEspecie|string %}selected{% endif %}>
+          {{ especie.tipoEspecie }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4">
+      <button class="btn btn-primary w-100" type="submit">Aplicar Filtros</button>
+    </div>
+  </form>
+
+  <!-- LISTADO DE DIETAS -->
+  <div class="row">
+    {% for dieta in dietas %}
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">{{ dieta.nombreAnimal }} <small class="text-muted">({{ dieta.tipoEspecie }})</small></h5>
+          <p class="mb-1">
+            <strong>Tipo de dieta:</strong> {{ dieta.tipoDieta }}
+          </p>
+          <span class="badge {% if dieta.definitivo == 1 %}badge-definitivo{% else %}badge-no-definitivo{% endif %}">
+            {% if dieta.definitivo == 1 %}Definitiva{% else %}Provisional{% endif %}
+          </span>
+
+          <hr>
+          <h6>Alimentos</h6>
+          {% if dieta.alimentos %}
+            <ul class="list-group">
+              {% for al in dieta.alimentos %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ al.nombreAlimento }}
+                <span class="text-muted small">
+                  {{ al.cantidadAlimento }} - {{ al.frecuenciaAlimento }}
+                </span>
+              </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted">No hay alimentos registrados.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if dietas|length == 0 %}
+    <div class="alert alert-warning text-center">No se encontraron dietas.</div>
+  {% endif %}
+
+</body>
+</html>

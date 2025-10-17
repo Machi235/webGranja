@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>📋 Reportes Médicos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reportes.css') }}">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-4">
+
+  <h2 class="mb-4 text-center">
+    🐾 Historial Clínico del Animal #{{ id_animal }}
+  </h2>
+
+  <!-- Formulario de filtros -->
+  <form method="POST" class="row g-3 mb-4 p-3 bg-white rounded shadow-sm">
+    <div class="col-md-4">
+      <label class="form-label">Tipo de reporte</label>
+      <select name="tipo" class="form-select">
+        <option value="">Todos</option>
+        <option value="Cirugía">Cirugía</option>
+        <option value="Medicación">Medicación</option>
+        <option value="Postoperatorio">Postoperatorio</option>
+        <option value="Terapia Física">Terapia Física</option>
+        <option value="Vacuna">Vacuna</option>
+        <option value="Visita">Visita</option>
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Fecha</label>
+      <input type="date" name="fecha" class="form-control">
+    </div>
+
+    <div class="col-md-4 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100">
+        <i class="bi bi-search"></i> Filtrar
+      </button>
+    </div>
+  </form>
+
+  <!-- Lista de reportes -->
+  <div class="row">
+    {% if registros %}
+      {% for r in registros %}
+      <div class="col-md-4 mb-4">
+          <div class="card shadow-sm h-100 border-0 hover-card">
+            <div class="card-body">
+              <h5 class="card-title text-primary">{{ r.tipo }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Animal: {{ r.id_animal }}</h6>
+              <p class="card-text">{{ r.descripcion }}</p>
+              <p class="text-end text-secondary"><small>{{ r.fecha or 'Sin fecha registrada' }}</small></p>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="col-12 text-center">
+        <div class="alert alert-info">No hay reportes disponibles para este animal.</div>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Botón de regreso -->
+  <div class="mt-4 text-center">
+    <a href="{{ url_for('animales.ver_animal', idAnimal=id_animal) }}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Volver a la ficha del animal
+    </a>
+  </div>
+
+</div>
+
+</body>
+</html>

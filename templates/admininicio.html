@@ -50,6 +50,9 @@
             <a class="nav-link" href="{{ url_for('auth.ver_usuarios') }}">Ver Usuarios</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('habitat_bp.ver_habitats') }}">Ver habitats</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{{ url_for('eventos.registro_cirugia') }}">Cirugia</a>
           </li>
           <li class="nav-item">
@@ -71,8 +74,9 @@
             <a class="nav-link" href="{{ url_for('actividad_bp.registro_actividad') }}">Actividad</a>
           </li>
            <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('auth.registro') }}">Registro</a>
-                        </li>
+              <a class="nav-link" href="{{ url_for('auth.registro') }}">Registro</a>
+            </li>
+            <button id="verPerfil">Ver perfil</button>
           <li class="nav-item">
   <a class="nav-link text-danger" href="{{ url_for('auth.logout') }}">
     <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
@@ -83,6 +87,35 @@
     </div>
   </div>
 </nav>
+
+<dialog id="perfil">
+    <div class="campo">
+    </div>
+        <div class="horas">
+            <div class="campo">
+                <p class="titulo">Nombre completo</p>
+                <p class="dato">{{usuario.nombre }} {{ usuario.apellido }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Rol:</p>
+                <p class="dato">{{ usuario.rol }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Numero de documento:</p>
+                <p class="dato">{{ usuario.documento }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Telefono:</p>
+                <p class="dato">{{ usuario.telefono }}</p>
+            </div>
+            <div class="campo">
+                <p class="titulo">Correo:</p>
+                <p class="dato">{{ usuario.correo }}</p>
+            </div>
+        </div>
+        <button id="cerrar">Cerrar</button>
+</dialog>
+
 <dialog id="notificacion">
   <form method="POST" action="{{ url_for('notificaciones_bp.crear_notificacion') }}">
       <div class="campo">

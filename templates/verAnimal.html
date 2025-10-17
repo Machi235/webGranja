@@ -116,9 +116,15 @@
                         <p class="texto">{{ animal.habitat }}</p>
                       </div>
                     </div>
+                    <form action="{{url_for('animales.eliminar_animal', idAnimal=animal.idAnimal) }}" method="POST">
+                      <button type="submit" class="boton" onclick="return confirm('estas seguro de que quieres eliminar este animal');">
+                        <i class="bi bi-trash3"></i>
+                      </button>
+                    </form>
                 </div>
-    </a>
+    </a> 
   {% endfor %}
+</div>
 </div>
 
 

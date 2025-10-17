@@ -72,11 +72,18 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('eventos.registro_visita') }}">Visita</a>
           </li>
+           <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('dietas.crear_dieta') }}">Dietas</a>
+          </li>
+           <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('dietas.ver_dietas') }}">Ver Dietas</a>
+          </li>
+          
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('asignacion.asignar') }}">Asignacion habitad</a>
           </li>
             <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('reporte.reportes') }}">Reporte</a>
+          <a class="nav-link" href="{{ url_for('animales.registros_medicos', id_animal=1) }}">Reporte</a>
           </li>
           <li class="nav-item">
            <a class="nav-link" href="{{ url_for('buscarHabitat.buscar') }}">Buscar Hábitat</a>

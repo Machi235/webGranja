@@ -9,8 +9,9 @@
 
 #miFormulario{
   display: flex;
-  max-width: 53%;
-  width: 90%;
+  max-width: 63%;
+  min-width: 53%;
+  width: 100%;
   background: #1a1a4034;
   border-radius: 12px;
   overflow: hidden;
@@ -27,13 +28,6 @@
   padding: 30px;
   background: #2a2a606b;
   color: white;
-
-}
-
-.form-box{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
 }
 
 .campo {

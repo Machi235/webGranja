@@ -50,88 +50,143 @@
     </div>
   </div>
 </nav>
-<div>
-  <div class="menu">
-    <select id="filtroArea">
-  <option value="">Buscar por</option>
-  <option value="Guia">Guias</option>
-  <option value="Cuidador">Cuidadores</option>
-</select>
-    <button><i class="bi bi-calendar-plus" id="crearHorario"></i></button>
-<!--------------------------------asignar Turno --------------------------------------------->
-    <!-- Formulario para asignar turno -->
-<dialog id="nuevoHorario">
-  <form method="post" action="{{ url_for('turnos_bp.asignar_turno') }}" id="formAsignarTurno">
-    <div class="campo">
-      <label for="empleado">Empleado:</label>
-      <input type="text" class="form-control" id="empleado" name="usuario" required>
-    </div>
-    <div class="campo">
-      <label for="idHorario">Turno:</label>
-      <select class="form-control" id="idHorario" name="idHorario" required>
-        <option value="">Selecciona un turno</option>
+<div class="menu">
+<!--------------------------------Ver turnos---------------------------------------------> 
+  <button id="verTurnos" class="verTurnos" type="button" >Ver turnos</button>
+<!--- --------------------------lista de turnos--------------------------------------------------------------------->
+  <dialog id="listaTurnos">
+    <div class="cerrar"><button  id="cerrarTurnos" type="button"><i class="bi bi-x-circle"></i></button></div>
+      <table class="table table-striped-columns">
+      <thead>
+        <tr>
+          <th>Nombre del turno</th>
+          <th>Hora de inicio</th>
+          <th>hora de fin</th>
+        </tr>
+      </thead>
+      <tbody>
         {% for turno in turnos %}
-          <option value="{{ turno.idHorario }}">{{ turno.horaInicio }} - {{ turno.horaFin }}</option>
+          <tr>
+            <td>{{ turno.nombreTurno}}</td>
+            <td>{{ turno.horaInicio}}</td>
+            <td>
+              {{ turno.horaFin}}
+              <form action="{{url_for('turnos_bp.eliminar_turno', idHorario=turno.idHorario)}}" method="POST">
+                <button type="submit" class="button" onclick="return confirm('estas seguro de que quieres eliminar este turno');">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
         {% endfor %}
-      </select>
-    </div>
-    <div class="campo">
-      <label>Fecha inicio:</label>
-      <input type="date" name="fechaInicio" required>
-    </div>
-    <div class="campo">
-      <label>Fecha fin:</label>
-      <input type="date" name="fechaFin" required>
-    </div>
-    <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
-  </form>
-</dialog>
-
-
-
-<!----------------------------------------------------------------------------------------------> 
-    <button><i class="bi bi-alarm" id="crearTurno"></i></button>
-<!------------------------------------agregar un turno ------------------------------------------>
+      </tbody>
+    </table>
+  </dialog>
+<!--- --------------------------menu del lado izquierdo--------------------------------------------------------------------->
+  <div class="ladoIzquierdo">
+    <select id="filtroArea">
+      <option value="">Buscar por</option>
+      <option value="Guia">Guias</option>
+      <option value="Cuidador">Cuidadores</option>
+    </select>
+<!--------------------------------asignar Turno --------------------------------------------->    
+    <button class="botonesMenu" type="button"><i class="bi bi-calendar-plus" id="crearHorario"></i></button>
+<!--- --------------------------Formulario para asignar turno --------------------------------------------------------------------->
+    <dialog id="nuevoHorario">
+      <div class="cerrar"><button  id="cerrarHorario" type="button"><i class="bi bi-x-circle"></i></button></div>
+      <form method="post" action="{{ url_for('turnos_bp.asignar_turno') }}" id="formAsignarTurno">
+        <div class="campo">
+          <label for="idUsuario">Empleado:</label>
+          <select class="form-control" id="idUsuario" name="idUsuario">
+            <option value="">Seleccione un empleado</option>
+            {% for usuario in usuarios %}
+              <option value="{{ usuario.idUsuario }}">{{ usuario.nombre }} {{ usuario.apellido }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="campo">
+          <label for="idHorario">Turno:</label>
+          <select class="form-control" id="idHorario" name="idHorario">
+            <option value="">Selecciona un turno</option>
+            {% for turno in turnos %}
+              <option value="{{ turno.idHorario }}">{{ turno.nombreTurno }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
+      </form>
+    </dialog>
+<!------------------------------------crear un turno -------------------------------------------------------------------> 
+    <button class="botonesMenu" type="button"><i class="bi bi-alarm" id="crearTurno"></i></button>
+<!------------------------------------Formulario para crear turno-------------------------------------------------------->
     <!-- Formulario para crear turno -->
-<dialog id="nuevoTurno">
-  <form method="post" action="{{ url_for('turnos_bp.crear_turno') }}" id="formCrearTurno">
-    <div class="campo">
-      <label>Horas:</label>
-      <div class="horas">
-        <input type="time" class="horas" name="horaInicio" placeholder="Hora de inicio" required>
-        <input type="time" class="horas" name="horaFin" placeholder="Hora de fin" required>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
-  </form>
-</dialog>
+    <dialog id="nuevoTurno">
+      <div class="cerrar"><button id="cerrarTurno" type="button"><i class="bi bi-x-circle"></i></button></div>
+      <form method="post" action="{{ url_for('turnos_bp.crear_turno') }}" id="formCrearTurno">
+        <div class="campo">
+          <label>Nombre del turno:</label>
+          <input type="text" class="nombre" name="nombreTurno">
+          <label>Horas:</label>
+          <div class="horas">
+            <input type="time" class="horas" name="horaInicio" placeholder="Hora de inicio">
+            <input type="time" class="horas" name="horaFin" placeholder="Hora de fin">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
+      </form>
+    </dialog>
+  </div>
+</div>
 
-
-<!-----------------------------------------------------------------------------------------------> 
- <table class="table table-striped br-4">
-  <thead>
-    <tr>
-      <th>EMPLEADO</th>
-      <th>AREA</th>
-      <th>TURNO</th>
-    </tr>
-  </thead>
-  <tbody id="data">
-    {% for turno in asignaciones %}
+<!------------------------------------Tabla de visualizacion de asignacion de turnos-----------------------------------------------------------> 
+<div class="horarios container" >
+  <table class="table table-striped br-4">
+    <thead>
       <tr>
-        <td>{{ turno.empleado }}</td>
-        <td>{{ turno.area }}</td>
-        <td>{{ turno.turno }}</td>
+        <th>EMPLEADO</th>
+        <th>AREA</th>
+        <th>TURNO</th>
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody id="data">
+      {% for turno in asignaciones %}
+        <tr>
+          <td>{{ turno.nombre }} {{ turno.apellido }}</td>
+          <td>{{ turno.area }}</td>
+          <td class="turno">{{ turno.turno }}<button class="botonEditar" 
+            data-id="{{turno.idUsuarioturno}}"
+            data-empleado="{{ turno.nombre }} {{ turno.apellido }}"
+            data-turno="{{ turno.idHorario }}">
+            <i class="bi bi-pencil-square"></i></button></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
+<!---------------------------------------Editar asignacion de turno--------------------------------------------------------> 
+ <dialog id="editarAsignacionTurno">
+    <div class="cerrar"><button id="cerrarEditarHorario" type="button"><i class="bi bi-x-circle"></i></button></div>
+    <form method="post" action="{{ url_for('turnos_bp.actualizar_asignar_turno') }}">
+      <input type="hidden" id="idUsuarioturno" name="idUsuarioturno">
+      <div class="campo">
+        <label for="idUsuario">Empleado:</label>
+        <input type="text" id="empleado" name="empleado" readonly>
+      </div>
+      <div class="campo">
+        <label for="idHorario">Turno:</label>
+        <select class="form-control" id="turno" name="idHorario">
+          <option value=""></option>
+          {% for turno in turnos %}
+            <option value="{{ turno.idHorario }}">{{ turno.nombreTurno }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
+    </form>
+  </dialog>
 
-
-
-   
-    <script src="{{ url_for('static', filename='js/horario.js') }}"></script>
+<script src="{{ url_for('static', filename='js/horario.js') }}"></script>
    
   </body>
 </html>

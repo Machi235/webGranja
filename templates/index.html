@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+ <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -10,68 +11,76 @@
 <body>
 
   <!-- NAVBAR -->
-  <nav class="navbar fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-  </svg>🌱 Granja Machis</a>
-  </div>
-</nav>
+  <nav class="">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" 
+             alt="Logo Granja Machis"  class="me-2">
+        <span class="titulo-2">Granja Livestock Log</span>
+      </a>
+    </div>
+  </nav>
 
-  <!-- HERO SECTION -->
-  <section class="hero d-flex align-items-center text-center text-white">
+  <!-- HERO + ANIMALES JUNTOS -->
+  <section class="hero d-flex align-items-center text-white py-5">
     <div class="container">
-      <h1 class="display-4 fw-bold">Bienvenid@ a la Granja Machis</h1>
-      <p class="lead mt-3">Descubre nuestros animales.</p>
-      <a href="{{ url_for('auth.formulario') }}" class="btn btn-light btn-lg mt-3">Comenzar</a>
+      <div class="row align-items-center">
+        
+        <!-- Columna izquierda -->
+        <div class="col-md-6 text-center text-md-start mb-4 mb-md-0">
+          <h3 class="titulo">Bienvenid@ a la Granja Livestock Log</h3>
+          <p class="lead mt-3">Descubre nuestros animales.</p>
+          <a href="{{ url_for('auth.formulario') }}" class="btn btn-light btn-lg mt-3">Comenzar</a>
+        </div>
+
+        <!-- Columna derecha: Tarjetas -->
+       <!-- Columna derecha: Tarjetas -->
+<div class="col-md-6">
+
+  <!-- 🔹 Texto arriba de las cards -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold">Animales de la Granja</h2>
+    <p class="text-light">Conoce a nuestros amigos que hacen posible la magia de la granja.</p>
+  </div>
+
+  <!-- 🔹 Contenedor de las tarjetas -->
+  <div class="d-flex flex-wrap justify-content-center gap-3">
+
+    <div class="card animal-card">
+      <img src="{{ url_for('static', filename='img/gallina.jpeg') }}" alt="Gallina">
+      <div class="card-body">
+        <h5> Gallina</h5>
+        <p>La gallina más linda de todas</p>
+      </div>
     </div>
-  </section>
 
-  <!-- SECCIÓN DE ANIMALES -->
-  <section class="container my-5">
-    <div class="text-center mb-5">
-      <h2 class="fw-bold">Animales de la Granja</h2>
-      <p class="text-muted">Conoce a nuestros amigos que hacen posible la magia de la granja.</p>
+    <div class="card animal-card">
+      <img src="{{ url_for('static', filename='img/vaca.jpeg') }}" alt="Vaquita">
+      <div class="card-body">
+        <h5> Vaquita</h5>
+        <p>La vaca más linda de todas</p>
+      </div>
     </div>
 
-    <div class="row g-4">
-      <div class="col-md-3">
-        <div class="card animal-card h-100">
-          <img src="{{ url_for('static', filename='img/gallina.jpeg') }}" class="card-img-top" alt="Caballo Lucy">
-          <div class="card-body text-center">
-            <h5 class="card-title">Gallina</h5>
-            <p class="card-text">La gallina más lindo de todos</p>
-          </div>
-        </div>
+    <div class="card animal-card">
+      <img src="{{ url_for('static', filename='img/cerdito.jpeg') }}" alt="Cerdito">
+      <div class="card-body">
+        <h5> Cerdito</h5>
+        <p>El cerdito más lindo de todos</p>
       </div>
+    </div>
 
-      <div class="col-md-3">
-        <div class="card animal-card h-100">
-          <img src="{{ url_for('static', filename='img/vaca.jpeg') }}" class="card-img-top" alt="Caballo Lucy">
-          <div class="card-body text-center">
-            <h5 class="card-title">Vaquita</h5>
-            <p class="card-text">La vaca más linda de todas</p>
-          </div>
-        </div>
+    <div class="card animal-card">
+      <img src="{{ url_for('static', filename='img/Caballo.jpeg') }}" alt="Caballo Lucy">
+      <div class="card-body">
+        <h5> Caballo Lucy</h5>
+        <p>El caballo más lindo de todos</p>
       </div>
+    </div>
 
-      <div class="col-md-3">
-        <div class="card animal-card h-100">
-          <img src="{{ url_for('static', filename='img/cerdito.jpeg') }}" class="card-img-top" alt="Caballo Lucy">
-          <div class="card-body text-center">
-            <h5 class="card-title">Cerdito</h5>
-            <p class="card-text">El Cerdito más lindo de todos</p>
           </div>
         </div>
-      </div>
 
-      <div class="col-md-3">
-        <div class="card animal-card h-100">
-          <img src="{{ url_for('static', filename='img/Caballo.jpeg') }}" class="card-img-top" alt="Caballo Lucy">
-          <div class="card-body text-center">
-            <h5 class="card-title">Caballo Lucy</h5>
-            <p class="card-text">El caballo más lindo de todos</p>
-          </div>
-        </div>
       </div>
     </div>
   </section>

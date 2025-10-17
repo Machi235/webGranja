@@ -55,7 +55,7 @@ img{
 .informacion{
     display: flex;
     padding-right: 50px;    
-    gap: 15%;
+    gap: 200px;
     /* background-color: blueviolet; */
     width: 100%;
     align-items: center;
@@ -88,4 +88,14 @@ p{
 }
 .filtro{
    display: none; 
+}
+
+.bi-trash3{
+    font-size: xx-large;
+    color: rgb(202, 36, 36);
+}
+
+.boton{
+    background: none;
+    border: none;
 }
