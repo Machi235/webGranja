@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Asignar Animal a Hábitat</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-5">
+
+  <h2 class="mb-4">Asignación de Animales a Hábitats</h2>
+
+  <form method="POST" class="card p-4 shadow">
+    <div class="mb-3">
+      <label for="animal_id" class="form-label">Animal</label>
+      <select class="form-select" name="animal_id" required>
+        <option value="">Seleccione un animal</option>
+        {% for a in animales %}
+          <option value="{{ a.id }}">{{ a.nombre }} ({{ a.especie }})</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="habitat_id" class="form-label">Hábitat</label>
+      <select class="form-select" name="habitat_id" required>
+        <option value="">Seleccione un hábitat</option>
+        {% for h in habitats %}
+          <option value="{{ h.id }}">{{ h.nombre }} - Capacidad: {{ h.capacidad_max }} ({{ h.especie_compatible }})</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Asignar</button>
+  </form>
+
+</body>
+</html>

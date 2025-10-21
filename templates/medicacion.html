@@ -1,21 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>medicacion</title>
-  
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Medicación</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/eventosClinicos.css') }}">
+
 </head>
+
 <body>
+
    <nav class="navbar">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
       <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16"></svg>
-      Bienvenido a la sección de medicacion
+      Bienvenido a la sección medicacion 
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -52,83 +55,89 @@
   </div>
 </nav>
 
-  
 
-<div class="form-container">
+  <div class="form-container">
 
-  <div class="form-box">
-  
-    <form id="formVisita" action="{{ url_for('eventos.registro_medicacion') }}" method="POST">
+    
+    <div class="form-box">
+      <h2>💊 Control de Medicación</h2>
+      <p class="form-desc">Registra las medicaciones aplicadas a tus animales para mantener un control sanitario completo.</p>
 
-      <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-        <label class="btn btn-outline-primary" for="btnradio1">medicacion</label>
+      <form id="formVisita" action="{{ url_for('eventos.registro_medicacion') }}" method="POST">
 
-        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-        <label class="btn btn-outline-primary" for="btnradio2">terapia fisica</label>
-      </div>
-
-      <div class="form-row">
-    <label for="idAnimal">Animal*</label>
-    <select class="form-control" name="idAnimal" id="idAnimal" required>
-        <option value="">Selecciona un animal</option>
-        {% for animal in animales %}
-            <option value="{{ animal.idAnimal }}">{{ animal.nombre }}</option>
-        {% endfor %}
-    </select>
-  </div>
-          <div class="form-row">
-              <label for="nombreMed">Nombre del Medicamento*</label>
-              <input type="text" class="form-control" name="nombreMed" id="nombreMed" required>
-          </div>
-
-          <div class="form-row-inline">
-            <div>
-              <label for="dosisSuministradas">Dosis Suministrada*</label>
-              <input type="text" class="form-control" name="dosisSuministradas" id="dosisSuministradas" required>
-            </div>
-            <div>
-              <label>&nbsp;</label>
-              <select class="form-control" name="unidad">
-                  <option value="ml">ml</option>
-                  <option value="mg">mg</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-row">
-              <label for="horaAplicacion">Hora aplicada*</label>
-              <input type="time" class="form-control" name="horaAplicacion" id="horaAplicacion" required>
-          </div>
-
-          <div class="form-row">
-              <label for="horaSiguiente">Hora próxima de aplicación*</label>
-              <input type="time" class="form-control" name="horaSiguiente" id="horaSiguiente" required>
-          </div>
-
-          <div class="form-row">
-              <label for="administracionMed">Administración*</label>
-              <select class="form-control" name="administracionMed" id="administracionMed" required>
-                  <option value="oral">Oral</option>
-                  <option value="inyectable">Inyectable</option>
-              </select>
-          </div>
-
-          <div class="form-row">
-              <label for="reaccionesMed">Reacciones</label>
-              <input type="text" class="form-control" name="reaccionesMed" id="reaccionesMed">
-          </div>
-          <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
-
-            </form>
-          </div>
-            <div class="form-side">
-        
-          <img src= "./views/imagen2.png">
+        <div class="form-group">
+          <label for="idAnimal">Animal:</label>
+          <select id="idAnimal" name="idAnimal" required>
+            <option value="">Selecciona un animal</option>
+            {% for animal in animales %}
+              <option value="{{ animal.idAnimal }}">{{ animal.nombreAnimal }}</option>
+            {% endfor %}
+          </select>
         </div>
+
+        <div class="form-group">
+          <label for="nombreMed">Medicamento:</label>
+          <input type="text" id="nombreMed" name="nombreMed" placeholder="Ej: Oxitetra 20%" required>
+        </div>
+
+        <div class="form-group inline">
+          <div>
+            <label for="dosisSuministradas">Dosis:</label>
+            <input type="text" id="dosisSuministradas" name="dosisSuministradas" placeholder="5">
+          </div>
+          <div>
+            <label>Unidad:</label>
+            <select name="unidad">
+              <option value="ml">ml</option>
+              <option value="mg">mg</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group inline">
+          <div>
+            <label for="horaAplicacion">Hora aplicada:</label>
+            <input type="time" id="horaAplicacion" name="horaAplicacion" required>
+          </div>
+          <div>
+            <label for="horaSiguiente">Próxima hora:</label>
+            <input type="time" id="horaSiguiente" name="horaSiguiente" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="administracionMed">Administración:</label>
+          <select id="administracionMed" name="administracionMed">
+            <option value="Oral">Oral</option>
+            <option value="Inyectable">Inyectable</option>
+            <option value="Tópica">Tópica</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="reaccionesMed">Reacciones:</label>
+          <textarea id="reaccionesMed" name="reaccionesMed" rows="3" placeholder="Describe las observaciones..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-registrar">Registrar</button>
+      </form>
+    </div>
+
+  <div class="form-side">
+  <div class="info-card">
+    <div class="icon">🐄</div>
+    <h2>Registro de Medicación</h2>
+    <p>
+      Lleva el control de cada tratamiento, dosis y aplicación.  
+      Asegura el bienestar de tus animales con registros claros y precisos. 💚
+    </p>
+    <a href="{{ url_for('animales.ver_animales') }}" class="btn-volver">⬅️ Volver a los animales</a>
+  </div>
 </div>
 
-<script src="./models/medicacion.js"></script>
-<script src="./models/alertamedicacion.js"></script>
+
+  </div>
+
 </body>
 </html>
+

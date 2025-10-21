@@ -116,13 +116,20 @@
     </form>
   </div>
  
+
   <div class="form-side">
-  
-    <img src= "./views/doctor.png">
+  <div class="info-card">
+    <div class="icon">🐄</div>
+    <h2>Registro de Postoperatorio</h2>
+    <p>
+      Lleva el control de cada tratamiento, dosis y aplicación.  
+      Asegura el bienestar de tus animales con registros claros y precisos. 💚
+    </p>
+    <a href="{{ url_for('animales.ver_animales') }}" class="btn-volver">⬅️ Volver a los animales</a>
   </div>
 </div>
-
-<script src="./models/alertaobligatorio.js"></script>
-<script src="./models/alertamedicacion.js"></script>
+</div>
+<script src="{{ url_for('static', filename='js/registro_exitoso.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

@@ -1,116 +1,96 @@
-
-.navbar {
-    background-color: #982f2f;
+body {
+  background-color: #f4f6f9;
+  font-family: 'Delius', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-.animal{
+/* --- CARD PRINCIPAL --- */
+.animal-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin: 40px auto;
+  max-width: 950px;
   display: flex;
-  max-width: 53%;
-  width: 90%;
-  background: #1a1a4034;
-  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  margin: 30px auto;
-  min-height: 600px;
 }
 
-.form-container{
-  display: flex;
-  width: 50%;
-  flex-direction: column;
-  gap: 10px;
+/* --- FOTO DEL ANIMAL --- */
+.image-side img {
+  width: 320px;
+  height: 100%;
+  object-fit: cover;
+  border-right: 1px solid #ddd;
+}
+
+/* --- INFORMACIÓN DEL ANIMAL --- */
+.animal-info {
+  flex: 1;
   padding: 30px;
-  background: #2a2a606b;
+}
+
+.animal-info h2 {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.estado-salud {
+  color: #6c757d;
+  margin-bottom: 15px;
+}
+
+/* --- TABS --- */
+.nav-tabs .nav-link {
+  color: #555;
+  font-weight: 500;
+  border-radius: 10px 10px 0 0;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #0d6efd;
   color: white;
-
 }
 
-.form-box{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+/* --- CONTENIDO DE CADA TAB --- */
+.tab-content {
+  margin-top: 15px;
 }
 
-.campo {
+/* --- DETALLES EN LISTA --- */
+.info-item {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
 }
 
-.titulo {
-  font-size: 24px;
-  font-family: "Delius", cursive;
-  font-weight: 300;
+.info-item strong {
+  color: #333;
 }
 
-.dato{  
-  font-family: "Sour Gummy", sans-seri;
-  font-size: 20px;
-  font-weight: 200;
-  color: black;
-}
-
+/* --- BOTONES --- */
 .btn {
-  border-radius: 6px;
+  border-radius: 10px;
+  font-weight: 500;
 }
 
-.form-side {
-  display: flex;
-  width: 50%;
-  justify-content: center;
-  align-items: center;
-  padding-inline: 20px;
+.btn-primary i,
+.btn-danger i {
+  margin-right: 5px;
 }
 
-.img-fluid{
-    display: flex;
-    height: 400px;
-    border-radius: 12px;
-    border: 1px solid white;
+.btn-primary {
+  background-color: #007bff;
+  border: none;
 }
 
-.boton{
-    border: none;
-    text-align: left;
-    background: none;
-    color: #af1c1c;
-    font-size: x-large;
-    margin-top: 5px;
-    font-family: "Delius", cursive;
+.btn-primary:hover {
+  background-color: #0056b3;
 }
 
-.obligatorio {
-    color: #af1c1c;
-    font-weight: bold;
-    margin-left: 3px;
+/* --- NAVBAR --- */
+.navbar {
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-#camposVacios::backdrop{
-    background-color:rgba(0, 0, 0, .56);
-}
-#camposVacios, #camposCompletos {
-    max-width: 70ch;
-    text-align: left;
-    border-radius: 10px;
-    border: 2px solid #af1c1c;
-    font-family: "Montserrat", sans-serif;
-}
-
-#camposCompletos{
-  padding: 40px;
-}
-
-#volver {
-    max-height: 30px;
-    max-width: 50px;
-    width: 50px;
-    border-radius: 10px;
-    margin-left: 90%;
-    background: none;
-    border: none;
-    color: #af1c1c;
-    font-size: x-large;
-}
-p{
-    margin: 0;
-}

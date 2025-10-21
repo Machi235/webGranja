@@ -1,12 +1,38 @@
-/* HERO SECTION */
-.hero {
-  background: url('../img/granja-bg.jpg') center/cover no-repeat;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  position: relative;
+.container-fluid {
+  background-color: #6ca76c;
 }
 
+.navbar-brand span {
+  color: #ffffff;
+  font-size: 1.3rem;
+}
+.titulo2{
+  color:white;
+}
+
+
+
+.hero {
+  background: url('../img/granja-bg.jpg') center/cover no-repeat;
+  min-height: 90vh;
+  position: relative;
+  color: rgb(0, 0, 0);
+  display: flex;
+  align-items: center;
+}
+.logo{
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  margin-right: 1rem;
+}
+.titulo {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color:#24b650;
+
+}
 .hero::after {
   content: "";
   position: absolute;
@@ -14,7 +40,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(105, 105, 105, 0.5);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .hero .container {
@@ -22,53 +48,64 @@
   z-index: 2;
 }
 
-/* NAVBAR */
-.navbar{
-    background-color: #982f2f;
-}
-.offcanvas-body{
-    background-color: rgb(19, 18, 18);
-}
-a.nav-link{
-    color: #982f2f;
-}
-a.nav-link:hover{
-    color: #9d0707;
-    font-size: large;
-}
-.offcanvas-header{
-    background-color: rgb(19, 18, 18);
-}
-h5.offcanvas-title{
-    color: #982f2f;
-}
-.btn-close{
-    background-color: #982f2f;
-}
-
-/* CARDS */
+/* TARJETAS */
 .animal-card {
   border: none;
+  border-radius: 12px;
+  overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 150px;
+  background-color: #fff;
+}
+
+.animal-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.animal-card .card-body {
+  padding: 0.7rem;
+  text-align: center;
+}
+
+.animal-card h5 {
+  color: #c0392b;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.animal-card p {
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin-bottom: 0;
 }
 
 .animal-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.card-body h5 {
-  font-weight: bold;
-  color: #f5260b;
-}
-
-.card-body p {
-  color: #6c757d;
 }
 
 /* FOOTER */
 footer {
   background-color: #1c1c1c;
   color: #fff;
-  font-size: 0.9rem;
+  text-align: center;
+  padding: 1rem 0;
+  margin-top: auto;
+  width: 100%;
+}
+
+/* General */
+html, body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  background-color: #f8f9fa;
+}
+.text-light {
+  color: #ffffff !important;
 }
