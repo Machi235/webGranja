@@ -2,19 +2,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>verAnimal</title>
     <!-- bootstrap css y js -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-    <!-- Iconos de bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <!-- google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+     <!-- Iconos de bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <!-- estilo ccs -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/detalleAnimal.css') }}">
-  
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/verActividad.css') }}">
+    <title>CREAR HABITAT</title>
 </head>
-<body>
+  <body>
      <nav class="navbar">
         <div class="container-fluid">
             <a class="navbar-brand" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
@@ -47,48 +46,69 @@
             <i class="bi bi-house-door"></i> Volver al Menú Principal
         </a>
     </div>
-        </div>
       </div>
     </div>
-  </nav>
-
-<div class="animal">
-    <div class="form-container" >
-            <div class="campo">
-                <p class="titulo">Nombre:</p>
-                <p class="dato">{{habitat.nombreHabitat }}</p>
+  </div>
+</nav>
+<div class="menu">
+  <button class="botonEditar">
+    <i class="bi bi-sort-up-alt"></i>
+  </button>
+  <dialog open id="limiteAnimal">
+    <div class="cerrar"><button id="cerrarEditarHorario" type="button"><i class="bi bi-x-circle"></i></button></div>
+    <form method="post" action="{{ url_for('actividad_bp.uso_animales') }}">
+      <div class="campo">
+        <label for="idUsuario">Ingrese el limite de todas las especie que se podran asignar por semana:</label>
+        <input type="number" id="limite" name="limite">
+      </div>
+      <button type="submit" class="btn btn-danger mt-3">Guardar</button>
+    </form>
+  </dialog>
+  <a href="{{ url_for('actividad_bp.registro_actividad') }}">
+    <i class="bi bi-plus-lg"></i>
+  </a>
+</div>
+<div class="horarios container" >
+  <table class="table table-striped-columns">
+    <thead>
+      <tr>
+        <th>GUIA</th>
+        <th>TIPO</th>
+        <th>ESPECIES</th>
+        <th>HABITATS</th>
+        <th>FECHA DE CREACION</th>
+        <th>DURACIOM</th>
+        <th>DETALLES</th>
+        <th>FECHA DE REALIZACION</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for actividad in actividades %}
+        <tr>
+          <td>{{ actividad.nombre }} {{ actividad.apellido }}</td>
+          <td>{{ actividad.tipo }}</td>
+          <td>{{ actividad.especie }}</td>
+          <td>{{ actividad.habitat }}</td>
+          <td>{{ actividad.fechaCreacion }}</td>
+          <td>{{ actividad.duracion }}</td>
+          <td>{{ actividad.detalles }}</td> 
+          <td>
+            <div class="turno">
+              {{ actividad.fechaRealizacion }}
+              <a href="{{ url_for('actividad_bp.editar_actividad',idActividad=actividad.idActividad) }}">
+                  <i class="bi bi-pencil-square"></i>
+              </a>
+              <form action="{{ url_for ('actividad_bp.eliminar_actividad', idActividad = actividad.idActividad)}}" method="POST">
+                <button type="submit" onclick="return confirm('estas seguro de que quieres eliminar esta actividad');">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </form></div>
             </div>
-            <div class="campo">
-                <p class="titulo">Temperatura Maxima:</p>
-                <p p class="dato">{{ habitat.maxTemperatura }}</p>
-            </div>
-            <div class="campo">
-                <p class="titulo">Temperatura Minima:</p>
-                <p p class="dato">{{ habitat.minTemperatura }}</p>
-            </div>
-            <div class="campo">
-                <p class="titulo">Estado:</p>
-                <p p class="dato">{{ habitat.estado }}</p>
-            </div>
-
-            <div class="campo">
-                <p class="titulo">Humedad:</p>
-                <p class="dato">{{ habitat.humedad }}</p>
-            </div>
-            <div class="campo">
-                <p class="titulo">Tipo:</p>
-                <p class="dato">{{ habitat.tipo }}</p>
-            </div>
-            <div class="campo">
-                <p class="titulo">Tamaño:</p>
-                <p class="dato">{{ habitat.tamaño }}</p>
-            </div>
-            <div class="campo">
-                <p class="titulo">Capacidad:</p>
-                <p class="dato">{{ habitat.capacidad }}</p>
-            </div>
-            <a href="{{url_for('habitat_bp.editar_habitat',idHabitat=habitat.idHabitat)}}" class="btn btn-danger w-100">Editar</a>
-    </div>  
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 </body>
 </html>

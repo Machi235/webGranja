@@ -8,7 +8,7 @@
 
        document.querySelectorAll("#miFormulario select").forEach(select => {
         // borra lo que el usuario escribió
-        select.selectedIndex = 0;
+        select.value = 0;
       });
 
       document.querySelectorAll("#miFormulario textarea").forEach(textarea => {
@@ -26,13 +26,12 @@ function validar() {
   let usuario = document.getElementById('idUsuario').value.trim();
   let habitat = document.getElementById('habitat').value.trim();
   let tipo = document.getElementById('tipo').value.trim();
-  let horas = document.getElementById('horas').value.trim();
-  let minutos = document.getElementById('minutos').value.trim();
+  let duracion = document.getElementById('duracion').value.trim();
   let realizacion = document.getElementById('realizacion').value.trim();
   let detalles = document.getElementById('detalles').value.trim();
 
   // Validar campos obligatorios
-  if (especie === '' || usuario === '' || habitat === '' || tipo === '' || horas === '' || minutos === '' || realizacion === '' || detalles === '') {
+  if (especie === '' || usuario === '' || habitat === '' || tipo === '' || duracion === '' || realizacion === '' || detalles === '') {
     Swal.fire({
       icon: 'error',
       title: 'Campos incompletos',

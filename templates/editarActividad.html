@@ -9,9 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <!-- estilo ccs -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/actividad.css') }}">
+
+    <!-- select 2 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <title>CREAR ANIMAL</title>
@@ -53,14 +53,14 @@
     </div>
   </div>
 </nav>
-<form id="miFormulario" method="post" action="{{ url_for('actividad_bp.registro_actividad') }}">
+<form id="miFormulario" action="{{ url_for('actividad_bp.actualizar_actividad',idActividad=actividad.idActividad) }}" method="post">
     <div class="form-container">
         <div class="form-box">
             <div class="campo">
                 <label for="idEspecie">Especie:<span class="obligatorio">*</span></label>
                 <select id="idEspecie" name="idEspecie" class="select-multiple" multiple>
                     {% for especie in especies %}
-                        <option value="{{ especie.idEspecie }}">{{ especie.tipoEspecie }}</option>
+                        <option value="{{ especie.idEspecie }}" {% if especie.idEspecie in selected_especies %} selected {% endif %}>{{ especie.tipoEspecie }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -68,7 +68,7 @@
             <div class="campo">
                 <label for="idUsuario">Usuario:<span class="obligatorio">*</span></label>
                 <select id="idUsuario" name="idUsuario" class="form-control" >
-                    <option value="">Selecciona un usuario</option>
+                <option value="{{ actividad.idUsuario }}">{{ actividad.nombre }} {{ actividad.apellido }}</option>
                     {% for usuario in usuarios %}
                         <option value="{{ usuario.idUsuario }}">{{ usuario.nombre }} {{ usuario.apellido }}</option>
                     {% endfor %}
@@ -79,7 +79,7 @@
                 <label for="habitat">Habitat:<span class="obligatorio">*</span></label>
                 <select id="habitat" name="idHabitat" class="select-multiple" multiple>
                     {% for hab in habitats %}
-                        <option value="{{ hab.idHabitat }}">{{ hab.nombreHabitat }}</option>
+                        <option value="{{ hab.idHabitat }}" {% if hab.idHabitat in selected_habitats %} selected {% endif %}>{{ hab.nombreHabitat }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -87,7 +87,7 @@
             <div class="campo">
                 <label for="tipo">Tipo de actividad:<span class="obligatorio">*</span></label>
                 <select id="tipo" name="tipo" class="form-control" >
-                    <option value="">Selecciona tipo</option>
+                    <option value="{{ actividad.tipo}}">{{ actividad.tipo }}</option>
                     <option value="Interaccion">Interacción</option>
                     <option value="Recorrido">Recorrido</option>
                     <option value="Charlas educativas">Charlas educativas</option>
@@ -96,37 +96,27 @@
             </div>
 
             <div class="campo">
-                <label for="horas">Duración:<span class="obligatorio">*</span></label>
+                <label for="duracion">Duración:<span class="obligatorio">*</span></label>
                 <div class="tiempo">
-                    <input type="number" id="horas" name="horas" min="0" max="24" placeholder="Horas" >
-                    <p>:</p>
-                    <input type="number" id="minutos" name="minutos" min="0" max="59" placeholder="Minutos" >
+                 <input value="{{actividad.duracion}}" name="duracion" type="text" id="duracion">
                 </div>
             </div>
             <div class="campo">
                 <label for="realizacion">Fecha de la acatividad:<span class="obligatorio">*</span></label>
-                <input type="date" id="realizacion" name="fechaRealizacion">
+                <input type="date" id="realizacion" name="fechaRealizacion" value="{{actividad.fechaRealizacion}}">
             </div>
             <div class="campo">
                 <label for="detalles">Detalles:<span class="obligatorio">*</span></label>
-                <textarea id="detalles" name="detalles" class="form-control" ></textarea>
+                <textarea id="detalles" name="detalles" class="form-control" value="{{ actividad.detalles }}">{{ actividad.detalles }}</textarea>
             </div>
-            <button class="btn btn-danger mt-3 w-100" type="button" onclick="validar()">Registrar</button>
+            <button class="btn btn-danger mt-3 w-100" type="button" onclick="validar()">Actualizar</button>
             <button class="btn btn-danger mt-3 w-100" type="button" onclick="vaciarFormulario()">Vaciar</button>
         </div>
     </div>
 </form>
 
-<dialog id="camposVacios">
-    <h1>Los campos con <span class="obligatorio">*</span> son obligatorios, por favor completos.</h1>
-    <button id="volver">ok</button>
-</dialog>
 
-<dialog id="camposCompletos">
-    <h1>Actividad registrada</h1>
-</dialog>
-
-<script src="{{ url_for('static', filename='js/actividad.js') }}"></script>
+<script src="{{ url_for('static', filename='js/editarActividad.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -150,4 +140,3 @@
 {% endwith %}
 </body>
 </html>
-

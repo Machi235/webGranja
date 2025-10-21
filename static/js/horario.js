@@ -99,6 +99,6 @@ cerrarEditarHorario.addEventListener("click", ()=>{
 
 
   document.getElementById("formAsignarTurno").addEventListener("submit", (e) => {
-    console.log("Formulario enviado ✅");
+    console.log("Formulario enviado ");
   });
 
