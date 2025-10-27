@@ -31,16 +31,16 @@ def asignar():
         animal = cursor.fetchone()
 
         if ocupados >= habitat['capacidad_max']:
-            flash("❌ El hábitat ya está en su capacidad máxima.", "error")
+            flash("El hábitat ya está en su capacidad máxima.", "error")
         elif animal['especie'] != habitat['especie_compatible']:
-            flash("⚠️ El hábitat no es compatible con la especie del animal.", "error")
+            flash("El hábitat no es compatible con la especie del animal.", "error")
         else:
             cursor.execute("""
                 INSERT INTO asignacion (animal_id, habitat_id, fecha_asignacion)
                 VALUES (%s, %s, %s)
             """, (animal_id, habitat_id, datetime.date.today()))
             conn.commit()
-            flash("✅ Animal asignado correctamente.", "success")
+            flash("Animal asignado correctamente.", "success")
             return redirect(url_for('asignacion.asignar'))
 
     cursor.close()

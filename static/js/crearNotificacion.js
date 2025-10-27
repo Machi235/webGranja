@@ -19,15 +19,15 @@ descripcion.addEventListener("input", () => {
     form.reset();
   })
 //---------------------------------------------------------------------------------------------
-  const perfil = document.querySelector("#perfil")
-  const verPerfil = document.querySelector("#verPerfil")
-  const cerrar = document.querySelector("#cerrar")
+  // const perfil = document.querySelector("#perfil")
+  // const verPerfil = document.querySelector("#verPerfil")
+  // const cerrar = document.querySelector("#cerrar")
 
-   verPerfil.addEventListener("click", () => { 
-    perfil.showModal();
-  })                                 
-    cerrar.addEventListener("click", () => {
-      perfil.close();
-    })
+  //  verPerfil.addEventListener("click", () => { 
+  //   perfil.showModal();
+  // })                                 
+  //   cerrar.addEventListener("click", () => {
+  //     perfil.close();
+  //   })
 
 

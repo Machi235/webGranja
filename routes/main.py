@@ -43,19 +43,8 @@ def bienvenida():
     conn.close()
 
     # Elegir template según rol
-    if rol == "Admin":
-        template = "admininicio.html"
-    elif rol == "Guia":
-        template = "inicioGuia.html"
-    elif rol == "Cuidador":
-        template = "inicio.html"
-    elif rol == "RRHH":
-        template = "inicioRrhh.html"
-    else:
-        template = "inicio.html"
 
-    return render_template(
-        template,
+    return render_template("inicioprueba.html",
         usuario=usuario,
         rol=rol,
         notificaciones=notificaciones,

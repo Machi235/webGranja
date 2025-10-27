@@ -15,10 +15,22 @@
     <title>Document</title>
 </head>
 <body>
-   {% include 'navAdmi.html' %}
+    
+ {% if rol == "Admin" %}
+    {% include "navAdmi.html" %}
+{% elif rol == "Guia" %}
+    {% include "navGuia.html" %}
+{% elif rol == "Cuidador" %}
+    {% include "navCuidador.html" %}
+{% elif rol == "RRHH" %}
+    {% include "nav_rrhh.html" %}
+{% else %}
+    {% include "nav_default.html" %}
+{% endif %}
+
 <section class="text-center py-5 bg-light intro-section">
   <div class="container">
-    <h1 class="display-4 fw-bold text-dark mb-4">Bienvenido usuario </h1>
+    <h1 class="display-4 fw-bold text-dark mb-4">Bienvenido {{rol}} </h1>
     <p class="lead text-secondary">
       En la parte superior izquierda encontraras todos tus modulos correspondientes a tu rol a disposicion.
     </p>
@@ -101,6 +113,6 @@
 <footer class="bg-dark text-white text-center py-4 mt-5">
     <p class="mb-0">&copy; 2025 Granja Machis - Todos los derechos reservados</p>
   </footer>
-<script src="{{ url_for('static', filename='js/crearNotificacion.js') }}"></script>
+
+
 </body>
-</html>

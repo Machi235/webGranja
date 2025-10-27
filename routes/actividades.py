@@ -59,12 +59,12 @@ def registro_actividad():
 
         for id_habitat in id_habitats:
             cur.execute(""" INSERT INTO actividades (idHabitat, idActividad ) VALUES (%s, %s)""",(id_habitat, id_actividad))
-
+        conn.commit()
         cur.close()
         conn.close()
 
         if "asignado" in mensaje.lower():
-            flash(mensaje, "sucess")
+            flash(mensaje, "success")
         else:
             flash(mensaje, "warning")
             
@@ -76,16 +76,20 @@ def ver_actividades():
     cur=conn.cursor(dictionary=True)
 
     cur.execute("""select C.idActividad, nombre, apellido, group_concat(distinct tipoEspecie separator ',') as especie, group_concat(distinct nombreHabitat separator ',') 
-                as habitat, c.tipo, fechaCreacion, duracion, detalles, fechaRealizacion from cronogramaactividades as c inner join actividades as a on 
+                as habitat, c.tipo, fechaCreacion, duracion, detalles, fechaRealizacion, limite from cronogramaactividades as c inner join actividades as a on 
                 c.idActividad = a.idActividad left join usuarios as u on c.idUsuario = u.idUsuario left join especie as e on a.idEspecie =e.idEspecie left join habitat as h 
                 on a.idHabitat = h.idHabitat WHERE c.estado = 1 group by a.idActividad""")
     
     actividades=cur.fetchall()
 
+    cur.execute("SELECT limite FROM especie LIMIT 1")
+    limite = cur.fetchone()['limite']   
+    print(limite)
+
     cur.close()
     conn.close()
 
-    return render_template("verActividad.html", actividades=actividades)
+    return render_template("verActividad.html", actividades=actividades, limite=limite)
 
 @actividad_bp.route("/uso de animales", methods=["POST"])
 def uso_animales():
@@ -94,7 +98,7 @@ def uso_animales():
     conn=get_connection()
     cur=conn.cursor()
 
-    cur.execute(" UPDATE especie SET limite = %s", (limite))
+    cur.execute(" UPDATE especie SET limite = %s", (limite,))
     conn.commit()
 
     conn.close()

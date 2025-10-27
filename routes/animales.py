@@ -65,7 +65,7 @@ def registro_animal():
             )
             conn.commit()
 
-            return jsonify({"mensaje": "✅ Animal registrado con éxito"}), 200
+            return jsonify({"mensaje": " Animal registrado con éxito"}), 200
 
         except Exception as e:
             print("Error al registrar animal:", str(e))

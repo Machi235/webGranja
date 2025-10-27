@@ -40,7 +40,7 @@ def marcar_leida(noti_id):
 @notificaciones_bp.route("/panel")
 def panel():
     conn = get_connection()
-    cur = conn.cursor(dictionary=True)  # 👈 importante
+    cur = conn.cursor(dictionary=True) 
 
     # Solo traer las no leídas
     cur.execute("SELECT * FROM notificacion WHERE leida = 0 ORDER BY id DESC")

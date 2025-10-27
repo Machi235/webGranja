@@ -1,6 +1,6 @@
 
 .navbar {
-    background-color: #982f2f;
+    background-color: #6ca76c;;
 }
 
 .select{
@@ -12,7 +12,7 @@
   max-width: 63%;
   min-width: 53%;
   width: 100%;
-  background: #1a1a4034;
+  background: transparent;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
@@ -26,8 +26,8 @@
   flex-direction: column;
   gap: 10px;
   padding: 30px;
-  background: #2a2a606b;
-  color: white;
+  background: #ffff;
+  color: rgb(0, 0, 0);
 }
 
 .campo {
@@ -43,7 +43,7 @@
 
 .campo input,
 .campo select, .campo textarea {
-  border: none;
+  border: 1px solid gray;
   border-radius: 6px;
   outline: none;
   font-family: "Sour Gummy", sans-seri;
@@ -59,20 +59,26 @@
 
 .btn {
   border-radius: 6px;
+  background-color: #6ca76c;
+  color: #f9fff9;
 }
 
 .form-side {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-inline: 20px;
+    background: linear-gradient(145deg, #a8e6cf, #dcedc1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    border-radius: 0 20px 20px 0;
+    position: relative;
+    overflow: hidden;
 }
 
 .boton{
     border: none;
     text-align: left;
     background: none;
-    color: #af1c1c;
+    color: #6ca76c;
     font-size: x-large;
     margin-top: 5px;
     font-family: "Delius", cursive;
@@ -87,9 +93,9 @@
 #myDropzone { 
     display: flex;
     align-items: center;
-    border: none;
+    border: ridge;
     border-radius: 12px;
-    background-color: #f9fff9;
+   background-color: transparent;
     height: 400px;
     cursor: pointer;
     font-size:25px;

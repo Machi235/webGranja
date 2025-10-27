@@ -58,22 +58,25 @@
     border-radius: 15px;
     border: none;
     font-family: "Montserrat", sans-serif;
-    background-color: #2a2a606b;
+    background-color: #aecc8bce ;
     color: white;
-    
-} 
+    text-align: left; 
+    padding: 0px 30px 30px;    
+}
+
+#listaTurnos{
+     background-color: white;
+     border: 1px solid black;
+
+}
 .cerrar{
     display: flex;
     justify-content: right;
 }
 .bi-x-circle{
-    color: white;
+    color: black;
 }
 
-form{
-    text-align: left; 
-    margin: 0px 30px 30px;
-}
 
 #nuevoTurno::backdrop{
     background-color:rgba(0, 0, 0, .56);
@@ -117,6 +120,25 @@ select{
     justify-content: space-between;
 }
 
-.bi-pencil-square{
+.bi-pencil-square,.bi-trash3{
     font-size: 20px;
+}
+
+.btn{
+    background-color: #fff6d9;
+    color: #4b7a4b ;
+    border: none;
+}
+
+.button{
+    background:none;
+    border: none;
+    width: 100%;
+}
+
+.horaFin{
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    justify-content: center;
 }

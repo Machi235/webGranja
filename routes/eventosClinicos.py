@@ -8,7 +8,7 @@ eventos = Blueprint("eventos", __name__)
 @eventos.route("/registro_cirugia", methods=["GET", "POST"])
 def registro_cirugia():
     if request.method == "POST":
-        # 1. Obtener datos del formulario
+        
         id_animal = request.form.get("idAnimal")
         responsable = request.form.get("responsableCirugia")
         procedimiento = request.form.get("procedimientoCirugia")
@@ -16,7 +16,7 @@ def registro_cirugia():
         proxima = request.form.get("proximaCirugia")
         fecha = request.form.get("fechaCirugia")
 
-        # 2. Guardar en base de datos
+       
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -29,10 +29,10 @@ def registro_cirugia():
         cur.close()
         conn.close()
 
-        flash("✅ Cirugía registrada con éxito")
+        flash("Cirugía registrada con éxito")
         return redirect(url_for("eventos.registro_cirugia"))
 
-    # Para GET, podemos traer lista de animales para un select
+    
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
@@ -46,7 +46,7 @@ def registro_cirugia():
 @eventos.route("/registro_medicacion", methods=["GET", "POST"])
 def registro_medicacion():
     if request.method == "POST":
-        # 1. Capturar datos del formulario
+        
         id_animal = request.form.get("idAnimal")
         nombre_med = request.form.get("nombreMed")
         dosis = request.form.get("dosisSuministradas")
@@ -56,7 +56,7 @@ def registro_medicacion():
         administracion = request.form.get("administracionMed")
         reacciones = request.form.get("reaccionesMed")
 
-        # 2. Insertar en base de datos
+        
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -71,10 +71,10 @@ def registro_medicacion():
         cur.close()
         conn.close()
 
-        flash("✅ Medicación registrada con éxito")
+        flash("Medicación registrada con éxito")
         return redirect(url_for("eventos.registro_medicacion"))
 
-    # Para GET, traer lista de animales para un select
+    
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
@@ -99,7 +99,7 @@ def registro_postoperatorio():
         dieta = request.form.get("dietaEspecifica")
         control = request.form.get("controlPostoperatorio")
 
-        # 2. Insertar en BD
+        
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -114,10 +114,10 @@ def registro_postoperatorio():
         cur.close()
         conn.close()
 
-        flash("✅ Postoperatorio registrado correctamente")
+        flash("Postoperatorio registrado correctamente")
         return redirect(url_for("eventos.registro_postoperatorio"))
 
-    # Para GET: traer lista de animales
+    
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
@@ -131,7 +131,7 @@ def registro_postoperatorio():
 @eventos.route("/registro_terapia", methods=["GET", "POST"])
 def registro_terapia():
     if request.method == "POST":
-        # 1. Capturar datos del formulario
+     
         id_animal = request.form.get("idAnimal")
         tipo_terapia = request.form.get("tipoTerapia")
         objetivo = request.form.get("objetivoSesion")
@@ -140,7 +140,7 @@ def registro_terapia():
         duracion = request.form.get("duracionSesion")
         evaluacion = request.form.get("evaluacion")
 
-        # 2. Insertar en la BD
+       
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -153,10 +153,10 @@ def registro_terapia():
         cur.close()
         conn.close()
 
-        flash("✅ Terapia física registrada correctamente")
+        flash("Terapia física registrada correctamente")
         return redirect(url_for("eventos.registro_terapia"))
 
-    # Para GET: traer lista de animales para el select
+    
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
@@ -196,16 +196,16 @@ def registro_vacuna():
             (idAnimal, responsable, tipoVacuna, laboratorio, lote, aplicacionVacuna, proximaVacuna, vacunasAplicadas, foto)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        # Suponiendo que vacunasAplicadas se llena con 1 por defecto al registrar
+        # vacunasAplicadas se llena con 1 por defecto al registrar
         cur.execute(sql, (id_animal, responsable, tipo_vacuna, laboratorio, lote, fecha_aplicacion, fecha_proxima, 1, filename))
         conn.commit()
         cur.close()
         conn.close()
 
-        flash("✅ Vacuna registrada correctamente")
+        flash(" Vacuna registrada correctamente")
         return redirect(url_for("eventos.registro_vacuna"))
 
-    # Para GET: traer lista de animales para el select
+   
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
@@ -218,7 +218,7 @@ def registro_vacuna():
 @eventos.route("/registro_visita", methods=["GET", "POST"])
 def registro_visita():
     if request.method == "POST":
-        # 1. Capturar datos del formulario
+       
         id_animal = request.form.get("idAnimal")
         veterinario = request.form.get("veterinario")
         motivo = request.form.get("motivo")
@@ -227,7 +227,7 @@ def registro_visita():
         proxima_visita = request.form.get("fecha")
         estado = request.form.get("estado")
 
-        # 2. Insertar en la BD
+        
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -240,10 +240,10 @@ def registro_visita():
         cur.close()
         conn.close()
 
-        flash("✅ Visita médica registrada correctamente")
+        flash("Visita médica registrada correctamente")
         return redirect(url_for("eventos.registro_visita"))
 
-    # Para GET: traer lista de animales para el select
+    
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")

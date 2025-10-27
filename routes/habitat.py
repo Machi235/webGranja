@@ -7,7 +7,7 @@ habitat_bp = Blueprint("habitat_bp", __name__)
 def crear_habitat():
     if request.method == "POST":
         try:
-            # Obtener datos del formulario
+            
             nombre = request.form.get("nombreHabitat")
             min_temp = request.form.get("minTemperatura")
             max_temp = request.form.get("maxTemperatura")
@@ -17,12 +17,12 @@ def crear_habitat():
             tamaño = request.form.get("tamaño")
             capacidad = request.form.get("capacidad")
 
-            # Validación backend (seguridad extra)
+            
             if not nombre or not estado or not tipo or not capacidad:
                 flash("Faltan campos obligatorios", "error")
                 return redirect(url_for("habitat_bp.crear_habitat"))
 
-            # Guardar en la base de datos
+            
             conn = get_connection()
             cur = conn.cursor()
 

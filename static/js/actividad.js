@@ -70,3 +70,5 @@ $('.select-multiple').select2({
 
 const hoy = new Date(). toISOString().split("T")[0];
 document.getElementById("realizacion").setAttribute("min", hoy);
+
+//--------------------------------------------------------------------------------------------------

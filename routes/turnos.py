@@ -107,7 +107,7 @@ def actualizar_asignar_turno():
     cur.close()
     conn.close()
 
-    flash("Turno actualizado ")
+    flash("Turno actualizado")
     return redirect(url_for("turnos_bp.horarios"))
 
 @turnos_bp.route("/eliminar_turno/<int:idHorario>", methods=["POST"])

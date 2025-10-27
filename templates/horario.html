@@ -69,7 +69,7 @@
           <tr>
             <td>{{ turno.nombreTurno}}</td>
             <td>{{ turno.horaInicio}}</td>
-            <td>
+            <td class="horaFin">
               {{ turno.horaFin}}
               <form action="{{url_for('turnos_bp.eliminar_turno', idHorario=turno.idHorario)}}" method="POST">
                 <button type="submit" class="button" onclick="return confirm('estas seguro de que quieres eliminar este turno');">
@@ -113,7 +113,7 @@
             {% endfor %}
           </select>
         </div>
-        <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
+        <button type="submit" class="btn btn-outline-success mt-3 w-100">Guardar</button>
       </form>
     </dialog>
 <!------------------------------------crear un turno -------------------------------------------------------------------> 
@@ -132,7 +132,7 @@
             <input type="time" class="horas" name="horaFin" placeholder="Hora de fin">
           </div>
         </div>
-        <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
+        <button type="submit" class="btn btn-outline-success mt-3 w-100">Guardar</button>
       </form>
     </dialog>
   </div>

@@ -114,17 +114,17 @@ def recuperar_password():
             )
 
             try:
-    # ✅ Importar mail aquí dentro y usar current_app
+   
                 from servidor import mail
                 with current_app.app_context():
                     mail.send(msg)
-                mensaje = "✅ Se ha enviado un correo con las instrucciones para restablecer tu contraseña."
+                mensaje = "Se ha enviado un correo con las instrucciones para restablecer tu contraseña."
             except Exception as e:
-                print("❌ Error al enviar correo:", e)
+                print("Error al enviar correo:", e)
                 mensaje = "Error al enviar el correo. Verifica tu conexión o configuración de Gmail."
 
         else:
-            mensaje = "⚠️ El correo no está registrado."
+            mensaje = "El correo no está registrado."
 
     return render_template("recuperar.html", mensaje=mensaje)
 
