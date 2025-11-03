@@ -12,6 +12,7 @@ from routes.buscarHabitat import bp as buscarHabitat_bp
 from routes.dietas import dietas
 from flask_mail import Mail
 from routes.eventos import eventos_general
+from routes.ventaBoleta import boleto
 
 app = Flask(__name__)
 app.secret_key = "super_clave_ultra_secreta_123"  
@@ -29,6 +30,7 @@ app.register_blueprint(actividad_bp, url_prefix="/actividad")
 app.register_blueprint(buscarHabitat_bp)
 app.register_blueprint(dietas)
 app.register_blueprint(eventos_general)
+app.register_blueprint(boleto)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587

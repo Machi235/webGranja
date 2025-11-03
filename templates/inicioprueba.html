@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <!-- estilo ccs -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -110,9 +111,32 @@
     </div>
   </div>
 </div>
+<div class="grafica">
+  <canvas id="grafica"></canvas>
+</div>
 <footer class="bg-dark text-white text-center py-4 mt-5">
     <p class="mb-0">&copy; 2025 Granja Machis - Todos los derechos reservados</p>
   </footer>
+<script>
+  const ctx = document.getElementById('grafica');
 
-
+  new Chart(ctx, {
+    type:'doughnut',
+    data: {
+      labels:{{ etiquetas | tojson }},
+      datasets: [{
+        data: {{ valores | tojson }},
+        backgroundColor:['rgb(255, 99, 132)','rgb(54, 162, 235)','rgb(255, 205, 86)'],
+        borderColor: '#ffff',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive:false,
+      plugins: {
+        legend: { position: 'right', labels:{ font:{ size:20 }, padding:30 } }
+      }
+    }
+  })
+</script>
 </body>
