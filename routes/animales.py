@@ -1,8 +1,14 @@
 import os
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, make_response
 from werkzeug.utils import secure_filename
+from io import BytesIO #Modulo de entradas y salidas
+from reportlab.lib.pagesizes import letter #tamaño de papel
+from reportlab.lib.styles import getSampleStyleSheet #Estilos de texto
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image #Contenido de pdf
+from reportlab.lib.units import cm #Usar unidades de medida 
+import os #sistema operativo
 from db import get_connection
-import pdfkit
+
 
 animales = Blueprint("animales", __name__)
 
@@ -143,22 +149,41 @@ def generar_pdf(idAnimal):
     """, (idAnimal,))
     animal = cur.fetchone()
 
-    cur.close()
-    conn.close()
+    buffer = BytesIO() #Crea un espacio temporal en memoria
+    pdf = SimpleDocTemplate(buffer, pagesize=letter) #Se crea el documento pdf
+    elements = [] #Lista vacia donde se pone el contenido
+    styles = getSampleStyleSheet() #conjunto de estilos 
 
-    path_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
-    config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+    elements.append(Paragraph(f"<b>Ficha del animal</b>", styles["Title"])) #Agrgar un parrafro al pdf
+    elements.append(Spacer(1,12)) #Inserta un espacio entre cada elemento 
 
-    img_url = url_for("static", filename="uploads/" + animal["imagen"], _external=True)
-    html = render_template("pdfAnimal.html", animal=animal, img_url=img_url)
-    options = {"enable-local-file-access": None}
+    ruta_imagen = os.path.join("static/uploads", animal["imagen"]) #Une la ruta base con el nombre de la imagen
+    img = Image(ruta_imagen, width=5*cm, height=5*cm) #Carga la imagen ajustandolo al tamaño
+    img.hAlign = "CENTER" #Ajusta la imagen
+    elements.append(img)
+    elements.append(Spacer(1, 12))
 
-    pdf = pdfkit.from_string(html, False, configuration=config, options=options)
+    contenido = f"""
+    <b>Nombre:</b>{animal['nombre']}<br/>
+    <b>Especie:</b>{animal['especie']}<br/>
+    <b>Estado salud:</b>{animal['estadoSalud']}<br/>
+    <b>Edad:</b>{animal['edad']}<br/>
+    <b>Fecha de nacimiento:</b>{animal['fechaNacimiento']}<br/>
+    <b>Fecha de llegada:</b>{animal['fechaLlegada']}<br/>
+    <b>Habitat:</b>{animal['habitat']}<br/>
+    <b>Observaciones:</b>{animal['observaciones']}<br/>
+    <b>Sexo:</b>{animal['sexo']}<br/>"""
 
-    response = make_response(pdf)
-    response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = "inline; filename=animal.pdf"
-    return response
+    elements.append(Paragraph(contenido,styles["Normal"]))
+
+    elements.append(Spacer(1, 20)) #Pie de pagina
+
+    pdf.build(elements) #Crea el pdf con todos elementos en el mismo orden  
+
+    response = make_response(buffer.getvalue()) # sE crea una respuesta http con los bytes obtenidos en el buffer    
+    response.headers["Content-Type"] = "application/pdf" #Dice que el contenido es un pdf
+    response.headers["Content-Disposition"] = "inline; filename=animal.pdf" #Lo abre directamente
+    return response 
 
 
 @animales.route("/eliminar_animal/<int:idAnimal>", methods=["POST"])

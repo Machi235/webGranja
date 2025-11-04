@@ -29,94 +29,78 @@
     {% include "nav_default.html" %}
 {% endif %}
 
-<section class="text-center py-5 bg-light intro-section">
-  <div class="container">
-    <h1 class="display-4 fw-bold text-dark mb-4">Bienvenido {{rol}} </h1>
-    <p class="lead text-secondary">
-      En la parte superior izquierda encontraras todos tus modulos correspondientes a tu rol a disposicion.
-    </p>
-  </div>
-</section>
-
-<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"></button>
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"></button>
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"></button>
-    </div>
-
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="{{ url_for('static', filename='img/caballos.jpeg') }}" class="d-block w-100" alt="Doctor en el establo">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>Habitats</h5>
-          <p>puedes asignar habitats a animales.</p>
+ <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-logo">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Livestock Log">
+            </div>
+            <h1 class="hero-title">LIVESTOCK LOG</h1>
+            <p class="hero-subtitle">Sistema de Gestión de la Granja</p>
         </div>
-      </div>
-      <div class="carousel-item active">
-      <img src="{{ url_for('static', filename='img/doctorestablo.webp') }}" class="d-block w-100" alt="Doctor en el establo">
-      <div class="carousel-caption d-none d-md-block">
-        <h5>Eventos Clínicos</h5>
-        <p>Podrás registrar sus vacunas.</p>
-      </div>
-    </div>
-      <div class="carousel-item">
-      <img src="{{ url_for('static', filename='img/comidaganado.jpg') }}" class="d-block w-100" alt="Comida de ganado">
-      <div class="carousel-caption d-none d-md-block">
-        <h5>Dietas</h5>
-        <p>Crearle dietas a sus mascotas.</p>
-      </div>
-    </div>
+    </section>
 
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-      <span class="carousel-control-next-icon"></span>
-    </button>
-  </div>
-
-  <div class="container my-5">
-  <div class="row text-center">
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <div class="card-body">
-      <i class="bi bi-person-circle fs-1 text-primary"></i>
-
-          <h5 class="card-title mt-3">usuarios</h5>
-          <p class="card-text">asigna turnos y tareas.</p>
+    <!-- WELCOME SECTION -->
+    <section class="welcome-section text-center">
+        <div class="container">
+            <h2 class="welcome-title">¡Bienvenido {{ session.get('rol', 'Administrador') }}!</h2>
+            <p class="welcome-text">
+                En la parte superior izquierda encontrarás todos los módulos correspondientes a tu rol.<br> 
+                Nuestro sistema te permite llevar un control completo y eficiente de la granja.
+            </p>
         </div>
-      </div>
-    </div>
-    
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <div class="card-body">
-          <i class="fa-solid fa-cow fs-1 text-success"></i>
-          <h5 class="card-title mt-3">animales</h5>
-          <p class="card-text">registra y creale todo al animal,.</p>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <div class="card-body">
-          <i class="bi bi-activity fs-1 text-danger"></i>
+    </section>
 
-          <h5 class="card-title mt-3">actividades</h5>
-          <p class="card-text">crea y asigna actividades.</p>
+    <!-- FEATURES SECTION -->
+    <section class="features-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-house-door-fill"></i>
+                        </div>
+                        <h3>Hábitats</h3>
+                        <p>Crea y gestiona espacios óptimos para cada especie. Asigna animales y monitorea condiciones.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-heart-pulse-fill"></i>
+                        </div>
+                        <h3>Salud Animal</h3>
+                        <p>Registra vacunas, cirugías, medicación y terapias. Mantén un historial médico completo.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-egg-fried"></i>
+                        </div>
+                        <h3>Nutrición</h3>
+                        <p>Diseña dietas balanceadas y personalizadas para maximizar la salud de tus animales.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="grafica">
-  <canvas id="grafica"></canvas>
-</div>
-<footer class="bg-dark text-white text-center py-4 mt-5">
-    <p class="mb-0">&copy; 2025 Granja Machis - Todos los derechos reservados</p>
-  </footer>
+    </section>
+
+    <!-- SECCIÓN DE ESTADÍSTICAS / GRÁFICA -->
+    <section class="stats-section">
+        <div class="container">
+            <h3 class="stats-title">ESTADÍSTICAS DE ANIMALES SEGUN SU ESTADO DE SALUD</h3>
+            <div class="chart-container">
+              <canvas id="grafica"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="text-center">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 Livestock Log - Todos los derechos reservados</p>
+        </div>
+    </footer>
 <script>
   const ctx = document.getElementById('grafica');
 

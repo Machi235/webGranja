@@ -3,6 +3,19 @@
     background-color: #6ca76c;;
 }
 
+.contenido{
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap:10px;
+  margin-left: 15px;
+}
+
+.bi{
+  font-size:30px;
+  color: white;
+}
+
 .select{
   appearance: a;
 }
@@ -12,6 +25,7 @@
   max-width: 63%;
   min-width: 53%;
   width: 100%;
+  height: 100%;
   background: transparent;
   border-radius: 12px;
   overflow: hidden;
@@ -22,108 +36,78 @@
 
 .form-container{
   display: flex;
-  width: 60%;
+  width: 55%;
   flex-direction: column;
-  gap: 10px;
-  padding: 30px;
+  gap: 30px;
+  padding: 40px;
   background: #ffff;
   color: rgb(0, 0, 0);
 }
 
+.fechas{
+  display: flex;
+  gap: 50px;
+  width: 500px;
+}
+
+.sexos{
+  display: flex;
+  gap: 20px;
+}
 .campo {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  width: 100%;
 }
 
-.campo label {
-  font-size: 18px;
-  font-family: "Delius", cursive;
-}
-
-.campo input,
-.campo select, .campo textarea {
-  border: 1px solid gray;
-  border-radius: 6px;
+input, select, textarea {
+  border: none;
   outline: none;
-  font-family: "Sour Gummy", sans-seri;
+  font-family: "Zalando Sans SemiExpanded", sans-serif;
+  font-style: normal;
   font-weight: 200;
+  color: black;
 }
-.campo input{
-  padding: 8px;
+input{
+  border-bottom: 1px solid gray;
+  color: black;
  }
+select{
+  appearance: auto;
+  border-bottom: 1px solid gray;
+  padding-bottom: 3px;
+}
 
-.campo select{
-  appearance: auto; 
+.selecciones{
+  color: #999;
+}
+
+textarea{
+  border-bottom: 1px solid gray;
+}
+
+#myDropzone {
+  display: flex;
+  background: linear-gradient(145deg, #a8e6cf, #dcedc1);
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 12px 12px 0;
+  border: none;
+  overflow: hidden;
+  height: 631px;
+  width:45%;
+  font-size: large;
 }
 
 .btn {
-  border-radius: 6px;
+  border-radius: 17px;
   background-color: #6ca76c;
   color: #f9fff9;
 }
 
-.form-side {
-    background: linear-gradient(145deg, #a8e6cf, #dcedc1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    border-radius: 0 20px 20px 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.boton{
-    border: none;
-    text-align: left;
-    background: none;
-    color: #6ca76c;
-    font-size: x-large;
-    margin-top: 5px;
-    font-family: "Delius", cursive;
-}
-
-.obligatorio {
-    color: #af1c1c;
-    font-weight: bold;
-    margin-left: 3px;
-}
-
-#myDropzone { 
-    display: flex;
-    align-items: center;
-    border: ridge;
-    border-radius: 12px;
-   background-color: transparent;
-    height: 400px;
-    cursor: pointer;
-    font-size:25px;
-}
-
-#camposVacios::backdrop{
-    background-color:rgba(0, 0, 0, .56);
-}
-#camposVacios, #camposCompletos {
-    max-width: 70ch;
-    text-align: left;
-    border-radius: 10px;
-    border: 2px solid #af1c1c;
-    font-family: "Montserrat", sans-serif;
-}
-
-#camposCompletos{
-  padding: 40px;
-}
-
-#volver {
-    max-height: 30px;
-    max-width: 50px;
-    width: 50px;
-    border-radius: 10px;
-    margin-left: 90%;
-    background: none;
-    border: none;
-    color: #af1c1c;
-    font-size: x-large;
+/* Target al img que Dropzone inserta */
+#myDropzone .dz-image {
+  width: 100%;
+  height: 100%;
+  background: none;
 }

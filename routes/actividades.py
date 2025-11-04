@@ -84,7 +84,6 @@ def ver_actividades():
 
     cur.execute("SELECT limite FROM especie LIMIT 1")
     limite = cur.fetchone()['limite']   
-    print(limite)
 
     cur.close()
     conn.close()

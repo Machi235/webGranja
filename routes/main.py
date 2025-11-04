@@ -39,6 +39,13 @@ def bienvenida():
     cur.execute("SELECT COUNT(*) AS total FROM notificacion WHERE rol = %s AND leida = 0", (rol,))
     no_leidas = cur.fetchone()["total"]
 
+    cur.execute("SELECT COUNT(idAnimal) as animales, estadoSalud FROM animal GROUP BY estadoSalud")
+    estados=cur.fetchall()
+
+    etiquetas = [f"{fila['animales']} animales {fila['estadoSalud']} " for fila in estados]
+    valores = [fila['animales'] for fila in estados]
+
+
     cur.close()
     conn.close()
 
@@ -48,6 +55,8 @@ def bienvenida():
         usuario=usuario,
         rol=rol,
         notificaciones=notificaciones,
-        notificaciones_no_leidas=no_leidas
+        notificaciones_no_leidas=no_leidas,
+        etiquetas=etiquetas,
+        valores=valores
     )
 

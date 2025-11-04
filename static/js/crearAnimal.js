@@ -8,9 +8,15 @@ const myDropzone = new Dropzone("#myDropzone", {
   autoProcessQueue: false,
   uploadMultiple: false,
   maxFiles: 1,
-  dictDefaultMessage: "Arrastra la imagen aquí o haz clic para subirla"
+  dictDefaultMessage: "Arrastra la imagen aquí o haz clic para subirla",
+  thumbnailWidth:400,
+  thumbnailHeight:400
 });
 
+myDropzone.on("maxfilesexceeded", function(file){
+  this.removeAllFiles();
+  this.addFile(file)
+});
 // Evento para botón de registro
 document.getElementById("btnRegistrar").addEventListener("click", function () {
   const form = document.getElementById("miFormulario");
