@@ -1,45 +1,3 @@
-.container-fluid {
-  background-color: #6a9b5d;
-}
-.navbar{
-  height: 1% !important;
-}
-/* Ajuste para que el contenido no quede detrás del navbar fijo */
-.main-container {
-    margin-top: 70px; /* ajusta según la altura real de tu navbar */
-    padding: 20px;
-}
-
-
-li {
-  background: transparent;
-  border: 1px solid green;
-  color: rgb(255, 255, 255);
-  padding: 5px 30px;
-  border-radius: 15px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: 0.3s;
-}
-li:hover {
-  background: green;
-  color: white;
-  border-color: #fff;
-}
-
-.navbar-brand span {
-  color: #ffffff;
-  font-size: 1.3rem;
-}
-.titulo2{
-  color:white;
-}
-.logo{
-  border-radius: 50%;
-  width: 70px;
-  height: 70px;
-  margin-right: 1rem;
-}
 
 .intro-section {
 margin-top: 10px;
@@ -80,8 +38,6 @@ margin-top: 10px;
 }
 
 
-
-
 .espacio {
   height: 80px;
   background-color: #F5F5DC;
@@ -99,6 +55,14 @@ margin-top: 10px;
   display: flex;
   justify-content: center;
   margin: 5px;
+}
+
+.btn {
+  background-color: rgb(9, 91, 214);
+  color: rgba(196, 205, 236, 0.973);
+}
+.btn:hover {
+  background-color: brown;
 }
 
 .Rectangulo {
@@ -120,8 +84,7 @@ margin-top: 10px;
 }
 
 .navbar {
-  background-color: #6a9b5d;
-  border-color: #000000;
+  background-color: #6ca76c;
 }
 
 .alert-success {
@@ -134,28 +97,28 @@ p.Textr {
 }
 
 .offcanvas-body {
-  background-color: rgb(250, 248, 248);
+  background-color: rgb(19, 18, 18);
 }
 
 a.nav-link {
-  color: #6a9b5d;
+  color: #971818;
 }
 
 a.nav-link:hover {
-  color: rgb(255, 255, 255);
+  color: #f946ff;
   font-size: large;
 }
 
 .offcanvas-header {
-  background-color: #6a9b5d;
+  background-color: rgb(19, 18, 18);
 }
 
 h5.offcanvas-title {
-  color: #ffffff;
+  color: #AD46FF;
 }
 
 .btn-close {
-  background-color: #fafafa;
+  background-color: #AD46FF;
 }
 
 .padre {
@@ -177,11 +140,9 @@ h5.offcanvas-title {
   flex-direction: column;
   align-items: center;
 }
-h3{
-  color: #000;
-}
+
 h2 {
-  color: rgb(253, 253, 253);
+  color: rgb(255, 255, 255);
   padding: 10px;
 }
 
@@ -225,6 +186,59 @@ h2 {
 }
 
 
+.noti-icon {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 28px;
+}
+
+
+
+
+.noti-panel {
+  position: absolute;   
+  right: 10px;
+  width: 300px;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+  z-index: 1050;
+  display: none; 
+}
+
+.noti-panel.show {
+  display: block;
+}
+
+.noti-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.noti-card {
+  border-bottom: 1px solid #eee;
+  margin: 10px 0;
+  padding: 5px;
+  transition: opacity 0.5s ease, max-height 0.5s ease;
+  overflow: hidden;
+}
+
+.noti-card.oculto {
+  opacity: 0;
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
 .item {
   padding: 10px;
   border-bottom: 1px solid #eee;
@@ -241,11 +255,7 @@ h2 {
       padding: 20px;
       border-radius: 10px;
     }
-.espacio{
-  margin-left: 500px;
-  margin-top: 10%;
-  width: 30%;
-}
+
 
 .navbar{
   border-bottom: 1px solid black;
@@ -297,6 +307,24 @@ form{
   color: #000000;
 }
 
+
+#notificacion, #perfil{
+  width: 30%;
+  text-align: left;
+  border-radius: 15px;
+  border: none;
+  font-family: "Montserrat", sans-serif;
+  background-color: #2a2a606b;
+  color: white;
+  padding: 30px;
+} 
+
+footer {
+  background-color: #1c1c1c;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
 .modal-header{
   background-color: #6ca76c;
 }
@@ -314,44 +342,4 @@ form{
   background: green;
   color: white;
   border-color: #fff;
-}
-
-footer {
-  background-color: #1c1c1c;
-  color: #fff;
-  font-size: 0.9rem;
-}
-@media (min-width: 992px) {
-      .offcanvas-lg {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 220px;
-        height: 100vh;
-        z-index: 1040;
-        transform: none !important;
-        visibility: visible !important;
-        border-right: 1px solid #dee2e6;
-      }
-
-      .offcanvas-lg .offcanvas-body {
-        padding-top: 60px;
-      }
-
-      .main-content {
-        margin-left: 220px;
-        padding: 70px 20px 20px 20px;
-      }
-    }
-
-    /* Contenido principal en pantallas pequeñas */
-    @media (max-width: 991px) {
-      .main-content {
-        padding-top: 70px;
-      }
-    }
-
-.offcanvas-start{
-  width: 20% !important;
-  color: #ddd;
 }

@@ -75,14 +75,38 @@ def registro():
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
             """, (nombre, hashed_password, rol, apellido, documento, telefono, correo))
             conn.commit()
-            cur.close()
-            conn.close()
-            return redirect(url_for("auth.formulario"))
 
         cur.close()
         conn.close()
 
-    return render_template("registro.html", mensaje_usuario=mensaje_usuario, mensaje_correo=mensaje_correo)
+        if not mensaje_usuario and not mensaje_correo:
+            return redirect(url_for("auth.formulario"))
+
+    # -------- Notificaciones RRHH (para navRrhh.html) --------
+    notificaciones_no_leidas = 0
+    notificaciones = []
+    if 'idUsuario' in session:
+        conn = get_connection()
+        cur = conn.cursor(dictionary=True)
+        cur.execute("""
+            SELECT * FROM notificacion
+            WHERE idUsuario = %s
+        """, (session['idUsuario'],))
+        notificaciones = cur.fetchall()
+        notificaciones_no_leidas = sum(1 for n in notificaciones if not n.get('leida'))
+        cur.close()
+        conn.close()
+
+    return render_template(
+        "registro.html",
+        mensaje_usuario=mensaje_usuario,
+        mensaje_correo=mensaje_correo,
+        rol=session.get("rol"),
+        notificaciones_no_leidas=notificaciones_no_leidas,
+        notificaciones=notificaciones
+    )
+
+
 
 
 # ---------------- RECUPERAR CONTRASEÑA ----------------

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <!-- bootstrap css y js -->
@@ -85,33 +86,206 @@
     <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
   </a>
 </li>
+=======
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>>>>>>> 498accc (Subiendo versión de notis y alertas, mejor front del menú y dietas mejoradas)
 
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>Panel Admin</title>
+</head>
+
+<body>
+  <nav class="navbar fixed-top">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+            <a class="navbar-brand d-flex align-items-center" href="#">
+        <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" 
+             alt="Logo Granja Machis"  class="me-2">
+        <span class="titulo-2">Granja Livestock Log</span>
+      </a>
+
+      <div class="accesos">
+        <button class="crearNotificacion" id="crearNotificacion" data-bs-toggle="modal" data-bs-target="#modalNotificacion">
+          <i class="bi bi-send-plus"></i>
+        </button>
+      </div>
+
+      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title">Menú</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li><a class="nav-link" href="{{ url_for('animales.registro_animal') }}">Crear Animal</a></li>
+            <li><a class="nav-link" href="{{ url_for('habitat_bp.crear_habitat') }}">Crear Hábitats</a></li>
+            <li><a class="nav-link" href="{{ url_for('turnos_bp.horarios') }}">Turnos</a></li>
+            <li><a class="nav-link" href="{{ url_for('animales.ver_animales') }}">Ver Animales</a></li>
+            <li><a class="nav-link" href="{{ url_for('auth.ver_usuarios') }}">Ver Usuarios</a></li>
+            <li><a class="nav-link" href="{{ url_for('habitat_bp.ver_habitats') }}">Ver Hábitats</a></li>
+            <li><a class="nav-link" href="{{ url_for('eventos.registro_cirugia') }}">Cirugía</a></li>
+            <li><a class="nav-link" href="{{ url_for('eventos.registro_medicacion') }}">Medicación</a></li>
+            <li><a class="nav-link" href="{{ url_for('eventos.registro_postoperatorio') }}">Postoperatorio</a></li>
+            <li><a class="nav-link" href="{{ url_for('eventos.registro_terapia') }}">Terapia Física</a></li>
+            <li><a class="nav-link" href="{{ url_for('eventos.registro_vacuna') }}">Vacunas</a></li>
+            <li><a class="nav-link" href="{{ url_for('eventos.registro_visita') }}">Visita</a></li>
+            <li><a class="nav-link" href="{{ url_for('actividad_bp.ver_actividades') }}">Ver Actividad</a></li>
+            <li><a class="nav-link" href="{{ url_for('auth.registro') }}">Registro</a></li>
+            <li><a class="nav-link text-danger" href="{{ url_for('auth.logout') }}">
+              <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+<!-- 💬 Modal Notificación -->
+<div class="modal fade" id="modalNotificacion" tabindex="-1" aria-labelledby="modalNotificacionLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header text-white">
+        <h5 class="modal-title" id="modalNotificacionLabel">Enviar Notificación</h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="mb-3">
+          <label for="rol" class="form-label">Seleccionar Rol</label>
+          <select id="rol" class="form-select">
+            <option value="">-- Cargando roles... --</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="usuario" class="form-label">Seleccionar Usuario</label>
+          <select id="usuario" class="form-select" disabled>
+            <option value="">-- Primero escoge un rol --</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="titulo" class="form-label">Título</label>
+          <input type="text" id="titulo" class="form-control" placeholder="Asunto de la notificación">
+        </div>
+
+        <div class="mb-3">
+          <label for="descripcion" class="form-label">Descripción</label>
+          <textarea id="descripcion" class="form-control" rows="3" placeholder="Mensaje..."></textarea>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary" id="enviar">Enviar</button>
       </div>
     </div>
   </div>
-</nav>
-<dialog id="notificacion">
-  <form method="POST" action="{{ url_for('notificaciones_bp.crear_notificacion') }}">
-      <div class="campo">
-        <label for="titulo">Titulo:</label>
-        <input type="text" class="form-control" id="titulo" name="titulo" required>
-      </div>
-      <div class="campo">
-        <label for="rol">Usuario a enviar:</label>
-        <select class="form-control" id="rol" name="rol" required>
-          <option value=""></option>
-          <option value="guia">Guia</option>
-          <option value="cuidador">Cuidador</option>
-        </select>
-      </div>
+</div>
 
-      <div class="campo">
-        <label for="descripcion">Descripcion:</label>
-        <textarea class="descripcion form-control" id="descripcion" name="descripcion" required></textarea>
+<!-- ✅ Modal de éxito -->
+<div class="modal fade" id="modalExito" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title w-100">¡Notificación enviada!</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
+      <div class="modal-body">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+        <p class="mt-3 mb-0">La notificación fue enviada correctamente al usuario seleccionado.</p>
+      </div>
+    </div>
+  </div>
+</div>
 
-      <button type="submit" class="btn btn-danger mt-3 w-100" id="enviar">Enviar</button>
-  </form>
-</dialog>
-<script src="{{ url_for('static', filename='js/crearNotificacion.js') }}"></script>
+<script>
+  // Cargar roles
+  $('#modalNotificacion').on('show.bs.modal', function() {
+    fetch('/roles_notificacion')
+      .then(res => res.json())
+      .then(data => {
+        let options = '<option value="">-- Escoge un rol --</option>';
+        data.forEach(r => options += `<option value="${r.rol}">${r.rol}</option>`);
+        $('#rol').html(options);
+      });
+  });
+
+  // Cargar usuarios según rol
+  $('#rol').change(function() {
+    const rol = $(this).val();
+    if (!rol) {
+      $('#usuario').prop('disabled', true).html('<option>-- Primero escoge un rol --</option>');
+      return;
+    }
+    fetch(`/usuarios_por_rol/${rol}`)
+      .then(res => res.json())
+      .then(data => {
+        let options = '<option value="">-- Escoge un usuario --</option>';
+        data.forEach(u => options += `<option value="${u.idUsuario}">${u.nombre} ${u.apellido}</option>`);
+        $('#usuario').html(options).prop('disabled', false);
+      });
+  });
+
+  // Enviar notificación
+  $('#enviar').click(function() {
+    const datos = {
+      titulo: $('#titulo').val(),
+      descripcion: $('#descripcion').val(),
+      rol: $('#rol').val(),
+      idUsuario: $('#usuario').val()  // clave: idUsuario
+    };
+
+    if (!datos.titulo || !datos.descripcion || !datos.rol || !datos.idUsuario) {
+      alert('Por favor completa todos los campos.');
+      return;
+    }
+
+    console.log("Datos a enviar:", datos);  // DEBUG
+
+    fetch('/guardar_notificacion', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(datos)
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Respuesta del servidor:", data); // DEBUG
+      if (data.success) {
+        $('#modalNotificacion').modal('hide');
+        $('#modalNotificacion').one('hidden.bs.modal', function () {
+          $('.modal-backdrop').remove();
+          $('body').removeClass('modal-open');
+          $('#titulo, #descripcion').val('');
+          $('#rol').val('');
+          $('#usuario').html('<option>-- Primero escoge un rol --</option>').prop('disabled', true);
+          const modalExito = new bootstrap.Modal(document.getElementById('modalExito'));
+          modalExito.show();
+          setTimeout(() => modalExito.hide(), 2000);
+        });
+      } else {
+        alert('❌ Error al enviar la notificación: ' + data.error);
+      }
+    });
+  });
+</script>
+
+
 </body>
+</html>

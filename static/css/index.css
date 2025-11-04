@@ -1,5 +1,5 @@
 .container-fluid {
-  background-color: #6ca76c;
+  background-color: #6a9b5d;
 }
 
 .navbar-brand span {
@@ -9,7 +9,21 @@
 .titulo2{
   color:white;
 }
+.btn {
+  background: transparent;
+  border: 2px solid green;
+  color: green;
+  padding: 5px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s;
+}
 
+.btn:hover {
+  background: green;
+  color: white;
+}
 
 
 .hero {
@@ -22,15 +36,15 @@
 }
 .logo{
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   margin-right: 1rem;
 }
 .titulo {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color:#24b650;
+  color:green;
 
 }
 .hero::after {

@@ -1,61 +1,65 @@
 .navbar {
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid black !important;
 }
 
 .select{
-  appearance: a;
+  appearance: a !important;
 }
 
-#miFormulario {
+#miFormulario{
+  display: flex !important;
+  max-width: 63% !important;
+  min-width: 53% !important;
+  width: 100% !important;
+  background: transparent !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3) !important;
+  margin: 30px auto !important;
+  min-height: 600px !important;
+}
+
+.form-container{
   display: flex;
-  max-width: 53%;
-  width: 90%;
-  background: #1a1a4034;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  margin: 30px auto;
-  min-height: 600px;
-}
-
-.form-container {
-  flex: 1;
+  width: 60%;
+  flex-direction: column;
+  gap: 10px;
   padding: 30px;
-  background: #2a2a606b;
-  color: white;
+  background: #ffff;
+  color: rgb(0, 0, 0);
 }
 
 .form-box{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
 }
 
 .campo {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
 }
 
 .campo label {
-  font-size: 18px;
-  font-family: "Delius", cursive;
+  font-size: 18px !important;
+  font-family: "Delius", cursive !important;
 }
 
 .campo input,
 .campo select {
-  border: none;
-  border-radius: 6px;
-  outline: none;
-  font-family: "Sour Gummy", sans-seri;
-  font-weight: 200;
+  border: none !important;
+  border-radius: 6px !important;
+  outline: none !important;
+  font-family: "Sour Gummy", sans-seri !important;
+  font-weight: 200 !important;
 }
 .campo input{
-  padding: 8px;
+  padding: 8px !important;
  }
 
 .campo select{
-  appearance: auto; 
+  appearance: auto !important; 
 }
 
 .btn {
@@ -87,7 +91,7 @@
     margin-left: 3px;
 }
 
-#myDropzone { 
+.myDropzone { 
     display: flex;
     align-items: center;
     border: 2px solid ;
@@ -98,10 +102,10 @@
     font-size:25px;
 }
 
-#camposVacios::backdrop{
+.camposVacios::backdrop{
     background-color:rgba(0, 0, 0, .56);
 }
-#camposVacios, #camposCompletos {
+.camposVacios, .camposCompletos {
     max-width: 70ch;
     text-align: left;
     border-radius: 10px;

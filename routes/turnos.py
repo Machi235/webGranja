@@ -29,7 +29,7 @@ def horarios():
     turnos = cur.fetchall()
 
     #Trae todos los usuarios que no tengan un horario y que su rol no sea de admnistrador
-    cur.execute("SELECT * FROM usuarios AS u LEFT JOIN usuarioturno AS t ON u.idUsuario = t.idUsuario WHERE t.idUsuario IS NULL AND rol != 'Admin';")      
+    cur.execute("SELECT idUsuario, nombre, apellido FROM usuarios AS u LEFT JOIN usuarioturno AS t ON u.idUsuario = t.idUsuario WHERE t.idUsuario IS NULL AND rol != 'Admin';")      
     usuarios = cur.fetchall()
 
     cur.close()
@@ -76,14 +76,14 @@ def asignar_turno():
     conn = get_connection()
     cur = conn.cursor()
     cur.execute("""
-        INSERT INTO usuarioturno (idHorario, idUsuario, activo)
-        VALUES (%s, %s, 1)
+        INSERT INTO usuarioturno (idHorario, idUsuario)
+        VALUES (%s, %s)
     """, (id_horario, id_usuario))
     conn.commit()
     cur.close()
     conn.close()
 
-    flash("Turno asignado ")
+    flash("Turno asignado")
     return redirect(url_for("turnos_bp.horarios"))
 
 #Actualizar asigancion de turno 

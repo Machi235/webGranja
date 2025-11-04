@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/recuperar.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <title>Inicio</title>
 </head>
 <body>
@@ -36,21 +37,39 @@
 </nav>
 
 
-
-<form method="POST">
-  <div class="formulario">
-    <h2>Recuperar contraseña</h2>
+<div class="login-container">
+    
+    <!-- Sección izquierda: formulario -->
+    <div class="login-form">
+      <h2>Recuperar contraseña</h2>
+  
     <form method="POST" action="{{ url_for('auth.recuperar_password') }}">
-        <label for="correo">Tu correo registrado</label>
-        <input type="email" id="correo" name="correo" required>
+      <div class="input-group">
+        <i class="bi bi-envelope"></i>
+        <input type="email" id="correo" name="correo" placeholder="Email" required>
+      </div>
 
         <!-- Aquí mostramos el mensaje justo debajo del input -->
         {% if mensaje %}
         <p style="color: red; font-size: 14px; margin-top: 5px;">{{ mensaje }}</p>
         {% endif %}
 
-        <button type="submit">Enviar</button>
-  </div>
+        <button type="submit" class="btn">Enviar</button>
 </form>
+
+    </div>
+
+    <!-- Sección derecha: bienvenida -->
+    <div class="login-welcome">
+      <h2>¡Esta es tu zona para recuperar contraseña!</h2>
+      <p>Ingrese su correo registrado y espera el enlace de cambio de contraseña</p>
+      <a href="{{ url_for('auth.formulario') }}" class="btn-back">Regresar</a>
+    </div>
+
+  </div>
+
+  <footer class="bg-dark text-white text-center py-4 mt-5">
+    <p class="mb-0">&copy; 2025 Granja LiveStock Log - Todos los derechos reservados</p>
+  </footer>
 </body>
 </html>

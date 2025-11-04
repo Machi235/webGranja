@@ -6,8 +6,9 @@ from reportlab.lib.pagesizes import letter #tamaño de papel
 from reportlab.lib.styles import getSampleStyleSheet #Estilos de texto
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image #Contenido de pdf
 from reportlab.lib.units import cm #Usar unidades de medida 
-import os #sistema operativo
 from db import get_connection
+from flask import session
+
 
 
 animales = Blueprint("animales", __name__)
@@ -76,18 +77,32 @@ def registro_animal():
         except Exception as e:
             print("Error al registrar animal:", str(e))
             return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
-
-    # GET: cargar especies y hábitats
+        
     cur.execute("SELECT idEspecie, tipoEspecie FROM especie ORDER BY tipoEspecie")
     especies = cur.fetchall()
 
     cur.execute("SELECT idHabitat, nombreHabitat FROM habitat ORDER BY nombreHabitat")
     habitats = cur.fetchall()
 
+# Notificaciones RRHH para navRrhh.html
+    notificaciones_no_leidas = 0
+    notificaciones = []
+    if 'idUsuario' in session:
+        cur.execute("SELECT * FROM notificacion WHERE idUsuario = %s", (session['idUsuario'],))
+        notificaciones = cur.fetchall()
+        notificaciones_no_leidas = sum(1 for n in notificaciones if not n.get('leida'))
+
     cur.close()
     conn.close()
+    return render_template(
+        "crearAnimal.html",
+        especies=especies,
+        habitats=habitats,
+        rol=session.get("rol"),
+        notificaciones_no_leidas=notificaciones_no_leidas,
+        notificaciones=notificaciones
+)
 
-    return render_template("crearAnimal.html", especies=especies, habitats=habitats)
 
 
 @animales.route("/ver_animales", methods=["GET"])
@@ -96,6 +111,7 @@ def ver_animales():
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
 
+    # Obtener todos los animales
     cur.execute("""
         SELECT idAnimal, nombre, especie, estadoSalud, edad, fechaNacimiento, fechaLlegada, habitat, sexo, imagen
         FROM animal
@@ -103,16 +119,33 @@ def ver_animales():
     """)
     animales = cur.fetchall()
 
+    # Filtros
     cur.execute("SELECT DISTINCT especie FROM animal")
     especies = [row["especie"] for row in cur.fetchall()]
 
     cur.execute("SELECT DISTINCT estadoSalud FROM animal")
     estados = [row["estadoSalud"] for row in cur.fetchall()]
 
+    # Notificaciones y rol
+    notificaciones_no_leidas = 0
+    notificaciones = []
+    if 'idUsuario' in session:
+        cur.execute("SELECT * FROM notificacion WHERE idUsuario = %s", (session['idUsuario'],))
+        notificaciones = cur.fetchall()
+        notificaciones_no_leidas = sum(1 for n in notificaciones if not n.get('leida'))
+
     cur.close()
     conn.close()
 
-    return render_template("verAnimal.html", animales=animales, especies=especies, estados=estados)
+    return render_template(
+        "verAnimal.html",
+        animales=animales,
+        especies=especies,
+        estados=estados,
+        rol=session.get("rol"),
+        notificaciones_no_leidas=notificaciones_no_leidas,
+        notificaciones=notificaciones
+    )
 
 
 @animales.route("/detalle_animal/<int:idAnimal>")

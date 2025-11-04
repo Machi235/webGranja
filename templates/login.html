@@ -5,48 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    
-    <!-- Bootstrap Icons para el botón de mostrar/ocultar -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-    <title>Inicio</title>
+    <title>Iniciar Sesión</title>
 </head>
+
 <body>
-    <nav class="navbar fixed-top">
-        <div class="contenido-navbar">
-            <a class="navbar-brand" href="#">
-                🌱Granja machis
-            </a>
+    <nav class="">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+        <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" 
+             alt="Logo Granja Machis"  class="me-2">
+        <span class="titulo-2">Granja Livestock Log</span>
+      </a>
         </div>
     </nav>
+  <div class="login-container">
+    
+    <!-- Sección izquierda: formulario -->
+    <div class="login-form">
+      <h2>Iniciar Sesión</h2>
 
-    <div class="formulario">
-        <h2>Iniciar Sesión</h2>
-        <form method="POST">
-            <!-- Usuario -->
-            <input type="text" name="usuario" placeholder="Usuario">
+      <p>Use su correo y contraseña</p>
 
-            <!-- Contraseña con botón flotante -->
-            <div style="position: relative; width: 100%;">
-                <input type="password" id="password" name="password" placeholder="Contraseña" style="width: 100%; padding-right: 40px;">
-                
-                
-                <button type="button" onclick="togglePassword()" 
-                        style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer;">
-                    <i id="icono-password" class="bi bi-eye"></i>
-                </button>
-            </div>
+      <form method="POST">
+        <div class="input-group">
+          <i class="bi bi-envelope"></i>
+          <input type="text" name="usuario" placeholder="Email" required>
+        </div>
 
-            <p><a href="{{ url_for('auth.recuperar_password') }}">¿Olvidaste tu contraseña?</a></p>
-            <button type="submit" class="btn btn-primary w-100 mt-2">Ingresar</button>
-        </form>
+        <div class="input-group">
+          <i class="bi bi-lock"></i>
+          <input type="password" id="password" name="password" placeholder="Password" required>
+          <button type="button" onclick="togglePassword()" class="show-pass"><i id="icono-password" class="bi bi-eye"></i></button>
+        </div>
 
-        {% if mensaje %}
-            <p class="mensaje text-danger mt-2">{{ mensaje }}</p>
-        {% endif %}
+        <a href="{{ url_for('auth.recuperar_password') }}" class="forgot">¿Olvidaste tu contraseña?</a>
+
+        <button type="submit" class="btn-login">INICIAR SESIÓN</button>
+      </form>
+
+      {% if mensaje %}
+      <p class="mensaje text-danger mt-2">{{ mensaje }}</p>
+      {% endif %}
     </div>
 
-<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <!-- Sección derecha: bienvenida -->
+    <div class="login-welcome">
+      <h2>¡Bienvenido!</h2>
+      <p>Ingrese sus datos personales para usar todas las funciones del sitio</p>
+      <a href="{{ url_for('main.index') }}" class="btn-back">Regresar al Inicio</a>
+    </div>
+
+  </div>
+
+  <footer class="bg-dark text-white text-center py-4 mt-5">
+    <p class="mb-0">&copy; 2025 Granja LiveStock Log - Todos los derechos reservados</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 </body>
 </html>
+
+

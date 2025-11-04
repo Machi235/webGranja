@@ -1,108 +1,207 @@
+/* === GENERAL === */
 body {
-    font-family: Arial, sans-serif;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    overflow: hidden; /* para que no se salga nada */
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f4f6f7;
 }
 
-body::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("../img/Fondo3.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.7; /* ajusta el valor entre 0 y 1 */
-    z-index: -1; /* lo envía detrás del contenido */
+/* === NAVBAR === */
+.container-fluid {
+  background-color: #6a9b5d;
 }
 
-.formulario {
-    background: rgba(236, 233, 233, 0.562);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+.navbar-brand span {
+  color: #ffffff;
+  font-size: 1.3rem;
 }
-input {
-    width: 100%;
-    padding: 10px 5px;
-    margin: 10px 0;
-    border: none;                 /* Quitamos el borde normal */
-    border-bottom: 1px solid #982f2f; /* Línea inferior gris */
-    background: transparent;       /* Fondo transparente (para que se vea el fondo detrás) */
-    color: #383737;                  /* Color del texto */
-    font-size: 16px;
-    outline: none;                 /* Quitamos el borde azul al hacer focus */
+.titulo2{
+  color:white;
 }
-
-/* Efecto al hacer focus */
-.navbar{
-    background-color: #982f2f;
-}
-.navbar-brand{
-    color: aliceblue;
-}
-input:focus {
-    border-bottom: 2px solid #9d0707; /* Línea verde más gruesa */
-    transition: 0.3s;
-}
-input::placeholder {
-    color: #982f2f;     /* Color del placeholder */
-    opacity: 1;      /* Asegura que no se vea transparente */
-    font-weight: bold;
-}
-
-.offcanvas-start {
-    --bs-offcanvas-width: 240px; /* Cambia el ancho a tu preferencia */
-    height: 300px;
-
+.logo{
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  margin-right: 1rem;
 }
 
 
-
-.btn {
-    padding: 10px;
-    background: #9d0707;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+/* === CONTENEDOR LOGIN === */
+.login-container {
+  display: flex;
+  width: 900px;
+  height: 900px;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.281);
+  margin: auto;
+  margin-top: 60px; 
 }
 
+/* === IZQUIERDA: FORMULARIO === */
+.login-form {
+  flex: 1;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.login-form h2 {
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+
+/* === INPUTS estilo primera imagen === */
+.input-group {
+  position: relative;
+  margin: 20px 0;
+}
+
+.input-group i {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #6a9b5d;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px 35px 10px 35px;
+  border: none;
+  border-bottom: 1px solid #6a9b5d;
+  background: transparent;
+  color: #383737;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+  border-bottom: 2px solid green;
+}
+
+.input-group input::placeholder {
+  color: #6a9b5d;
+  font-weight: bold;
+  opacity: 1;
+}
+
+/* Mostrar contraseña */
+.show-pass {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #6a9b5d;
+  cursor: pointer;
+}
+
+/* Enlace de olvidó contraseña */
+.forgot {
+  display: block;
+  text-align: right;
+  font-size: 0.9rem;
+  color: #3bb397;
+  text-decoration: none;
+  padding: 10px;
+}
+
+.forgot:hover {
+  text-decoration: underline;
+}
+
+/* Botón ingresar */
+.btn-login {
+  background: transparent;
+  border: 2px solid green;
+  color: green;
+  padding: 5px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.btn-login:hover {
+  background: green;
+  color: white;
+}
+
+/* === DERECHA: BIENVENIDA === */
+.login-welcome {
+  flex: 1;
+  background-color: #399f2d;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+  clip-path: ellipse(90% 100% at 100% 50%);
+}
+
+.login-welcome h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.login-welcome p {
+  font-size: 1rem;
+  margin-bottom: 25px;
+  width: 80%;
+}
+
+.btn-back {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 10px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.btn-back:hover {
+  background: white;
+  color: #6ca76c;
+}
+
+/* Mensajes de error */
 .mensaje {
-    margin-top: 15px;
-    font-weight: bold;
+  margin-top: 15px;
+  font-weight: bold;
+  color: #9d0707;
+}
+footer {
+  background-color: #1c1c1c;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+  margin-top: auto;
+  width: 100%;
 }
 
-.offcanvas-body{
-    background-color: rgb(255, 255, 255);
-}
-a.nav-link{
-    color: #982f2f;
-}
-a.nav-link:hover{
-    color: #9d0707;
-    font-size: large;
-}
-.offcanvas-header{
-    background-color: rgb(255, 255, 255);
-}
-h5.offcanvas-title{
-    color: #982f2f;
-}
-.btn-close{
-    background-color: #982f2f;
-}
+/* === RESPONSIVO === */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    width: 95%;
+    height: auto;
+  }
 
-.contenido-navbar{
-   display: flex;
-   margin-left: 15px;
-   gap: 12px;
-
+  .login-welcome {
+    clip-path: none;
+    border-radius: 0;
+  }
 }

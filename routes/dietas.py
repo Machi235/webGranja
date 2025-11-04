@@ -10,48 +10,42 @@ def crear_dieta():
 
     if request.method == "POST":
         try:
-            # 1. Recoger datos principales
+            # Datos principales
             idAnimal = request.form.get("idAnimal")
             tipoDieta = request.form.get("tipoDieta")
             definitivo = 1 if request.form.get("definitivo") else 0
 
-            # Obtener especie automáticamente
+            # Obtener especie
             cur.execute("SELECT especie FROM animal WHERE idAnimal = %s", (idAnimal,))
             especie_data = cur.fetchone()
-
             if not especie_data:
                 return jsonify({"error": "Animal no encontrado"}), 404
-
             idEspecie = especie_data["especie"]
 
-            # 2. Insertar en dieta
-            sql_dieta = """
+            # Insertar dieta
+            cur.execute("""
                 INSERT INTO dieta (idAnimal, idEspecie, tipoDieta, definitivo)
                 VALUES (%s, %s, %s, %s)
-            """
-            cur.execute(sql_dieta, (idAnimal, idEspecie, tipoDieta, definitivo))
+            """, (idAnimal, idEspecie, tipoDieta, definitivo))
             idDieta = cur.lastrowid
 
-            # 3. Insertar alimentos
+            # Insertar alimentos evitando duplicados
             idAlimentos = request.form.getlist("idAlimento[]")
             cantidades = request.form.getlist("cantidadAlimento[]")
             frecuencias = request.form.getlist("frecuenciaAlimento[]")
 
+            alimentos_insertados = set()
             for i in range(len(idAlimentos)):
-                if idAlimentos[i]:  # Validar que haya un alimento seleccionado
-                    sql_dieta_alimento = """
+                idAlimento = idAlimentos[i]
+                if idAlimento and idAlimento not in alimentos_insertados:
+                    cur.execute("""
                         INSERT INTO dietaalimento (idDieta, idAlimento, cantidadAlimento, frecuenciaAlimento)
                         VALUES (%s, %s, %s, %s)
-                    """
-                    cur.execute(sql_dieta_alimento, (
-                        idDieta,
-                        idAlimentos[i],
-                        cantidades[i],
-                        frecuencias[i]
-                    ))
+                    """, (idDieta, idAlimento, cantidades[i], frecuencias[i]))
+                    alimentos_insertados.add(idAlimento)
 
             conn.commit()
-            return "OK", 200
+            return jsonify({"success": True}), 200
 
         except Exception as e:
             conn.rollback()
@@ -62,107 +56,83 @@ def crear_dieta():
             cur.close()
             conn.close()
 
-    # GET - Mostrar formulario
+    # GET - mostrar formulario
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
     animales = cur.fetchall()
 
-    cur.execute("SELECT idAlimento, origen FROM alimento ORDER BY origen")
+    cur.execute("SELECT idAlimento, Origen FROM alimento ORDER BY Origen")
     alimentos = cur.fetchall()
+
+    # Notificaciones y rol para los navs
+    notificaciones_no_leidas = 0
+    notificaciones = []
+    from flask import session
+    if 'idUsuario' in session:
+        cur.execute("SELECT * FROM notificacion WHERE idUsuario = %s", (session['idUsuario'],))
+        notificaciones = cur.fetchall()
+        notificaciones_no_leidas = sum(1 for n in notificaciones if not n.get('leida'))
 
     cur.close()
     conn.close()
 
-    return render_template("crearDieta.html", animales=animales, alimentos=alimentos)
+    return render_template(
+        "crearDieta.html",
+        animales=animales,
+        alimentos=alimentos,
+        rol=session.get("rol"),
+        notificaciones_no_leidas=notificaciones_no_leidas,
+        notificaciones=notificaciones
+    )
 
 
-ALIMENTOS_POR_ESPECIE = {
-    "Gallina": ["Maíz", "Sorgo", "Salvado de trigo", "Harina de pescado", "Cáscaras de huevo"],
-    "Caballo": ["Pasto fresco", "Avena", "Zanahoria", "Heno", "Sal mineralizada"],
-    "Vaca": ["Pasto", "Maíz", "Heno", "Sal mineralizada", "Sorgo"],
-    "Toro": ["Pasto", "Maíz", "Heno", "Sal mineralizada", "Sorgo"],
-    "Cerdo": ["Maíz", "Soya", "Trigo", "Salvado de trigo", "Restos de vegetales"],
-    "Perro": ["Croquetas", "Pollo cocido", "Hígado", "Arroz", "Verduras"],
-    "Gato": ["Croquetas", "Pescado", "Pollo cocido", "Hígado", "Leche"]
-}
 
 @dietas.route("/alimentos_por_animal/<int:idAnimal>", methods=["GET"])
 def alimentos_por_animal(idAnimal):
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
+    try:
+        cur.execute("SELECT especie FROM animal WHERE idAnimal = %s", (idAnimal,))
+        res = cur.fetchone()
+        if not res:
+            return jsonify([])
+        idEspecie = res["especie"]
 
-    # 1. Obtener especie del animal
-    cur.execute("""
-        SELECT e.tipoEspecie 
-        FROM animal a
-        INNER JOIN especie e ON a.especie = e.idEspecie
-        WHERE a.idAnimal = %s
-    """, (idAnimal,))
-    resultado = cur.fetchone()
-    
-    if not resultado:
+        cur.execute("SELECT idAlimento, Origen FROM alimento WHERE idEspecie = %s ORDER BY Origen", (idEspecie,))
+        alimentos = cur.fetchall()
+        return jsonify(alimentos)
+    except Exception as e:
+        print("Error alimentos_por_animal:", e)
+        return jsonify([])
+    finally:
         cur.close()
         conn.close()
-        return jsonify([])  # No se encontró el animal
 
-    especie = resultado["tipoEspecie"]
-
-    # 2. Buscar alimentos correspondientes
-    alimentos_permitidos = ALIMENTOS_POR_ESPECIE.get(especie, [])
-
-    # 3. Traer alimentos desde la tabla `alimento`
-    formato = ",".join(["%s"] * len(alimentos_permitidos))
-    sql = f"SELECT idAlimento, origen FROM alimento WHERE origen IN ({formato}) ORDER BY origen"
-    cur.execute(sql, tuple(alimentos_permitidos))
-    alimentos = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
-    return jsonify(alimentos)
 
 @dietas.route("/ver_dietas", methods=["GET"])
 def ver_dietas():
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
-
     try:
-        # --- Filtros opcionales ---
-        idAnimal = request.args.get("idAnimal")
-        idEspecie = request.args.get("idEspecie")
-
         sql = """
             SELECT
                 d.idDieta, d.tipoDieta, d.definitivo,
                 a.idAnimal, a.nombre AS nombreAnimal,
                 e.idEspecie, e.tipoEspecie,
-                da.idAlimento, al.origen AS nombreAlimento,
+                da.idAlimento, al.Origen AS nombreAlimento,
                 da.cantidadAlimento, da.frecuenciaAlimento
             FROM dieta d
             JOIN animal a ON d.idAnimal = a.idAnimal
             JOIN especie e ON d.idEspecie = e.idEspecie
             LEFT JOIN dietaalimento da ON d.idDieta = da.idDieta
             LEFT JOIN alimento al ON da.idAlimento = al.idAlimento
-            WHERE 1=1
+            ORDER BY d.idDieta DESC
         """
-
-        params = []
-        if idAnimal:
-            sql += " AND a.idAnimal = %s"
-            params.append(idAnimal)
-        if idEspecie:
-            sql += " AND e.idEspecie = %s"
-            params.append(idEspecie)
-
-        sql += " ORDER BY d.idDieta DESC"
-
-        cur.execute(sql, params)
+        cur.execute(sql)
         rows = cur.fetchall()
 
-        # --- Agrupar alimentos por dieta ---
         dietas_dict = {}
         for row in rows:
             idDieta = row["idDieta"]
-
             if idDieta not in dietas_dict:
                 dietas_dict[idDieta] = {
                     "idDieta": idDieta,
@@ -174,7 +144,6 @@ def ver_dietas():
                     "tipoEspecie": row["tipoEspecie"],
                     "alimentos": []
                 }
-
             if row["idAlimento"]:
                 dietas_dict[idDieta]["alimentos"].append({
                     "idAlimento": row["idAlimento"],
@@ -183,20 +152,9 @@ def ver_dietas():
                     "frecuenciaAlimento": row["frecuenciaAlimento"]
                 })
 
-        # Datos para filtros
-        cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
-        animales = cur.fetchall()
-
-        cur.execute("SELECT idEspecie, tipoEspecie FROM especie ORDER BY tipoEspecie")
-        especies = cur.fetchall()
-
-        return render_template("verDietas.html",
-                               dietas=list(dietas_dict.values()),
-                               animales=animales,
-                               especies=especies)
-
+        return render_template("verDietas.html", dietas=list(dietas_dict.values()))
     except Exception as e:
-        print("ERROR DETALLADO ver_dietas:", repr(e))
+        print("ERROR ver_dietas:", e)
         return jsonify({"error": "Ocurrió un error al cargar las dietas"}), 500
     finally:
         cur.close()
