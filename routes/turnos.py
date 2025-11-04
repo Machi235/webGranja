@@ -29,7 +29,7 @@ def horarios():
     turnos = cur.fetchall()
 
     #Trae todos los usuarios que no tengan un horario y que su rol no sea de admnistrador
-    cur.execute("SELECT idUsuario, nombre, apellido FROM usuarios AS u LEFT JOIN usuarioturno AS t ON u.idUsuario = t.idUsuario WHERE t.idUsuario IS NULL AND rol != 'Admin';")      
+    cur.execute("SELECT u.idUsuario, nombre, apellido FROM usuarios AS u LEFT JOIN usuarioturno AS t ON u.idUsuario = t.idUsuario WHERE t.idUsuario IS NULL AND rol != 'Admin';")      
     usuarios = cur.fetchall()
 
     cur.close()

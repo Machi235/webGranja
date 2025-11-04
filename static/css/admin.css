@@ -390,11 +390,11 @@ h2 {
   gap: 20px;
   align-items: center;
 }
-form{
+/* form{
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
+} */
 .campo {
   display: flex;
   flex-direction: column;

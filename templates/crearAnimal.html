@@ -32,32 +32,23 @@
 
     <!-- Formulario -->
     <form id="miFormulario" enctype="multipart/form-data">
-        <div class="containerdiv">
-            <div class="form-container">
-            <!-- Nombre -->
-            <div class="campo">
-                <label for="nombre">Nombre:<span class="obligatorio">*</span></label>
-                <input type="text" id="nombre" name="nombre" required>
-            </div>
-
-            <!-- Especie -->
-            <div class="campo">
-                <label for="especie">Especie:<span class="obligatorio">*</span></label>
-                <select id="especie" name="especie" required>
-                    <option value="">Seleccione una especie</option>
-                    {% for especie in especies %}
-                        <option value="{{ especie.idEspecie }}">{{ especie.tipoEspecie }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- Edad -->
-            <div class="campo">
-                <label for="edad">Edad:<span class="obligatorio">*</span></label>
-                <input type="number" id="edad" name="edad" min="0" required>
-            </div>
-
-            <!-- Fecha de nacimiento -->
+    <div class="form-container">
+        <!-- Nombre -->
+        <input type="text" id="nombre" name="nombre" placeholder="Nombre del animal *" required>
+            
+        <!-- Especie (select dinámico) -->
+        <select id="especie" name="especie" required>
+            <option value="">Seleccione una especie <span class="obligatorio">*</span></option>
+            {% for especie in especies %}
+                <option value="{{ especie.idEspecie }}">{{ especie.tipoEspecie }}</option>
+            {% endfor %}
+        </select>
+        
+        <!-- Edad -->
+        <input type="number" id="edad" name="edad" min="0" placeholder="Edad *" required>
+            
+        <div class="fechas">
+                <!-- Fecha de nacimiento -->
             <div class="campo">
                 <label for="nacimiento">Fecha de nacimiento:</label>
                 <input type="date" id="nacimiento" name="fechaNacimiento">
@@ -68,8 +59,9 @@
                 <label for="ingreso">Fecha de ingreso:</label>
                 <input type="date" id="ingreso" name="fechaLlegada">
             </div>
-                 <!-- Sexo -->
-            <div class="campo">
+        </div>
+            <!-- Sexo -->
+        <div class="campo">
             <label>Sexo: *</label>
             <div class="sexos">
                 <div>
@@ -80,68 +72,59 @@
                     <input type="radio" id="hembra" name="sexo" value="Hembra" required>
                     <label for="hembra">Hembra</label>
                 </div>
-                </div>
             </div>
-
+        </div>
 
         <!-- Estado de salud -->
-            <div class="campo">
-                <label for="salud">Estado de Salud:<span class="obligatorio">*</span></label>
-                <select id="salud" name="salud" required>
-                    <option value="">Seleccione...</option>
-                    <option value="Sano">Sano</option>
-                    <option value="Enfermo">Enfermo</option>
-                    <option value="En recuperación">En recuperación</option>
-                </select>
-            </div>
-
-            <!-- Observaciones -->
-            <div class="campo">
-                <label for="observaciones">Observaciones:<span class="obligatorio">*</span></label>
-                <textarea id="observaciones" name="observaciones" required></textarea>
-            </div>
-
-            <!-- Hábitat -->
-            <div class="campo">
-                <label for="habitat">Hábitat:<span class="obligatorio">*</span></label>
-                <select id="habitat" name="habitat" required>
-                    <option value="">Seleccione un hábitat</option>
-                    {% for habitat in habitats %}
-                        <option value="{{ habitat.idHabitat }}">{{ habitat.nombreHabitat }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        <select id="salud" name="salud" required>
+            <option value="">Seleccione un estado de salud <span class="obligatorio">*</span></option>
+            <option value="sano">Sano</option>
+            <option value="enfermo">Enfermo</option>
+            <option value="en recuperación">En recuperación</option>
+        </select>
+        
+        <!-- Observaciones -->
+        <textarea id="observaciones" name="observaciones" placeholder="observaciones *" required></textarea>
+            
+        <!-- Hábitat -->
+        <select id="habitat" name="habitat" required>
+            <option value="" class="selecciones">Seleccione un hábitat</option>
+            {% for habitat in habitats %}
+                <option value="{{ habitat.idHabitat }}">{{ habitat.nombreHabitat }}</option>
+            {% endfor %}
+        </select>
 
         <!-- Botones -->
-            <div>
+        <div>
             <button class="btn w-20" type="button" onclick="vaciarFormulario()">Vaciar</button>
             <button class="btn w-20" id="btnRegistrar" type="button">Registrar</button>
-            </div>
         </div>
-        
-        <!-- Imagen -->
-        <div class="dropzone" id="myDropzone"></div>
-        </div>
+    </div>
+    <!-- Imagen -->
+    <div class="dropzone" id="myDropzone"></div>
 </form>
 
     
 <script src="{{ url_for('static', filename='js/crearAnimal.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-    <!-- Dialogs -->
-    <dialog id="camposVacios">
-        <h1>Los campos con <span class="obligatorio">*</span> son obligatorios, por favor complételos.</h1>
-        <button id="volver">OK</button>
-    </dialog>
-
-    <dialog id="camposCompletos">
-        <h1>Animal registrado correctamente</h1>
-    </dialog>
-
-    <!-- Scripts -->
-    <script src="{{ url_for('static', filename='js/crearAnimal.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <script>
+      {% for category, message in messages %}
+        Swal.fire({
+          icon: '{{ category }}',
+          title: '{{ message }}',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true
+        }).then(() => {
+          window.location.href = "{{ url_for('actividad_bp.ver_actividades') }}";
+        });
+      {% endfor %}
+    </script>
+  {% endif %}
+{% endwith %}
 
 
 </body>
