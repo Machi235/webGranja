@@ -4,93 +4,6 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <!-- bootstrap css y js -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-    <!-- Iconos de bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <!-- google fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <!-- estilo ccs -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
-    <title>Document</title>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-            </svg>CREAR ANIMAL</a>
-        <div class="accesos">
-          <button class="crearNotificacion" id="crearNotificacion" type="submit"><i class="bi bi-send-plus"></i></button>
-          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        </div>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="{{ url_for('animales.registro_animal') }}">Crear Animal</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('habitat_bp.crear_habitat') }}">Crear Habitats</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('turnos_bp.horarios') }}">Turnos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('animales.ver_animales') }}">Ver Animales</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.ver_usuarios') }}">Ver Usuarios</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('habitat_bp.ver_habitats') }}">Ver habitats</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('eventos.registro_cirugia') }}">Cirugia</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('eventos.registro_medicacion') }}">Medicacion</a>
-          </li>
-           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('eventos.registro_postoperatorio') }}">Postoperatorio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('eventos.registro_terapia') }}">Terapia Fisica</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('eventos.registro_vacuna') }}">Vacunas</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('eventos.registro_visita') }}">Visita</a>
-          </li>
-           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('actividad_bp.ver_actividades') }}">Ver actividad</a>
-          </li>
-           <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('auth.registro') }}">Registro</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('ventaBoleto.ver_boletas') }}">Grafica</a>
-            </li>
-            <button id="verPerfil">Ver perfil</button>
-          <li class="nav-item">
-  <a class="nav-link text-danger" href="{{ url_for('auth.logout') }}">
-    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
-  </a>
-</li>
-=======
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
->>>>>>> 498accc (Subiendo versión de notis y alertas, mejor front del menú y dietas mejoradas)
-
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
@@ -115,9 +28,6 @@
           <span class="navbar-toggler-icon"></span>
         </button>
             <a class="navbar-brand d-flex align-items-center" href="#">
-        <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" 
-             alt="Logo Granja Machis"  class="me-2">
-        <span class="titulo-2">Granja Livestock Log</span>
       </a>
 
       <div class="accesos">

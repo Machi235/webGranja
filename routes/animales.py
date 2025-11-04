@@ -61,16 +61,17 @@ def registro_animal():
                 archivo.save(os.path.join(UPLOAD_FOLDER, filename))
 
             # Guardar el animal
-            sql = """
-                INSERT INTO animal 
-                (nombre, especie, estadoSalud, edad, fechaNacimiento, fechaLlegada, habitat, observaciones, sexo, imagen)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """
-            cur.execute(
-                sql,
-                (nombre, especie, salud, edad, nacimiento, llegada, habitat, observaciones, sexo, filename),
-            )
+            cur.callproc("limite_de_habitat",(nombre, especie, salud, edad, nacimiento, llegada, habitat, observaciones, sexo, filename))
+            for result in cur.stored_results():
+                animal= result.fetchall()
+                if animal:
+                    mensaje = animal[0]['mensaje']
+                    print("Mensaje del procedimiento:", mensaje)
             conn.commit()
+            if "asignado" in mensaje.lower():
+                flash(mensaje, "success")
+            else:
+                flash(mensaje, "warning")
 
             return jsonify({"mensaje": " Animal registrado con éxito"}), 200
 

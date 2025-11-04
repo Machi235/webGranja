@@ -32,7 +32,6 @@ body {
 .login-container {
   display: flex;
   width: 900px;
-  height: 900px;
   background: #fff;
   border-radius: 20px;
   overflow: hidden;
