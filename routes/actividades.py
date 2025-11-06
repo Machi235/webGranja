@@ -27,7 +27,7 @@ def registro_actividad():
         return render_template("actividad.html", especies=especies, usuarios=usuarios, habitats=habitats)
 
     elif request.method == "POST":
-        # Capturar datos del formulario
+    # Capturar datos del formulario
         id_especies = request.form.getlist("idEspecie")
         id_usuario = request.form.get("idUsuario")
         id_habitats = request.form.getlist("idHabitat")
@@ -36,39 +36,54 @@ def registro_actividad():
         minutos = request.form.get("minutos") or 0
         fechaRealizacion = request.form.get("fechaRealizacion")
         detalles = request.form.get("detalles")
-        
-        # Combinar horas y minutos en formato HH:MM
+    
+    # Combinar horas y minutos en formato HH:MM
         duracion = f"{int(horas):02d}:{int(minutos):02d}"
 
-        # Fecha actual para la actividad
+    # Fecha actual para la actividad
         fecha = datetime.now().strftime("%Y-%m-%d")
 
         conn = get_connection()
         cur = conn.cursor()
 
-        # Insertar en la base de datos
-        cur.execute(""" INSERT INTO cronogramaactividades (idUsuario, tipo, fechaCreacion, duracion, detalles, fechaRealizacion) VALUES (%s, %s, %s, %s, %s, %s)""", 
-                        (id_usuario, tipo, fecha, duracion,  detalles, fechaRealizacion ))
+    # ✅ Insertar actividad principal
+        cur.execute(""" 
+            INSERT INTO cronogramaactividades (idUsuario, tipo, fechaCreacion, duracion, detalles, fechaRealizacion) 
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (id_usuario, tipo, fecha, duracion, detalles, fechaRealizacion ))
 
         id_actividad = cur.lastrowid
 
-        for id_especie in id_especies:
-                cur.callproc("limite_de_uso1",(id_especie,id_actividad))
-                for result in cur.stored_results():
-                    mensaje = result.fetchone()[0]
+    # ✅ Enviar notificación al guía asignado
+        titulo = "Nueva Actividad Asignada"
+        descripcion = f"Se te ha asignado una actividad de tipo '{tipo}' para la fecha {fechaRealizacion}."
+        cur.execute("""
+            INSERT INTO notificacion (idUsuario, titulo, rol, descripcion, fecha, leida)
+            VALUES (%s, %s, 'Guia', %s, NOW(), 0)
+        """, (id_usuario, titulo, descripcion))
 
+    # ✅ Registrar especies en actividad (y límite)
+        for id_especie in id_especies:
+            cur.callproc("limite_de_uso1",(id_especie,id_actividad))
+            for result in cur.stored_results():
+                mensaje = result.fetchone()[0]
+
+    # ✅ Registrar habitats
         for id_habitat in id_habitats:
-            cur.execute(""" INSERT INTO actividades (idHabitat, idActividad ) VALUES (%s, %s)""",(id_habitat, id_actividad))
+            cur.execute("""INSERT INTO actividades (idHabitat, idActividad ) VALUES (%s, %s)""",(id_habitat, id_actividad))
+
         conn.commit()
         cur.close()
         conn.close()
 
+    # ✅ Mantener tu lógica de mensajes intacta
         if "asignado" in mensaje.lower():
             flash(mensaje, "success")
         else:
             flash(mensaje, "warning")
-            
+        
     return render_template("actividad.html")
+
 
 @actividad_bp.route("/actividades", methods=["GET"])
 def ver_actividades():
