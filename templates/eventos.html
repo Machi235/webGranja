@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Eventos Clínicos</h2>
+
+  <!-- Botón para abrir modal -->
+  <div class="text-center">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEventos">
+      <i class="bi bi-clipboard-heart"></i> Abrir eventos clínicos
+    </button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalEventos" tabindex="-1" aria-labelledby="modalEventosLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Encabezado -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="modalEventosLabel">Gestión de Eventos Clínicos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <!-- Cuerpo del modal con pestañas -->
+      <div class="modal-body">
+        <ul class="nav nav-tabs" id="eventTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="visita-tab" data-bs-toggle="tab" data-bs-target="#visita" type="button" role="tab">Visita Médica</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="vacuna-tab" data-bs-toggle="tab" data-bs-target="#vacuna" type="button" role="tab">Vacuna</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="medicacion-tab" data-bs-toggle="tab" data-bs-target="#medicacion" type="button" role="tab">Medicación</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="terapia-tab" data-bs-toggle="tab" data-bs-target="#terapia" type="button" role="tab">Terapia Física</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="cirugia-tab" data-bs-toggle="tab" data-bs-target="#cirugia" type="button" role="tab">Cirugía</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="postoperatorio-tab" data-bs-toggle="tab" data-bs-target="#postoperatorio" type="button" role="tab">Postoperatorio</button>
+          </li>
+          <!-- 📋 NUEVA PESTAÑA REGISTROS MÉDICOS -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="registros-tab" data-bs-toggle="tab" data-bs-target="#registros" type="button" role="tab">Registros Médicos</button>
+          </li>
+        </ul>
+
+        <div class="tab-content mt-3" id="eventTabsContent">
+          <!-- VISITA MÉDICA -->
+          <div class="tab-pane fade show active" id="visita" role="tabpanel">
+            {% include "eventos/visitamedica.html" %}
+          </div>
+
+          <!-- VACUNA -->
+          <div class="tab-pane fade" id="vacuna" role="tabpanel">
+            {% include "eventos/vacuna.html" %}
+          </div>
+
+          <!-- MEDICACIÓN -->
+          <div class="tab-pane fade" id="medicacion" role="tabpanel">
+            {% include "eventos/medicacion.html" %}
+          </div>
+
+          <!-- TERAPIA FÍSICA -->
+          <div class="tab-pane fade" id="terapia" role="tabpanel">
+            {% include "eventos/terapiafisica.html" %}
+          </div>
+
+          <!-- CIRUGÍA -->
+          <div class="tab-pane fade" id="cirugia" role="tabpanel">
+            {% include "eventos/cirugia.html" %}
+          </div>
+
+          <!-- POSTOPERATORIO -->
+          <div class="tab-pane fade" id="postoperatorio" role="tabpanel">
+            {% include "eventos/postoperatorio.html" %}
+          </div>
+
+          <!-- 📋 REGISTROS MÉDICOS -->
+          <div class="tab-pane fade" id="registros" role="tabpanel">
+            {% include "eventos/registros_medicos.html" %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Pie del modal -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

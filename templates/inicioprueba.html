@@ -39,20 +39,12 @@
             <div class="hero-logo">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Livestock Log">
             </div>
-            <h1 class="hero-title">LIVESTOCK LOG</h1>
-            <p class="hero-subtitle">Sistema de Gestión de la Granja</p>
-
-    </section>
-
-    <!-- WELCOME SECTION -->
-    <section class="welcome-section text-center">
-        <div class="container">
             <h2 class="welcome-title">¡Bienvenido {{ session.get('rol', 'Administrador') }}!</h2>
             <p class="welcome-text">
                 En la parte superior izquierda encontrarás todos los módulos correspondientes a tu rol.<br> 
                 Nuestro sistema te permite llevar un control completo y eficiente de la granja.
             </p>
-        </div>
+
     </section>
 
     <!-- FEATURES SECTION -->

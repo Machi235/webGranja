@@ -66,11 +66,14 @@
   </div>
 
   <!-- Botón de regreso -->
+{% if id_animal %}
   <div class="mt-4 text-center">
     <a href="{{ url_for('animales.ver_animal', idAnimal=id_animal) }}" class="btn btn-secondary">
       <i class="bi bi-arrow-left"></i> Volver a la ficha del animal
     </a>
   </div>
+{% endif %}
+
 
 </div>
 

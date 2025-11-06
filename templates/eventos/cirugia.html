@@ -1,0 +1,65 @@
+
+     
+<div class="form-container">
+  
+  <div class="form-box">
+  
+<form id="formVisita" action="{{ url_for('eventos.registro_cirugia') }}" method="POST">
+
+      
+  <h2> Cirugía > <a href="postoperatorio.html">Postoperatorio</a></h2>
+
+  <div class="form-row">
+    <label for="idAnimal">Animal*</label>
+    <select class="form-control" name="idAnimal" id="idAnimal" required>
+        <option value="">Selecciona un animal</option>
+        {% for animal in animales %}
+            <option value="{{ animal.idAnimal }}">{{ animal.nombre }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+
+
+      <div class="form-row">
+    <label for="responsableCirugia">Responsable*</label>
+    <input type="text" class="form-control" name="responsableCirugia" id="responsableCirugia" required>
+</div>
+
+<div class="form-row">
+    <label for="procedimientoCirugia">Procedimiento*</label>
+    <input type="text" class="form-control" name="procedimientoCirugia" id="procedimientoCirugia" required>
+</div>
+
+<div class="form-row">
+    <label for="preparacionCirugia">Preparación*</label>
+    <input type="text" class="form-control" name="preparacionCirugia" id="preparacionCirugia" required>
+</div>
+
+<div class="form-row">
+    <label for="proximaCirugia">Próxima Cirugía</label>
+    <input type="text" class="form-control" name="proximaCirugia" id="proximaCirugia">
+</div>
+
+<div class="form-row">
+    <label for="fechaCirugia">Fecha*</label>
+    <input type="date" class="form-control" name="fechaCirugia" id="fechaCirugia" required>
+</div>
+
+      <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
+
+    </form>
+    </div>
+
+ 
+  <div class="form-side">
+  
+    <img src= "./views/doctor.png">
+  </div>
+</div>
+
+      <script src="./models/activacionbotones.js"></script>
+      <script src="./models/alertacirugia.js"></script>
+      
+</body>
+</html>

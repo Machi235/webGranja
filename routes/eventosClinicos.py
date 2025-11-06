@@ -252,3 +252,7 @@ def registro_visita():
     conn.close()
 
     return render_template("visitamedica.html", animales=animales)
+
+@eventos.route('/eventosclinicos')
+def evento():
+    return render_template('eventos.html')

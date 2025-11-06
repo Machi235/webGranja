@@ -146,7 +146,7 @@ li:hover {
 
         .welcome-title {
             font-size: 2.5rem;
-            color: #2d5016;
+            color: #ffffff;
             font-style: italic;
             margin-bottom: 30px;
             position: relative;
@@ -166,7 +166,7 @@ li:hover {
         }
 
         .welcome-text {
-            color: #666;
+            color: #d4d3d3;
             font-size: 1.1rem;
             line-height: 1.8;
             max-width: 800px;
@@ -196,7 +196,7 @@ li:hover {
             padding: 40px 30px;
             text-align: center;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.459);
             height: 100%;
             border: 3px solid transparent;
         }
@@ -498,4 +498,5 @@ footer {
 .containerdiv{
   display: flex;
   width: 900px;
+  margin-top: 7%;
 }
