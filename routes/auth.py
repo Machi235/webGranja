@@ -74,7 +74,28 @@ def registro():
                 (nombre, contraseña, rol, apellido, documento, telefono, correo)
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
             """, (nombre, hashed_password, rol, apellido, documento, telefono, correo))
+            
+            nuevo_id_usuario = cur.lastrowid
+
+# Buscar todos los usuarios con rol Admin o RRHH
+            cur.execute("SELECT idUsuario FROM usuarios WHERE rol IN ('Admin', 'RRHH') AND activo = 1")
+            destinatarios = cur.fetchall()
+
+# Crear mensaje
+            titulo = "Nuevo usuario registrado"
+            descripcion = f"Se ha registrado el usuario {nombre} ({rol})."
+
+            from datetime import datetime
+            fecha_actual = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+            for d in destinatarios:
+                cur.execute("""
+                    INSERT INTO notificacion (idUsuario, titulo, descripcion, fecha, leida)
+                    VALUES (%s, %s, %s, %s, 0)
+                """, (d['idUsuario'], titulo, descripcion, fecha_actual))
+
             conn.commit()
+            
 
         cur.close()
         conn.close()
@@ -105,9 +126,6 @@ def registro():
         notificaciones_no_leidas=notificaciones_no_leidas,
         notificaciones=notificaciones
     )
-
-
-
 
 # ---------------- RECUPERAR CONTRASEÑA ----------------
 @auth.route("/recuperar", methods=["GET", "POST"])
