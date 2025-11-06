@@ -13,6 +13,8 @@ from flask_mail import Mail
 from routes.eventos import eventos_general
 from routes.ventaBoleta import boleto
 from routes.notificacion import notificaciones_bp
+from routes.reporte import reporte
+from routes.tareas import tareas
 
 
 app = Flask(__name__)
@@ -34,6 +36,9 @@ app.register_blueprint(eventos_general)
 app.register_blueprint(boleto)
 
 app.register_blueprint(notificaciones_bp)
+app.register_blueprint(reporte)
+app.register_blueprint(tareas)
+
 
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'

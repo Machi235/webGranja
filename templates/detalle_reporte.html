@@ -2,22 +2,36 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Detalle del Reporte</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='reportes.css') }}">
+  <title>Detalle del reporte</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
+
 <div class="container mt-4">
-  <h2 class="mb-4">Detalle del Reporte 🐾</h2>
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">{{ reporte.tipo }}</h5>
-      <h6 class="card-subtitle mb-2 text-muted">Animal: {{ reporte.id_animal }}</h6>
-      <p class="card-text"><strong>Descripción:</strong> {{ reporte.descripcion }}</p>
-      <p class="card-text"><strong>Fecha:</strong> {{ reporte.fecha }}</p>
-      <a href="{{ url_for('reporte.reportes') }}" class="btn btn-primary mt-3">Volver a Reportes</a>
-    </div>
+  <h2 class="text-primary mb-4">🐾 Detalle del reporte ({{ tipo | capitalize }})</h2>
+
+  <div class="card p-4 shadow-sm">
+    {% for campo, valor in reporte.items() %}
+      {% if campo not in ['activo'] %}
+        <p><strong>{{ campo }}:</strong> {{ valor or '—' }}</p>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="mt-4">
+    <!-- Botón Editar usando id_registro pasado desde Flask -->
+    <a href="{{ url_for('reporte.editar_reporte', id_registro=id_registro) }}" 
+       class="btn btn-success">✏️ Editar</a>
+
+    <!-- Botón Volver a lista de reportes usando id_animal -->
+    <a href="{{ url_for('reporte.reportes', id_animal=id_animal) }}" 
+       class="btn btn-secondary">⬅ Volver</a>
   </div>
 </div>
+
 </body>
 </html>
+
+
+
+

@@ -5,10 +5,12 @@ from db import get_connection
 
 eventos = Blueprint("eventos", __name__)
 
+UPLOAD_FOLDER = "static/uploads"  # Carpeta para guardar las fotos
+
+
 @eventos.route("/registro_cirugia", methods=["GET", "POST"])
 def registro_cirugia():
     if request.method == "POST":
-        
         id_animal = request.form.get("idAnimal")
         responsable = request.form.get("responsableCirugia")
         procedimiento = request.form.get("procedimientoCirugia")
@@ -16,7 +18,6 @@ def registro_cirugia():
         proxima = request.form.get("proximaCirugia")
         fecha = request.form.get("fechaCirugia")
 
-       
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -29,10 +30,9 @@ def registro_cirugia():
         cur.close()
         conn.close()
 
-        flash("Cirugía registrada con éxito")
+        flash("Cirugía registrada correctamente", "success")
         return redirect(url_for("eventos.registro_cirugia"))
 
-    
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
@@ -46,17 +46,15 @@ def registro_cirugia():
 @eventos.route("/registro_medicacion", methods=["GET", "POST"])
 def registro_medicacion():
     if request.method == "POST":
-        
-        id_animal = request.form.get("idAnimal")
+        id_animal = request.form.get("id_animal")  # Asegúrate que coincida con el name del select
         nombre_med = request.form.get("nombreMed")
         dosis = request.form.get("dosisSuministradas")
-        unidad = request.form.get("unidad")  # ml o mg
+        unidad = request.form.get("unidad")
         hora_aplicacion = request.form.get("horaAplicacion")
         hora_siguiente = request.form.get("horaSiguiente")
         administracion = request.form.get("administracionMed")
         reacciones = request.form.get("reaccionesMed")
 
-        
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -71,13 +69,13 @@ def registro_medicacion():
         cur.close()
         conn.close()
 
-        flash("Medicación registrada con éxito")
+        flash("Medicación registrada correctamente", "success")
         return redirect(url_for("eventos.registro_medicacion"))
 
-    
+    # Cargar animales para el select
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
-    cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
+    cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")  # 👈 nombre correcto de la tabla
     animales = cur.fetchall()
     cur.close()
     conn.close()
@@ -88,7 +86,6 @@ def registro_medicacion():
 @eventos.route("/registro_postoperatorio", methods=["GET", "POST"])
 def registro_postoperatorio():
     if request.method == "POST":
-        # 1. Capturar datos del formulario
         id_animal = request.form.get("idAnimal")
         nombre_med = request.form.get("nombreMed")
         dosis = request.form.get("dosisSuministradas")
@@ -99,7 +96,6 @@ def registro_postoperatorio():
         dieta = request.form.get("dietaEspecifica")
         control = request.form.get("controlPostoperatorio")
 
-        
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -114,10 +110,9 @@ def registro_postoperatorio():
         cur.close()
         conn.close()
 
-        flash("Postoperatorio registrado correctamente")
+        flash("Postoperatorio registrado correctamente", "success")
         return redirect(url_for("eventos.registro_postoperatorio"))
 
-    
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
@@ -131,7 +126,6 @@ def registro_postoperatorio():
 @eventos.route("/registro_terapia", methods=["GET", "POST"])
 def registro_terapia():
     if request.method == "POST":
-     
         id_animal = request.form.get("idAnimal")
         tipo_terapia = request.form.get("tipoTerapia")
         objetivo = request.form.get("objetivoSesion")
@@ -140,7 +134,6 @@ def registro_terapia():
         duracion = request.form.get("duracionSesion")
         evaluacion = request.form.get("evaluacion")
 
-       
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -153,10 +146,9 @@ def registro_terapia():
         cur.close()
         conn.close()
 
-        flash("Terapia física registrada correctamente")
+        flash("Terapia física registrada correctamente", "success")
         return redirect(url_for("eventos.registro_terapia"))
 
-    
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
@@ -166,12 +158,10 @@ def registro_terapia():
 
     return render_template("terapiafisica.html", animales=animales)
 
-UPLOAD_FOLDER = "static/uploads"  # Carpeta para las fotos
 
 @eventos.route("/registro_vacuna", methods=["GET", "POST"])
 def registro_vacuna():
     if request.method == "POST":
-        # 1. Capturar datos del formulario
         id_animal = request.form.get("idAnimal")
         responsable = request.form.get("responsable")
         tipo_vacuna = request.form.get("tipoVacuna")
@@ -179,8 +169,7 @@ def registro_vacuna():
         lote = request.form.get("lote")
         fecha_aplicacion = request.form.get("aplicacionVacuna")
         fecha_proxima = request.form.get("proximaVacuna")
-        
-        # Manejo de imagen
+
         archivo = request.files.get("foto")
         if archivo and archivo.filename != "":
             filename = secure_filename(archivo.filename)
@@ -188,7 +177,6 @@ def registro_vacuna():
         else:
             filename = None
 
-        # 2. Insertar en la BD
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -196,16 +184,14 @@ def registro_vacuna():
             (idAnimal, responsable, tipoVacuna, laboratorio, lote, aplicacionVacuna, proximaVacuna, vacunasAplicadas, foto)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        # vacunasAplicadas se llena con 1 por defecto al registrar
         cur.execute(sql, (id_animal, responsable, tipo_vacuna, laboratorio, lote, fecha_aplicacion, fecha_proxima, 1, filename))
         conn.commit()
         cur.close()
         conn.close()
 
-        flash(" Vacuna registrada correctamente")
+        flash("Vacuna registrada correctamente", "success")
         return redirect(url_for("eventos.registro_vacuna"))
 
-   
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
@@ -215,10 +201,10 @@ def registro_vacuna():
 
     return render_template("vacuna.html", animales=animales)
 
+
 @eventos.route("/registro_visita", methods=["GET", "POST"])
 def registro_visita():
     if request.method == "POST":
-       
         id_animal = request.form.get("idAnimal")
         veterinario = request.form.get("veterinario")
         motivo = request.form.get("motivo")
@@ -227,7 +213,6 @@ def registro_visita():
         proxima_visita = request.form.get("fecha")
         estado = request.form.get("estado")
 
-        
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -240,10 +225,9 @@ def registro_visita():
         cur.close()
         conn.close()
 
-        flash("Visita médica registrada correctamente")
+        flash("Visita médica registrada correctamente", "success")
         return redirect(url_for("eventos.registro_visita"))
 
-    
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")

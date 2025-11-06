@@ -1,0 +1,190 @@
+/* === ESTILO GENERAL === */
+body {
+  background: linear-gradient(135deg, #b8e994, #78e08f);
+  font-family: "Poppins", sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === NAVBAR === */
+.navbar {
+  background-color: #218c74;
+  padding: 12px 25px;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar .navbar-brand {
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar .btn {
+  background: #f6f6f6;
+  color: #218c74;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+.navbar .btn:hover {
+  background-color: #20bf6b;
+  color: white;
+}
+
+/* === CONTENEDOR PRINCIPAL === */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 50px;
+  padding: 40px 60px;
+  flex: 1;
+}
+
+/* === FORMULARIO === */
+.form-box {
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 35px 45px;
+  width: 500px;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.8s ease;
+}
+
+.form-box h2 {
+  text-align: center;
+  color: #218c74;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.form-control,
+select,
+input[type="text"],
+input[type="date"] {
+  border: 2px solid #b8e994;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 1rem;
+  transition: 0.3s ease;
+}
+
+.form-control:focus,
+select:focus,
+input:focus {
+  border-color: #20bf6b;
+  box-shadow: 0 0 8px rgba(32, 191, 107, 0.3);
+  outline: none;
+}
+
+/* === BOTÓN GUARDAR === */
+.btn-danger {
+  background-color: #20bf6b !important;
+  border: none;
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+  background-color: #16a085 !important;
+  transform: scale(1.03);
+}
+
+/* === TARJETA LATERAL === */
+.form-side {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info-card {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+  padding: 40px;
+  text-align: center;
+  width: 350px;
+  transition: transform 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+}
+
+.icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.info-card h2 {
+  color: #218c74;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.info-card p {
+  color: #444;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+}
+
+.btn-volver {
+  display: inline-block;
+  background-color: #20bf6b;
+  color: white;
+  padding: 10px 25px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-volver:hover {
+  background-color: #16a085;
+}
+
+/* === ANIMACIÓN === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 992px) {
+  .form-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding: 20px;
+  }
+
+  .form-box,
+  .info-card {
+    width: 95%;
+  }
+
+  .navbar .navbar-brand {
+    font-size: 1.1rem;
+  }
+}

@@ -1,0 +1,70 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Lista de Tareas</h2>
+  <a href="{{ url_for('tareas.nueva_tarea') }}" class="btn btn-success mb-3">+ Nueva tarea</a>
+
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Empleado</th>
+        <th>Prioridad</th>
+        <th>Inicio</th>
+        <th>Fin</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in tareas %}
+      <tr>
+        <td>{{ t.idTarea }}</td>
+        <td>{{ t.nombreTarea }}</td>
+        <td>{{ t.empleado }}</td>
+        <td>{{ t.prioridad }}</td>
+        <td>{{ t.fechaInicio }}</td>
+        <td>{{ t.fechaFin }}</td>
+        <td>{{ t.estado }}</td>
+       <td class="text-center">
+    <a href="{{ url_for('tareas.editar_tarea', id=t.idTarea) }}" 
+       class="btn btn-outline-primary btn-sm" title="Editar">
+        <i class="bi bi-pencil-square"></i>
+    </a>
+
+  <a href="#" 
+   class="btn btn-outline-danger btn-sm" 
+   title="Eliminar"
+   onclick="confirmarEliminacion('{{ url_for('tareas.eliminar_tarea', id=t.idTarea) }}')">
+    <i class="bi bi-trash3-fill"></i>
+</a>
+
+</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+function confirmarEliminacion(url) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡Esta acción eliminará la tarea permanentemente!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = url;
+        }
+    });
+}
+</script>
+{% endblock %}
+
+
+

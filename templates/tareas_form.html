@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>{{ 'Editar Tarea' if tarea else 'Crear Tarea' }}</h2>
+
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label">Nombre de la tarea</label>
+      <input type="text" name="nombreTarea" class="form-control" value="{{ tarea.nombreTarea if tarea else '' }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Descripción</label>
+      <textarea name="descripcion" class="form-control">{{ tarea.descripcion if tarea else '' }}</textarea>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Prioridad</label>
+        <select name="prioridad" class="form-select">
+          {% for p in ['Alta','Media','Baja'] %}
+          <option value="{{p}}" {% if tarea and tarea.prioridad==p %}selected{% endif %}>{{p}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Fecha inicio</label>
+        <input type="date" name="fechaInicio" class="form-control" value="{{ tarea.fechaInicio if tarea else '' }}">
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Fecha fin</label>
+        <input type="date" name="fechaFin" class="form-control" value="{{ tarea.fechaFin if tarea else '' }}">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Asignar a</label>
+      <select name="idUsuario" class="form-select" required>
+        <option value="">-- Seleccione --</option>
+        {% for emp in empleados %}
+        <option value="{{ emp.idUsuario }}" {% if tarea and tarea.idUsuario==emp.idUsuario %}selected{% endif %}>
+          {{ emp.nombre }} ({{ emp.rol }})
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    {% if tarea %}
+    <div class="mb-3">
+      <label class="form-label">Estado</label>
+      <select name="estado" class="form-select">
+        {% for e in ['Pendiente','Realizada','No realizada'] %}
+        <option value="{{e}}" {% if tarea.estado==e %}selected{% endif %}>{{e}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% endif %}
+
+    <button class="btn btn-primary" type="submit">Guardar</button>
+    <a href="{{ url_for('tareas.listar_tareas') }}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

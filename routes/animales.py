@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify, make_response, flash
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, make_response
 from werkzeug.utils import secure_filename
 from io import BytesIO #Modulo de entradas y salidas
 from reportlab.lib.pagesizes import letter #tamaño de papel
@@ -230,7 +230,6 @@ def eliminar_animal(idAnimal):
     conn.close()
     return redirect(url_for("animales.ver_animales"))
 
-
 @animales.route("/registros_medicos/<int:id_animal>", methods=["GET", "POST"])
 def registros_medicos(id_animal):
     """Muestra los eventos clínicos del animal usando la vista vista_reportes"""
@@ -240,7 +239,7 @@ def registros_medicos(id_animal):
     tipo = request.form.get("tipo")
     fecha = request.form.get("fecha")
 
-    query = "SELECT tipo, descripcion, fecha FROM vista_reportes WHERE idAnimal = %s"
+    query = "SELECT id_registro, tipo, descripcion, fecha FROM vista_reportes WHERE idAnimal = %s"
     params = [id_animal]
 
     if tipo:
@@ -259,8 +258,10 @@ def registros_medicos(id_animal):
 
     return render_template("registros_medicos.html", registros=registros, id_animal=id_animal)
 
+
 @animales.route("/detalle_registro/<int:id_registro>")
 def detalle_registro(id_registro):
+    """Muestra el detalle completo de un registro (formulario)"""
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
 
@@ -273,5 +274,6 @@ def detalle_registro(id_registro):
     if not registro:
         return "Registro no encontrado", 404
 
-    return render_template("registros_medicos.html", registro=registro)
+    # 🔹 Aquí cambiamos el template (antes estaba mal)
+    return render_template("detalle_reporte.html", reporte=registro)
 

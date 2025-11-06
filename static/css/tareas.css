@@ -1,0 +1,38 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    transition: background-color 0.3s ease;
+}
+.navbar:hover {
+    background-color: #198754; /* verde más intenso */
+}
+
+/* Títulos */
+h1, h2, h3 {
+    color: #198754;
+}
+
+/* Tablas */
+.table {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.table th {
+    background-color: #198754;
+    color: white;
+}
+
+/* Botones personalizados */
+.btn-success {
+    background-color: #28a745;
+    border: none;
+}
+.btn-success:hover {
+    background-color: #218838;
+}
+

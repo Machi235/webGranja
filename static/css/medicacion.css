@@ -1,8 +1,9 @@
-/* === COLORES BASE === */
+/* === PALETA DE COLORES === */
 :root {
   --verde-oscuro: #14532d;
   --verde-medio: #16a34a;
   --verde-claro: #bbf7d0;
+  --verde-agua: #dcfce7;
   --blanco: #ffffff;
   --gris-claro: #f3f4f6;
   --gris-texto: #374151;
@@ -44,7 +45,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 2rem;
+  gap: 3rem;
   padding: 3rem 2rem;
   flex-wrap: wrap;
 }
@@ -53,56 +54,78 @@ body {
 .form-box {
   background-color: var(--blanco);
   border-radius: 20px;
-  padding: 2rem;
-  width: 400px;
+  padding: 2.5rem;
+  width: 420px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-.form-box label {
+.form-box h2 {
+  text-align: center;
+  color: var(--verde-oscuro);
+  font-weight: 700;
+  margin-bottom: 1.8rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
   font-weight: 600;
   margin-bottom: 5px;
   color: var(--verde-oscuro);
 }
 
-.form-box .form-control {
+.form-group input,
+.form-group select,
+.form-group textarea {
   border: 1px solid var(--verde-claro);
   border-radius: 10px;
   padding: 0.7rem;
-  margin-bottom: 1rem;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
 }
 
-.form-box .form-control:focus {
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
   border-color: var(--verde-medio);
-  box-shadow: 0 0 5px var(--verde-claro);
+  box-shadow: 0 0 6px var(--verde-claro);
+  outline: none;
 }
 
-.btn-group .btn {
-  border-radius: 8px !important;
-  color: var(--verde-oscuro);
-  font-weight: 500;
-  border-color: var(--verde-medio);
+/* === CAMPOS EN LÍNEA === */
+.form-group.inline {
+  display: flex;
+  gap: 1rem;
 }
 
-.btn-group .btn-check:checked + .btn {
+.form-group.inline > div {
+  flex: 1;
+}
+
+/* === BOTÓN REGISTRAR === */
+.btn-registrar {
   background-color: var(--verde-medio);
-  color: white;
-}
-
-/* === BOTÓN GUARDAR === */
-.btn-danger {
-  background-color: var(--verde-medio);
-  border: none;
+  color: var(--blanco);
   font-weight: 600;
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.btn-danger:hover {
+.btn-registrar:hover {
   background-color: var(--verde-oscuro);
   transform: translateY(-2px);
 }
 
-/* === LADO INFORMATIVO === */
+/* === TARJETA INFORMATIVA === */
 .form-side {
   max-width: 350px;
 }
@@ -152,14 +175,14 @@ body {
     flex-direction: column;
     align-items: center;
   }
-  
-  .form-box, .info-card {
+
+  .form-box,
+  .info-card {
     width: 100%;
+    max-width: 420px;
+  }
+
+  .form-group.inline {
+    flex-direction: column;
   }
 }
-
-
-
-
-
-
