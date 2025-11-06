@@ -24,17 +24,32 @@
 <body>
   <nav class="navbar fixed-top">
     <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
           <span class="navbar-toggler-icon"></span>
         </button>
             <a class="navbar-brand d-flex align-items-center" href="#">
+        <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" 
+             alt="Logo Granja Machis"  class="me-2">
+        <span class="titulo-2">Granja Livestock Log</span>
       </a>
 
       <div class="accesos">
         <button class="crearNotificacion" id="crearNotificacion" data-bs-toggle="modal" data-bs-target="#modalNotificacion">
           <i class="bi bi-send-plus"></i>
         </button>
-      </div>
+        <button class="btn btn-outline-primary position-relative" id="btnNotificaciones"
+                data-bs-toggle="modal" data-bs-target="#modalNotificaciones">
+          <i class="bi bi-bell-fill"></i>
+          {% if notificaciones_no_leidas > 0 %}
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ notificaciones_no_leidas }}
+          </span>
+          {% endif %}
+        </button>
+      </div> 
+
+        
+
 
       <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
         <div class="offcanvas-header">
@@ -195,6 +210,96 @@
       }
     });
   });
+</script>
+
+<!-- MODAL DE NOTIFICACIONES (igual que RRHH) -->
+<div class="modal fade" id="modalNotificaciones" tabindex="-1" aria-labelledby="modalNotificacionesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header text-white">
+        <h5 class="modal-title" id="modalNotificacionesLabel">Notificaciones Recibidas</h5>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-tabs" id="tabsNoti" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="nuevas-tab" data-bs-toggle="tab" data-bs-target="#nuevas"
+                    type="button" role="tab">Nuevas</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="historial-tab" data-bs-toggle="tab" data-bs-target="#historial"
+                    type="button" role="tab">Historial</button>
+          </li>
+        </ul>
+        <div class="tab-content mt-2">
+
+          <!-- Nuevas -->
+          <div class="tab-pane fade show active" id="nuevas" role="tabpanel">
+            {% set nuevas = notificaciones|selectattr("leida","equalto",False)|list %}
+            {% if nuevas %}
+              {% for n in nuevas %}
+                <div class="card mb-2" id="notificacion-{{ n.id }}">
+                  <div class="card-body d-flex justify-content-between align-items-start">
+                    <div>
+                      <h6 class="card-title">{{ n.titulo }}</h6>
+                      <p class="card-text">{{ n.descripcion }}</p>
+                      <small class="text-muted">📅 {{ n.fecha.strftime("%d/%m/%Y %H:%M") }}</small>
+                    </div>
+                    <button class="btn btn-sm btn-success ms-2 btn-leido" data-id="{{ n.id }}">
+                      <i class="bi bi-check2"></i>
+                    </button>
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <p class="text-center text-muted">No tienes notificaciones nuevas.</p>
+            {% endif %}
+          </div>
+
+          <!-- Historial -->
+          <div class="tab-pane fade" id="historial" role="tabpanel">
+            {% set leidas = notificaciones|selectattr("leida","equalto",True)|list %}
+            {% if leidas %}
+              {% for n in leidas %}
+                <div class="card mb-2">
+                  <div class="card-body">
+                    <h6 class="card-title">{{ n.titulo }}</h6>
+                    <p class="card-text">{{ n.descripcion }}</p>
+                    <small class="text-muted">📅 {{ n.fecha.strftime("%d/%m/%Y %H:%M") }}</small>
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <p class="text-center text-muted">No hay historial de notificaciones.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('click', function(e) {
+  if(e.target.closest('.btn-leido')) {
+    const btn = e.target.closest('.btn-leido');
+    const id = btn.dataset.id;
+
+    fetch(`/marcar_notificacion/${id}`, {
+      method: 'POST'
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(data.success) {
+        const card = document.getElementById(`notificacion-${id}`);
+        if(card) card.remove();
+      }
+    });
+  }
+});
 </script>
 
 

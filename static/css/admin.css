@@ -146,7 +146,7 @@ li:hover {
 
         .welcome-title {
             font-size: 2.5rem;
-            color: #2d5016;
+            color: #ffffff;
             font-style: italic;
             margin-bottom: 30px;
             position: relative;
@@ -498,4 +498,5 @@ footer {
 .containerdiv{
   display: flex;
   width: 900px;
+  margin-top: 7%;
 }

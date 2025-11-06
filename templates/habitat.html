@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block contenido %}
-{% if rol_usuario == 'admin' %}
+{% if rol_usuario == 'Admin' %}
     {% include "navAdmi.html" %}
 {% else %}
     {% include "navCuidador.html" %}
