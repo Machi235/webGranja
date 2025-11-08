@@ -7,10 +7,12 @@
     {% include "navCuidador.html" %}
 {% endif %}
 <form id="miFormulario" method="post" action="{{ url_for('habitat_bp.crear_habitat') }}">
-    <div class="form-container">
             <div class="campo">
                 <label for="nombreHabitat">Nombre de hábitat:<span class="obligatorio">*</span></label>
                 <input type="text" id="nombreHabitat" name="nombreHabitat">
+                {% if mensaje_nombre %}
+                    <p style="color:red">{{ mensaje_nombre }}</p>
+                {% endif %}
             </div>
             <div class="campo"> 
                 <label>Temperatura:</label>
@@ -50,9 +52,9 @@
             </div> 
 
         <!-- Botones -->
-        <button id="registrar" class="btn btn-danger mt-3 w-100" type="submit">Registrar</button>
+        <button id="registrar" class="btn btn-danger mt-3 w-100" type="button" onclick="validar()">Registrar</button>
         <button class="btn btn-secondary mt-2 w-100" type="button" onclick="vaciarFormulario()">Vaciar</button>
-    </div>
+    
 </form>
 
 
@@ -61,9 +63,28 @@
 
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
+      <script>
       {% for category, message in messages %}
-        
+        {% if category == 'success' %}
+            Swal.fire({
+            icon: 'success',
+            title: '{{ message }}',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+            }).then(() => {
+            window.location.href = "{{ url_for('habitat_bp.ver_habitats') }}";
+            });
+            {% elif category == 'error' %}
+            Swal.fire({
+                icon: 'error',
+                title: '{{ message }}',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#d33'
+            });
+        {% endif %}
       {% endfor %}
+    </script>
   {% endif %}
 {% endwith %}
 

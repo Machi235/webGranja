@@ -10,21 +10,22 @@
   display: flex !important;
   max-width: 63% !important;
   min-width: 53% !important;
-  width: 100% !important;
+  width: 50% !important;
   background: transparent !important;
   border-radius: 12px !important;
   overflow: hidden !important;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3) !important;
   margin: 30px auto !important;
   min-height: 600px !important;
+  padding: 30px;
 }
 
 .form-container{
   display: flex;
-  width: 60%;
+  width: 100%;
   flex-direction: column;
   gap: 10px;
-  padding: 30px;
+  
   background: #ffff;
   color: rgb(0, 0, 0);
 }
@@ -56,17 +57,17 @@
 }
 .campo input{
   padding: 8px !important;
+  border-bottom: 1px solid gray !important;
  }
 
 .campo select{
   appearance: auto !important; 
+  border-bottom: 1px solid gray !important;
 }
 
 .btn {
   border-radius: 6px;
 }
-
-
 
 .form-side {
   flex: 1;
@@ -116,7 +117,6 @@
 #camposCompletos{
   padding: 40px;
 }
-
 
 #volver {
     max-height: 30px;
