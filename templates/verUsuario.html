@@ -57,6 +57,9 @@
     <input class="form-control" type="search" placeholder="Nombre del usuario" id="buscador">
   </div>  
   <div class="filtros">
+    <a href="{{ url_for('auth.registro') }}">
+      <i class="bi bi-plus-lg"></i>
+    </a>
     <select id="filtroRol">
       <option value="">Todos los roles</option>
       {% for rol in roles %}

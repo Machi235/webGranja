@@ -89,3 +89,8 @@ p{
 .filtro{
    display: none; 
 }
+
+.bi-plus-lg{
+    font-size: 30px;
+    color: black;
+}
