@@ -11,23 +11,15 @@
   max-width: 63% !important;
   min-width: 53% !important;
   width: 50% !important;
+  flex-direction: column !important;
   background: transparent !important;
   border-radius: 12px !important;
   overflow: hidden !important;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3) !important;
   margin: 30px auto !important;
   min-height: 600px !important;
-  padding: 30px;
-}
-
-.form-container{
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  gap: 10px;
-  
-  background: #ffff;
-  color: rgb(0, 0, 0);
+  padding: 30px !important;
+  gap: 10px ! important;
 }
 
 .form-box{
