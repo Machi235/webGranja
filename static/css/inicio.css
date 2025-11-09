@@ -5,12 +5,13 @@
             box-sizing: border-box;
         }
 
-.container-fluid {
-  background-color: #6a9b5d;
+nav {
+  background-color: #4a7c2c;
+  top: 0;
+  height: 14%;
 }
-
-.navbar{
-  height: 1% !important;
+.container-fluid{
+  height: 90%;
 }
 
 li {
@@ -39,8 +40,6 @@ li:hover {
 }
 .logo{
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
   margin-right: 1rem;
 }
 
@@ -50,10 +49,7 @@ li:hover {
             overflow-x: hidden;
         }
 
-        /* NAVBAR */
-        .navbar {
-          background-color: #6ca76c;;
-}
+
 
         .navbar-brand {
             color: white !important;
@@ -64,8 +60,8 @@ li:hover {
         }
 
         img {
-            width: 50px;
-            height: 50px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             background: white;
             
@@ -173,15 +169,7 @@ li:hover {
             margin: 0 auto;
         }
 
-.Rectangulo {
-  display: flex;
-  justify-content: center;
-  width: 500px;
-  height: 700px;
-  background-color: rgba(240, 248, 255, 0.185);
-  border: 2px solid black;
-  border-radius: 10px;
-}
+
 
         /* FEATURES CARDS */
         .features-section {
@@ -200,11 +188,6 @@ li:hover {
             height: 100%;
             border: 3px solid transparent;
         }
-
-.navbar {
-  background-color: #6a9b5d;
-  border-color: #000000;
-}
 
         .feature-card:hover {
             transform: translateY(-10px);

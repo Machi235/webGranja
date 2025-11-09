@@ -69,12 +69,9 @@ def registro_animal():
                     print("Mensaje del procedimiento:", mensaje)
             conn.commit()
             if "asignado" in mensaje.lower():
-                flash(mensaje, "success")
+                return jsonify({"status": "success", "message": mensaje})
             else:
-                flash(mensaje, "warning")
-
-            return jsonify({"mensaje": " Animal registrado con éxito"}), 200
-
+                return jsonify({"status": "warning", "message": mensaje})
         except Exception as e:
             print("Error al registrar animal:", str(e))
             return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
@@ -82,7 +79,7 @@ def registro_animal():
     cur.execute("SELECT idEspecie, tipoEspecie FROM especie ORDER BY tipoEspecie")
     especies = cur.fetchall()
 
-    cur.execute("SELECT idHabitat, nombreHabitat FROM habitat ORDER BY nombreHabitat")
+    cur.execute("select count(*) as animales, idHabitat, habitat, nombreHabitat, capacidad from animal as a inner join habitat as h on a.habitat=h.idHabitat where h.activo = 1 group by habitat having animales < capacidad")
     habitats = cur.fetchall()
 
 # Notificaciones RRHH para navRrhh.html

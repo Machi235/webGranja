@@ -1,47 +1,42 @@
 Dropzone.autoDiscover = false;
 
 const myDropzone = new Dropzone("#myDropzone", {
-  url: "/registro_animal",
+  url: "#", // solo para mostrar la interfaz
   paramName: "imagen",
   maxFilesize: 2,
   acceptedFiles: ".jpg,.png",
-  autoProcessQueue: false,
+  autoProcessQueue: false, // no sube nada automáticamente
   uploadMultiple: false,
   maxFiles: 1,
-  dictDefaultMessage: "Arrastra la imagen aquí o haz clic para subirla",
-  thumbnailWidth:400,
-  thumbnailHeight:400
+  dictDefaultMessage: "Arrastra la imagen o haz clic para subirla"
 });
 
-myDropzone.on("maxfilesexceeded", function(file){
-  this.removeAllFiles();
-  this.addFile(file)
-});
-// Evento para botón de registro
-document.getElementById("btnRegistrar").addEventListener("click", function () {
-  const form = document.getElementById("miFormulario");
-  const requiredFields = ["nombre", "especie", "edad", "salud", "habitat", "observaciones"];
-  let isValid = true;
-
-  // Validar campos obligatorios
-  requiredFields.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el.value.trim()) {
-      isValid = false;
-      el.style.borderColor = "red";
-    } else {
-      el.style.borderColor = "";
-    }
+// Manejo de errores de Dropzone (solo visual)
+myDropzone.on("error", function (file, errorMessage) {
+  Swal.fire({
+    icon: "error",
+    title: "Error al subir la imagen",
+    text: errorMessage || "Ocurrió un problema con el archivo.",
+    confirmButtonColor: "#d33"
   });
+});
 
-  // Si faltan campos, mostrar ventana de advertencia
-  if (!isValid) {
+function validar() {
+  const form = document.getElementById('miFormulario');
+  const nombre = document.getElementById('nombre').value.trim();
+  const especie = document.getElementById('especie').value.trim();
+  const edad = document.getElementById('edad').value.trim();
+  const salud = document.getElementById('salud').value.trim();
+  const habitat = document.getElementById('habitat').value.trim();
+  const observaciones = document.getElementById('observaciones').value.trim();
+
+  // Validar campos vacíos
+  if (!nombre || !especie || !edad || !salud || !habitat || !observaciones) {
     Swal.fire({
-      icon: "warning",
-      title: "Campos incompletos",
-      text: "Los campos con * son obligatorios, por favor completelos.",
-      confirmButtonColor: "#d33",
-      confirmButtonText: "Entendido"
+      icon: 'error',
+      title: 'Campos incompletos',
+      text: 'Por favor, completa todos los campos obligatorios marcados con *',
+      confirmButtonColor: '#d33'
     });
     return;
   }
@@ -52,48 +47,44 @@ document.getElementById("btnRegistrar").addEventListener("click", function () {
       icon: "warning",
       title: "Imagen requerida",
       text: "Debes subir una imagen del animal antes de registrarlo.",
-      confirmButtonColor: "#d33",
-      confirmButtonText: "Entendido"
+      confirmButtonColor: "#d33"
     });
     return;
   }
 
-  // Adjuntar datos del formulario a Dropzone
-  myDropzone.on("sending", function (file, xhr, formData) {
-    const formElements = form.querySelectorAll("input, select, textarea");
-    formElements.forEach(el => {
-      if (el.type === "radio" && !el.checked) return;
-      formData.append(el.name, el.value);
+  // Crear FormData con todos los campos e imagen
+  const formData = new FormData(form);
+  myDropzone.getAcceptedFiles().forEach(file => {
+    formData.append("imagen", file);
+  });
+
+  // Enviar al backend
+  fetch("/registro_animal", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log(data); // 👈 para verificar qué llega del backen
+    Swal.fire({
+      icon: "success",
+      title: data.message,
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true
+    }).then(() =>  {
+        window.location.href = "/ver_animales";
+      });
+  })
+  .catch(error => {
+    Swal.fire({
+      icon: "error",
+      title: "Error de conexión",
+      text: "No se pudo conectar con el servidor."
     });
+    console.error(error);
   });
-
-  // Procesar la cola (subir imagen y datos)
-  myDropzone.processQueue();
-});
-
-// Cuando la subida sea exitosa
-myDropzone.on("success", function (file, response) {
-  Swal.fire({
-    icon: "success",
-    title: "Registro exitoso",
-    text: response.mensaje || "El animal ha sido registrado correctamente.",
-    confirmButtonColor: "#28a745",
-    confirmButtonText: "Ver animales"
-  }).then(() => {
-    window.location.href = "/ver_animales";
-  });
-});
-
-// Cuando ocurra un error durante la subida
-myDropzone.on("error", function (file, errorMessage) {
-  Swal.fire({
-    icon: "error",
-    title: "Error",
-    text: errorMessage.error || "Ocurrió un error al registrar el animal. Intenta nuevamente.",
-    confirmButtonColor: "#d33",
-    confirmButtonText: "Reintentar"
-  });
-});
+}
 
 function vaciarFormulario() {
       // selecciona todos los inputs dentro del formulario

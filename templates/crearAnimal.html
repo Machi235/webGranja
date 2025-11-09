@@ -32,7 +32,8 @@
 
     <!-- Formulario -->
     <form id="miFormulario" enctype="multipart/form-data">
-    <div class="form-container">
+        <div class="espaciodiv">
+            <div class="form-container">
         <!-- Nombre -->
         <input type="text" id="nombre" name="nombre" placeholder="Nombre del animal *" required>
             
@@ -97,35 +98,17 @@
         <!-- Botones -->
         <div>
             <button class="btn w-20" type="button" onclick="vaciarFormulario()">Vaciar</button>
-            <button class="btn w-20" id="btnRegistrar" type="button">Registrar</button>
+            <button class="btn w-20" id="btnRegistrar" type="button" onclick="validar()">Registrar</button>
         </div>
     </div>
     <!-- Imagen -->
     <div class="dropzone" id="myDropzone"></div>
+        </div>
 </form>
 
     
 <script src="{{ url_for('static', filename='js/crearAnimal.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <script>
-      {% for category, message in messages %}
-        Swal.fire({
-          icon: '{{ category }}',
-          title: '{{ message }}',
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true
-        }).then(() => {
-          window.location.href = "{{ url_for('actividad_bp.ver_actividades') }}";
-        });
-      {% endfor %}
-    </script>
-  {% endif %}
-{% endwith %}
-
 
 </body>
 </html>
