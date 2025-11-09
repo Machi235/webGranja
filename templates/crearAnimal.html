@@ -110,24 +110,5 @@
 <script src="{{ url_for('static', filename='js/crearAnimal.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <script>
-      {% for category, message in messages %}
-        Swal.fire({
-          icon: '{{ category }}',
-          title: '{{ message }}',
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true
-        }).then(() => {
-          window.location.href = "{{ url_for('actividad_bp.ver_actividades') }}";
-        });
-      {% endfor %}
-    </script>
-  {% endif %}
-{% endwith %}
-
-
 </body>
 </html>
