@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify, make_response
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, make_response, flash
 from werkzeug.utils import secure_filename
 from io import BytesIO #Modulo de entradas y salidas
 from reportlab.lib.pagesizes import letter #tamaño de papel

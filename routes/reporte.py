@@ -88,7 +88,7 @@ def detalle_reporte(id_registro):
     conn.close()
 
     if not reporte:
-        flash("⚠️ No se encontró el detalle del reporte", "warning")
+        flash(" No se encontró el detalle del reporte", "warning")
         return redirect(url_for('reporte.reportes', id_animal=id_animal))
 
     # PASAMOS id_registro AL TEMPLATE
@@ -112,7 +112,7 @@ def eliminar_reporte():
         print("=====================================")
 
         if not id_registro or not tipo or not id_animal:
-            flash("⚠️ Faltan datos para eliminar el registro", "danger")
+            flash("Faltan datos para eliminar el registro", "danger")
             return redirect(request.referrer or url_for('reporte.reportes', id_animal=1))
 
         conn = get_connection()
@@ -132,7 +132,7 @@ def eliminar_reporte():
 
         tipo_normalizado = tipo.lower().strip()
         if tipo_normalizado not in tablas:
-            flash(f"❌ Tipo de evento '{tipo}' no reconocido", "danger")
+            flash(f" Tipo de evento '{tipo}' no reconocido", "danger")
             return redirect(url_for('reporte.reportes', id_animal=id_animal))
 
         tabla, campo_id = tablas[tipo_normalizado]
@@ -142,18 +142,18 @@ def eliminar_reporte():
 
         if cur.rowcount > 0:
             conn.commit()
-            flash(f"✅ {tipo.capitalize()} eliminado correctamente", "success")
+            flash(f"{tipo.capitalize()} eliminado correctamente", "success")
         else:
             conn.rollback()
-            flash("⚠️ No se encontró el registro a eliminar", "warning")
+            flash("No se encontró el registro a eliminar", "warning")
 
     except Exception as e:
         if 'conn' in locals():
             conn.rollback()
-        print(f"💥 Error al eliminar: {str(e)}")
+        print(f" Error al eliminar: {str(e)}")
         import traceback
         traceback.print_exc()
-        flash(f"❌ Error al eliminar: {str(e)}", "danger")
+        flash(f" Error al eliminar: {str(e)}", "danger")
 
     finally:
         if 'cur' in locals():
@@ -176,7 +176,7 @@ def editar_reporte(id_registro):
     cur.execute("SELECT tipo, idAnimal FROM vista_reportes WHERE id_registro = %s", (id_registro,))
     info = cur.fetchone()
     if not info:
-        flash("❌ Reporte no encontrado en la vista", "danger")
+        flash(" Reporte no encontrado en la vista", "danger")
         return redirect(url_for("reporte.reportes", id_animal=1))
 
     tipo = info['tipo'].strip().lower()
@@ -206,7 +206,7 @@ def editar_reporte(id_registro):
     reporte = cur.fetchone()
 
     if not reporte:
-        flash("❌ No se encontró el reporte original", "danger")
+        flash(" No se encontró el reporte original", "danger")
         return redirect(url_for("reporte.reportes", id_animal=id_animal))
 
     if request.method == "POST":
@@ -220,11 +220,9 @@ def editar_reporte(id_registro):
         cur.execute(query, valores)
         conn.commit()
 
-        flash("✅ Reporte actualizado correctamente", "success")
+        flash(" Reporte actualizado correctamente", "success")
         return redirect(url_for("reporte.detalle_reporte", id_registro=id_registro))
 
     cur.close()
     conn.close()
-    
-    # PASAR id_registro AL TEMPLATE
-    return render_template("editar_reporte.html", reporte=reporte, tipo=tipo, id_registro=id_registro, id_animal=id_animal)
+    return render_template("editar_reporte.html", reporte=reporte, tipo=tipo)
