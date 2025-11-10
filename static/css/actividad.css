@@ -10,7 +10,6 @@
   display: flex;
   max-width: 53%;
   width: 90%;
-  background: #1a1a4034;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
@@ -21,8 +20,7 @@
 .form-container {
   flex: 1;
   padding: 30px;
-  background: #2a2a606b;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .form-box{
@@ -39,23 +37,27 @@
 
 .campo label {
   font-size: 18px;
-  font-family: "Delius", cursive;
 }
 
 .campo input,
 .campo select, .campo textarea {
-  border: none;
-  border-radius: 6px;
+  border: none !important;
   outline: none;
   font-family: "Sour Gummy", sans-seri;
   font-weight: 200;
 }
 .campo input{
   padding: 8px;
+  border-bottom: 1px solid gray !important;
  }
 
 .campo select{
   appearance: auto; 
+  border-bottom: 1px solid gray !important;
+}
+
+.campo textarea{
+  border-bottom: 1px solid gray !important;
 }
 
 .btn {
@@ -85,22 +87,6 @@
     color: #af1c1c;
     font-weight: bold;
     margin-left: 3px;
-}
-
-
-#camposVacios::backdrop{
-    background-color:rgba(0, 0, 0, .56);
-}
-#camposVacios, #camposCompletos {
-    max-width: 70ch;
-    text-align: left;
-    border-radius: 10px;
-    border: 2px solid #af1c1c;
-    font-family: "Montserrat", sans-serif;
-}
-
-#camposCompletos{
-  padding: 40px;
 }
 
 

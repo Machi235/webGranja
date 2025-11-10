@@ -36,13 +36,18 @@
 .ficha{
     display: flex;
     text-decoration: none;
-    border: 2px solid green;
     margin-inline: 70px;
     gap: 40px;
     color: black;
     border-radius: 20px;
+    box-shadow: 8px 8px 10px rgba(0,0,0,0.3);
+    margin-bottom: 25px ;
 }
 
+.ficha:hover {
+  box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+  transform: translateY(-10px); 
+}
 img{
     width: 120px;
     margin: 10px;
@@ -52,28 +57,26 @@ img{
 .informacion{
     display: flex;
     padding-right: 50px;    
-    gap: 200px;
+    gap: 55px;
     /* background-color: blueviolet; */
     width: 100%;
     align-items: center;
-    margin-block: 15px;
+    margin-block: 18px;
 }
 .datos{
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
 }
 
 .dato{
     display: flex;
-    flex-direction: column;
-    gap: 2px;
+    flex-direction: column; 
 }
 .titulo {
     color: black;
     font-size: x-large;
-    font-weight: 500;
-    font-family: "Delius", cursive;
+    font-weight: 350;
 }
 
 p{
@@ -82,7 +85,6 @@ p{
 }
 .texto{
     font-size: larger;
-    font-family: "Sour Gummy", sans-seri;
     font-weight: lighter;
 }
 .filtro{
