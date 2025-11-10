@@ -60,7 +60,7 @@
       <thead>
         <tr>
           <th>Nombre del turno</th>
-          <th>Hora de inicio</th>
+          <th class="horaInicio">Hora de inicio</th>
           <th>hora de fin</th>
         </tr>
       </thead>
@@ -68,7 +68,7 @@
         {% for turno in turnos %}
           <tr>
             <td>{{ turno.nombreTurno}}</td>
-            <td>{{ turno.horaInicio}}</td>
+            <td class="horaInicio">{{ turno.horaInicio}}</td>
             <td class="horaFin">
               {{ turno.horaFin}}
               <form action="{{url_for('turnos_bp.eliminar_turno', idHorario=turno.idHorario)}}" method="POST">
@@ -140,11 +140,11 @@
 
 <!------------------------------------Tabla de visualizacion de asignacion de turnos-----------------------------------------------------------> 
 <div class="horarios container" >
-  <table class="table table-striped br-4">
+  <table class="table table-striped br-4 ">
     <thead>
       <tr>
         <th>EMPLEADO</th>
-        <th>AREA</th>
+        <th >AREA</th>
         <th>TURNO</th>
       </tr>
     </thead>

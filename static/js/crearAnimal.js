@@ -8,17 +8,14 @@ const myDropzone = new Dropzone("#myDropzone", {
   autoProcessQueue: false, // no sube nada automáticamente
   uploadMultiple: false,
   maxFiles: 1,
-  dictDefaultMessage: "Arrastra la imagen o haz clic para subirla"
+  dictDefaultMessage: "Arrastra la imagen o haz clic para subirla",
+  thumbnailWidth:400,
+  thumbnailHeight:400
 });
 
-// Manejo de errores de Dropzone (solo visual)
-myDropzone.on("error", function (file, errorMessage) {
-  Swal.fire({
-    icon: "error",
-    title: "Error al subir la imagen",
-    text: errorMessage || "Ocurrió un problema con el archivo.",
-    confirmButtonColor: "#d33"
-  });
+myDropzone.on("maxfilesexceeded", function(file){
+  this.removeAllFiles();
+  this.addFile(file)
 });
 
 function validar() {

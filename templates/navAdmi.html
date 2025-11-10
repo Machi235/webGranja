@@ -48,9 +48,6 @@
         </button>
       </div> 
 
-        
-
-
       <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title">Menú</h5>
@@ -73,6 +70,7 @@
             <li><a class="nav-link" href="{{ url_for('eventos.registro_visita') }}">Visita</a></li>
             <li><a class="nav-link" href="{{ url_for('actividad_bp.ver_actividades') }}">Ver Actividad</a></li>
             <li><a class="nav-link" href="{{ url_for('auth.registro') }}">Registro</a></li>
+            <li><a class="nav-link" href="{{ url_for('ventaBoleto.ver_boletas') }}">Venta de boletod</a></li>
             <li><a class="nav-link" href="{{ url_for('tareas.listar_tareas') }}">Tareas</a></li>
             <li><a class="nav-link text-danger" href="{{ url_for('auth.logout') }}">
               <i class="bi bi-box-arrow-right"></i> Cerrar Sesión

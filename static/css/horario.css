@@ -13,7 +13,7 @@
     border-radius: 17px;
     padding: 10px 20px;
     border: none;
-    background-color: rgba(186, 152, 218, 0.747);
+    background-color: #aecc8bce
 }
 
 .botonesMenu, .botonEditar, #cerrarEditarHorario, #cerrarTurno, #cerrarHorario, #cerrarTurnos{
@@ -108,11 +108,11 @@ select{
     box-shadow: 0px 15px 20px rgba(59, 59, 59, 0.5);
     padding: 0;
     border-bottom-width:0px;
-
 }
 .table-striped-columns{
     border-collapse: collapse;
     border-radius: 200px;
+    background-color: #4b7a4b;
 }
 
 .turno{
@@ -141,4 +141,8 @@ select{
     gap: 25px;
     align-items: center;
     justify-content: center;
+}
+
+.horaInicio{
+    background-color: #aecc8b88 !important;
 }
