@@ -97,3 +97,17 @@ def mis_notificaciones():
     finally:
         cur.close()
         conn.close()
+
+# ✅ Función utilitaria para enviar notificaciones desde otros módulos
+def enviar_notificacion(id_usuario, titulo, descripcion):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO notificacion (idUsuario, titulo, descripcion, fecha, leida)
+        VALUES (%s, %s, %s, NOW(), 0)
+    """, (id_usuario, titulo, descripcion))
+
+    conn.commit()
+    cur.close()
+    conn.close()

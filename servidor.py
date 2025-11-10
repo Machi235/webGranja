@@ -17,6 +17,8 @@ from routes.reporte import reporte
 from routes.tareas import tareas
 
 
+
+
 app = Flask(__name__)
 app.secret_key = "super_clave_ultra_secreta_123"  
 
