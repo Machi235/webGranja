@@ -78,37 +78,6 @@
     font-family: "Delius", cursive;
 }
 
-.obligatorio {
-    color: #af1c1c;
-    font-weight: bold;
-    margin-left: 3px;
-}
-
-.myDropzone { 
-    display: flex;
-    align-items: center;
-    border: 2px solid ;
-    border-radius: 12px;
-    background-color: #f9fff9;
-    height: 400px;
-    cursor: pointer;
-    font-size:25px;
-}
-
-.camposVacios::backdrop{
-    background-color:rgba(0, 0, 0, .56);
-}
-.camposVacios, .camposCompletos {
-    max-width: 70ch;
-    text-align: left;
-    border-radius: 10px;
-    border: 2px solid #af1c1c;
-    font-family: "Montserrat", sans-serif;
-}
-
-#camposCompletos{
-  padding: 40px;
-}
 
 #volver {
     max-height: 30px;
@@ -121,3 +90,4 @@
     color: #af1c1c;
     font-size: x-large;
 }
+

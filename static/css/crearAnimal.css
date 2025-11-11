@@ -1,93 +1,92 @@
 #miFormulario{
-  display: flex;
-  max-width: 63%;
-  min-width: 53%;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  margin: 100px 0px 30px 18%;
-  min-height: 600px;
+  display: flex !important;
+  max-width: 63% !important;
+  min-width: 53% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3) !important;
+  margin: 100px 0px 30px 18% !important;
+  min-height: 600px !important;
 }
 
 .form-container{
-  display: flex;
-  width: 55%;
-  flex-direction: column;
-  gap: 30px;
-  padding: 40px;
-  background: #ffff;
-  color: rgb(0, 0, 0);
+  display: flex !important;
+  width: 55% !important;
+  flex-direction: column !important;
+  gap: 30px !important;
+  padding: 40px !important;
+  background: #ffff !important;
+  color: rgb(0, 0, 0) !important;
 }
 
 .fechas{
-  display: flex;
-  gap: 50px;
-  width: 500px;
+  display: flex !important;
+  gap: 50px !important;
+  width: 500px !important;
 }
 
 .sexos{
-  display: flex;
-  gap: 20px;
+  display: flex !important;
+  gap: 20px !important;
 }
 .campo {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  display: flex !important; 
+  flex-direction: column !important;
+  width: 100% !important;
 }
 
 input, select, textarea {
-  border: none;
-  outline: none;
-  font-family: "Zalando Sans SemiExpanded", sans-serif;
-  font-style: normal;
-  font-weight: 200;
-  color: black;
+  border: none !important;
+  outline: none !important;
+  font-family: "Zalando Sans SemiExpanded", sans-serif !important;
+  font-style: normal !important;
+  font-weight: 200 !important;
+  color: black !important;
 }
 input{
-  border-bottom: 1px solid gray;
-  color: black;
+  border-bottom: 1px solid gray !important;
+  color: black !important;
  }
 select{
-  appearance: auto;
-  border-bottom: 1px solid gray;
-  padding-bottom: 3px;
+  appearance: auto !important;
+  border-bottom: 1px solid gray !important;
+  padding-bottom: 3px !important;
 }
 
 .selecciones{
-  color: #999;
+  color: #999 !important;
 }
 
 textarea{
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid gray !important;
 }
 
 #myDropzone {
-  display: flex;
-  background: linear-gradient(145deg, #a8e6cf, #dcedc1);
-  align-items: center;
-  justify-content: center;
-  border-radius: 0 12px 12px 0;
-  border: none;
-  overflow: hidden;
-  width:45%;
-  font-size: large;
-}
-.espaciodiv{
-  display: flex;
+  display: flex !important;
+  background: linear-gradient(145deg, #a8e6cf, #dcedc1) !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 0 12px 12px 0 !important;
+  border: none !important;
+  overflow: hidden !important;
+  height: 642px !important;
+  width:45% !important;
+  font-size: large !important;
+  
 }
 
 .btn {
-  border-radius: 17px;
-  background-color: #6ca76c;
-  color: #f9fff9;
+  border-radius: 17px !important;
+  background-color: #6ca76c !important;
+  color: #f9fff9 !important;
 }
 
 /* Target al img que Dropzone inserta */
 #myDropzone .dz-image {
-  width: 100%;
-  height: 100%;
-  background: none;
+  width: 100% !important;
+  height: 100% !important;
+  background: none !important;
 }

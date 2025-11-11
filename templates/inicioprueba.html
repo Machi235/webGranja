@@ -37,7 +37,7 @@
  <section class="hero-section">
         <div class="hero-content">
             <div class="hero-logo">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Livestock Log">
+                <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" alt="Livestock Log">
             </div>
             <h2 class="welcome-title">¡Bienvenido {{ session.get('rol', 'Administrador') }}!</h2>
             <p class="welcome-text">

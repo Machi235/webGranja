@@ -2,11 +2,14 @@
 
 {% block contenido %}
 
-<div class="buscar container-fluid">
+<div class="buscar">
   <div class="buscador">
     <input class="form-control" type="search" placeholder="Nombre del animal" id="buscador">
-  </div>  
+  </div> 
   <div class="filtros">
+    <a href="{{ url_for('animales.registro_animal') }}">
+      <i class="bi bi-plus-lg"></i>
+    </a>
     <select id="filtroEspecie">
       <option value="">Todas las especies</option>
       {% for especie in especies %}
@@ -25,7 +28,7 @@
 
 <div class="listaAnimales">
   {% for animal in animales %}
-    <a href="{{ url_for('animales.ver_animal', idAnimal=animal.idAnimal) }}" class="card">
+    <a href="{{ url_for('animales.ver_animal', idAnimal=animal.idAnimal) }}" class="ficha">
         {% if animal.imagen %}
           <img src="{{ url_for('static', filename='uploads/' + animal.imagen) }}">
         {% endif %}
