@@ -2,9 +2,6 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from db import get_connection 
 tareas = Blueprint('tareas', __name__)
 
-# =====================================================
-# LISTAR TAREAS
-# =====================================================
 @tareas.route('/tareas')
 def listar_tareas():
     conn = get_connection()
@@ -25,9 +22,7 @@ def listar_tareas():
     return render_template('tareas_lista.html', tareas=tareas_list)
 
 
-# =====================================================
-# CREAR NUEVA TAREA
-# =====================================================
+
 @tareas.route('/tareas/nueva', methods=['GET', 'POST'])
 def nueva_tarea():
     conn = get_connection()
@@ -51,7 +46,7 @@ def nueva_tarea():
         """, (nombreTarea, descripcion, prioridad, fechaInicio, fechaFin, idUsuario))
 
         conn.commit()
-        flash("✅ Tarea creada correctamente", "success")
+        flash(" Tarea creada correctamente", "success")
         return redirect(url_for('tareas.listar_tareas'))
 
     cur.close()
@@ -59,9 +54,6 @@ def nueva_tarea():
     return render_template('tareas_form.html', empleados=empleados, tarea=None)
 
 
-# =====================================================
-# EDITAR TAREA — BLOQUEADA SI ESTÁ REALIZADA
-# =====================================================
 @tareas.route('/tareas/editar/<int:id>', methods=['GET', 'POST'])
 def editar_tarea(id):
     conn = get_connection()
@@ -72,12 +64,12 @@ def editar_tarea(id):
     tarea = cur.fetchone()
 
     if not tarea:
-        flash("❌ La tarea no existe", "danger")
+        flash(" La tarea no existe", "danger")
         return redirect(url_for('tareas.listar_tareas'))
 
-    # ❌ Bloquear edición si está realizada
+    
     if tarea['estado'] == 'Realizada':
-        flash("⚠️ Esta tarea ya está marcada como realizada y no puede editarse", "warning")
+        flash("Esta tarea ya está marcada como realizada y no puede editarse", "warning")
         return redirect(url_for('tareas.listar_tareas'))
 
     # Obtener lista de empleados
@@ -87,7 +79,7 @@ def editar_tarea(id):
     if request.method == 'POST':
         # Seguridad adicional por si alguien intenta postear manualmente
         if tarea['estado'] == 'Realizada':
-            flash("⚠️ Esta tarea ya está marcada como realizada y no puede editarse", "warning")
+            flash("Esta tarea ya está marcada como realizada y no puede editarse", "warning")
             return redirect(url_for('tareas.listar_tareas'))
 
         nombreTarea = request.form['nombreTarea']
@@ -106,7 +98,7 @@ def editar_tarea(id):
         """, (nombreTarea, descripcion, prioridad, fechaInicio, fechaFin, idUsuario, estado, id))
 
         conn.commit()
-        flash("✅ Tarea actualizada correctamente", "success")
+        flash(" Tarea actualizada correctamente", "success")
         return redirect(url_for('tareas.listar_tareas'))
 
     cur.close()
@@ -114,9 +106,7 @@ def editar_tarea(id):
     return render_template('tareas_form.html', tarea=tarea, empleados=empleados)
 
 
-# =====================================================
-# ELIMINAR TAREA
-# =====================================================
+
 @tareas.route('/tareas/eliminar/<int:id>')
 def eliminar_tarea(id):
     conn = get_connection()
@@ -127,13 +117,11 @@ def eliminar_tarea(id):
 
     cur.close()
     conn.close()
-    flash("🗑️ Tarea eliminada correctamente", "info")
+    flash(" Tarea eliminada correctamente", "info")
     return redirect(url_for('tareas.listar_tareas'))
 
 
-# =====================================================
-# LISTAR TAREAS PENDIENTES
-# =====================================================
+
 @tareas.route('/tareas/pendientes')
 def tareas_pendientes():
     conn = get_connection()
@@ -155,9 +143,7 @@ def tareas_pendientes():
     return render_template('tareas_pendientes.html', pendientes=pendientes)
 
 
-# =====================================================
-# CAMBIAR ESTADO (REALIZADA / PENDIENTE)
-# =====================================================
+
 @tareas.route('/tareas/cambiar_estado/<int:id>/<string:estado>')
 def cambiar_estado(id, estado):
     conn = get_connection()
@@ -168,7 +154,7 @@ def cambiar_estado(id, estado):
 
     cur.close()
     conn.close()
-    flash("🔄 Estado de tarea actualizado", "success")
+    flash(" Estado de tarea actualizado", "success")
     return redirect(url_for('tareas.tareas_pendientes'))
 
     

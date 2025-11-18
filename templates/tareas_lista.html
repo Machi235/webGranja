@@ -19,36 +19,37 @@
     </thead>
     <tbody>
       {% for t in tareas %}
-  <tr style="cursor:pointer;"
-    onclick="window.location='{{ url_for('tareas.detalle_tarea', id=t.idTarea) }}'">
-    <td>{{ t.idTarea }}</td>
-    <td>{{ t.nombreTarea }}</td>
-    <td>{{ t.empleado }}</td>
-    <td>{{ t.prioridad }}</td>
-    <td>{{ t.fechaInicio }}</td>
-    <td>{{ t.fechaFin }}</td>
-    <td>{{ t.estado }}</td>
+      <tr style="cursor:pointer;" onclick="window.location='{{ url_for('tareas.detalle_tarea', id=t.idTarea) }}'">
+        <td>{{ t.idTarea }}</td>
+        <td>{{ t.nombreTarea }}</td>
+        <td>{{ t.empleado }}</td>
+        <td>{{ t.prioridad }}</td>
+        <td>{{ t.fechaInicio }}</td>
+        <td>{{ t.fechaFin }}</td>
+        <td>{{ t.estado }}</td>
 
-    <td class="text-center">
-        {% if t.estado != 'Realizada' %}
-        <a href="{{ url_for('tareas.editar_tarea', id=t.idTarea) }}" 
-           class="btn btn-outline-primary btn-sm">
-           <i class="bi bi-pencil-square"></i>
-        </a>
-        {% endif %}
+        <td class="text-center">
 
-        <a href="#" 
-           class="btn btn-outline-danger btn-sm" 
-           onclick="confirmarEliminacion('{{ url_for('tareas.eliminar_tarea', id=t.idTarea) }}')">
-           <i class="bi bi-trash3-fill"></i>
-        </a>
-    </td>
-</tr>
+          {% if t.estado != 'Realizada' %}
+          <a href="{{ url_for('tareas.editar_tarea', id=t.idTarea) }}"
+             class="btn btn-outline-primary btn-sm"
+             onclick="event.stopPropagation();">
+             <i class="bi bi-pencil-square"></i>
+          </a>
+          {% endif %}
 
+          <a href="#"
+             class="btn btn-outline-danger btn-sm"
+             onclick="event.stopPropagation(); confirmarEliminacion('{{ url_for('tareas.eliminar_tarea', id=t.idTarea) }}')">
+             <i class="bi bi-trash3-fill"></i>
+          </a>
+        </td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
+
 <script>
 function confirmarEliminacion(url) {
     Swal.fire({
@@ -67,7 +68,9 @@ function confirmarEliminacion(url) {
     });
 }
 </script>
+
 {% endblock %}
+
 
 
 
