@@ -3,6 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from db import get_connection
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask_mail import Message
+from werkzeug.utils import secure_filename
+import os
+
 
 auth = Blueprint("auth", __name__)
 
@@ -42,6 +45,17 @@ def registro():
     mensaje_usuario = ""
     mensaje_correo = ""
 
+    # Inicializamos variables
+    nombre = ""
+    password = ""
+    rol = ""
+    apellido = ""
+    documento = ""
+    telefono = ""
+    correo = ""
+    hashed_password = ""
+    nombre_archivo = None
+
     if request.method == "POST":
         nombre = request.form.get("nombre")
         password = request.form.get("password")
@@ -52,41 +66,50 @@ def registro():
         correo = request.form.get("correo")
         hashed_password = generate_password_hash(password)
 
+        # ------------------ Validación usuario y correo ------------------
         conn = get_connection()
         cur = conn.cursor(dictionary=True)
-
         cur.execute("""
             SELECT nombre, correo
             FROM usuarios
             WHERE nombre = %s OR correo = %s
         """, (nombre, correo))
-
         resultados = cur.fetchall()
+
         for r in resultados:
             if r['nombre'] == nombre:
                 mensaje_usuario = "Este nombre de usuario ya está registrado."
             if r['correo'] == correo:
                 mensaje_correo = "Este correo ya está registrado."
 
+        # ------------------ Manejo de archivo y registro ------------------
         if not mensaje_usuario and not mensaje_correo:
+            # Subir foto solo si existe
+            foto_file = request.files.get("foto")
+            if foto_file and foto_file.filename != "":
+                filename = secure_filename(foto_file.filename)
+                upload_folder = os.path.join(current_app.root_path, "static/uploads/usuarios")
+                os.makedirs(upload_folder, exist_ok=True)  # Crear carpeta si no existe
+                foto_file.save(os.path.join(upload_folder, filename))
+                nombre_archivo = f"uploads/usuarios/{filename}"  # Ruta relativa para DB
+
+            # Insertar usuario
             cur.execute("""
                 INSERT INTO usuarios
-                (nombre, contraseña, rol, apellido, documento, telefono, correo)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
-            """, (nombre, hashed_password, rol, apellido, documento, telefono, correo))
-            
+                (nombre, contraseña, rol, apellido, documento, telefono, correo, foto)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """, (nombre, hashed_password, rol, apellido, documento, telefono, correo, nombre_archivo))
+
             nuevo_id_usuario = cur.lastrowid
 
-# Buscar todos los usuarios con rol Admin o RRHH
+            # ------------------ Notificaciones a Admin y RRHH ------------------
             cur.execute("SELECT idUsuario FROM usuarios WHERE rol IN ('Admin', 'RRHH') AND activo = 1")
             destinatarios = cur.fetchall()
 
-# Crear mensaje
-            titulo = "Nuevo usuario registrado"
-            descripcion = f"Se ha registrado el usuario {nombre} ({rol})."
-
             from datetime import datetime
             fecha_actual = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            titulo = "Nuevo usuario registrado"
+            descripcion = f"Se ha registrado el usuario {nombre} ({rol})."
 
             for d in destinatarios:
                 cur.execute("""
@@ -95,24 +118,25 @@ def registro():
                 """, (d['idUsuario'], titulo, descripcion, fecha_actual))
 
             conn.commit()
-            
+            cur.close()
+            conn.close()
 
+            return redirect(url_for("auth.formulario"))
+
+        # Cerrar conexión si hubo errores de usuario/correo
         cur.close()
         conn.close()
 
-        if not mensaje_usuario and not mensaje_correo:
-            return redirect(url_for("auth.formulario"))
-
-    # -------- Notificaciones RRHH (para navRrhh.html) --------
+    # -------- Notificaciones para nav por roles --------
+    rol_usuario = session.get("rol")
+    id_usuario = session.get("idUsuario")
     notificaciones_no_leidas = 0
     notificaciones = []
-    if 'idUsuario' in session:
+
+    if id_usuario:
         conn = get_connection()
         cur = conn.cursor(dictionary=True)
-        cur.execute("""
-            SELECT * FROM notificacion
-            WHERE idUsuario = %s
-        """, (session['idUsuario'],))
+        cur.execute("SELECT * FROM notificacion WHERE idUsuario = %s", (id_usuario,))
         notificaciones = cur.fetchall()
         notificaciones_no_leidas = sum(1 for n in notificaciones if not n.get('leida'))
         cur.close()
@@ -122,10 +146,11 @@ def registro():
         "registro.html",
         mensaje_usuario=mensaje_usuario,
         mensaje_correo=mensaje_correo,
-        rol=session.get("rol"),
-        notificaciones_no_leidas=notificaciones_no_leidas,
-        notificaciones=notificaciones
+        rol=rol_usuario,
+        notificaciones=notificaciones,
+        notificaciones_no_leidas=notificaciones_no_leidas
     )
+
 
 # ---------------- RECUPERAR CONTRASEÑA ----------------
 @auth.route("/recuperar", methods=["GET", "POST"])
@@ -206,94 +231,166 @@ def restablecer_password_token(token):
 def ver_usuarios():
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
-    cur.execute("SELECT idUsuario, nombre, apellido, rol, documento, telefono, correo FROM usuarios WHERE activo = 1 ORDER BY nombre")
+    cur.execute("""
+        SELECT idUsuario, nombre, apellido, rol, documento, telefono, correo, foto
+        FROM usuarios
+        WHERE activo = 1
+        ORDER BY nombre
+    """)
     usuarios = cur.fetchall()
+
     cur.execute("SELECT DISTINCT rol FROM usuarios")
     roles = [row['rol'] for row in cur.fetchall()]
     cur.close()
     conn.close()
-    return render_template("verUsuario.html", usuarios=usuarios, roles=roles)
 
-# ---------------- VER USUARIO ----------------
-@auth.route("/detalle_usuario/<int:idUsuario>")
+    # Información para nav por roles
+    rol_usuario = session.get("rol")
+    id_usuario = session.get("idUsuario")
+    notificaciones_no_leidas = 0
+    notificaciones = []
+
+    if id_usuario:
+        conn = get_connection()
+        cur = conn.cursor(dictionary=True)
+        cur.execute("SELECT * FROM notificacion WHERE idUsuario = %s", (id_usuario,))
+        notificaciones = cur.fetchall()
+        notificaciones_no_leidas = sum(1 for n in notificaciones if not n.get('leida'))
+        cur.close()
+        conn.close()
+
+    return render_template(
+        "verUsuario.html",
+        usuarios=usuarios,
+        roles=roles,
+        rol=rol_usuario,
+        notificaciones=notificaciones,
+        notificaciones_no_leidas=notificaciones_no_leidas
+    )
+
+
+# ---------------- VER DETALLE DE USUARIO ----------------
+@auth.route("/detalle_usuario/<int:idUsuario>", methods=["GET"])
 def ver_usuario(idUsuario):
-    """Muestra la informacion completa de un solo usuario"""
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
-
     cur.execute("""
-        SELECT idUsuario, nombre, apellido, rol, documento, telefono, correo
+        SELECT idUsuario, nombre, apellido, rol, documento, telefono, correo, foto
         FROM usuarios
         WHERE idUsuario = %s
-    """,(idUsuario,)) 
+    """, (idUsuario,))
     usuario = cur.fetchone()
-
     cur.close()
     conn.close()
 
     if not usuario:
-        return "usuario no encontrado", 404
-    return render_template("detalleUsuario.html", usuario=usuario)
+        return "Usuario no encontrado", 404
 
-# ---------------- EDITAR USUARIO ----------------
+    # Información para nav
+    rol_usuario = session.get("rol")
+    id_usuario_sesion = session.get("idUsuario")
+    notificaciones_no_leidas = 0
+    notificaciones = []
+
+    if id_usuario_sesion:
+        conn = get_connection()
+        cur = conn.cursor(dictionary=True)
+        cur.execute("SELECT * FROM notificacion WHERE idUsuario = %s", (id_usuario_sesion,))
+        notificaciones = cur.fetchall()
+        notificaciones_no_leidas = sum(1 for n in notificaciones if not n.get('leida'))
+        cur.close()
+        conn.close()
+
+    return render_template(
+        "detalleUsuario.html",
+        usuario=usuario,
+        rol=rol_usuario,
+        notificaciones=notificaciones,
+        notificaciones_no_leidas=notificaciones_no_leidas
+    )
+
+# ---------------- EDITAR USUARIO (FORMULARIO) ----------------
 @auth.route("/editar_usuario/<int:idUsuario>", methods=["GET"])
 def editar_usuario(idUsuario):
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
 
-    cur.execute("""
-        SELECT idUsuario, nombre, apellido, rol, documento, telefono, correo
-        FROM usuarios
-        WHERE idUsuario = %s
-    """,(idUsuario,)) 
+    cur.execute("SELECT * FROM usuarios WHERE idUsuario = %s", (idUsuario,))
     usuario = cur.fetchone()
 
     cur.close()
     conn.close()
 
     if not usuario:
-        return "usuario no encontrado", 404
+        flash("Usuario no encontrado")
+        return redirect(url_for("auth.ver_usuarios"))
+
     return render_template("editarUsuario.html", usuario=usuario)
 
 # ---------------- ACTUALIZAR USUARIO ----------------
 @auth.route("/actualizar_usuario/<int:idUsuario>", methods=["POST"])
 def actualizar_usuario(idUsuario):
-    nombre = request.form["nombre"]
-    rol = request.form["rol"]
-    apellido = request.form["apellido"]
-    documento = request.form["documento"]
-    telefono = request.form["telefono"]
-    correo = request.form["correo"]
+    nombre = request.form.get("nombre")
+    rol = request.form.get("rol")
+    apellido = request.form.get("apellido")
+    documento = request.form.get("documento")
+    telefono = request.form.get("telefono")
+    correo = request.form.get("correo")
+    foto = request.files.get("foto")  # Imagen del formulario
 
+    # Validación
     if not all([nombre, rol, apellido, documento, telefono, correo]):
         flash("Todos los campos son obligatorios")
-        return redirect(url_for("auth.ver_usuarios"))
+        return redirect(url_for("auth.editar_usuario", idUsuario=idUsuario))
 
     conn = get_connection()
-    cur=conn.cursor()
+    cur = conn.cursor(dictionary=True)
 
-    cur.execute(""" UPDATE usuarios SET nombre=%s, rol=%s, apellido=%s, documento=%s, telefono=%s, correo=%s WHERE idUsuario=%s """,
-    (nombre,rol,apellido,documento,telefono,correo, idUsuario))
+    # Obtener el usuario actual para conservar la foto si no suben una nueva
+    cur.execute("SELECT foto FROM usuarios WHERE idUsuario = %s", (idUsuario,))
+    usuario_actual = cur.fetchone()
+    imagen_actual = usuario_actual["foto"] if usuario_actual else None
 
+    # Guardar nueva imagen si se envió
+    if foto and foto.filename != "":
+        filename = secure_filename(foto.filename)
+        # Guardamos en la carpeta static/uploads/usuarios
+        ruta_carpeta = os.path.join(current_app.root_path, 'static/uploads/usuarios')
+        os.makedirs(ruta_carpeta, exist_ok=True)  # Crear carpeta si no existe
+        ruta_guardado = os.path.join(ruta_carpeta, filename)
+        foto.save(ruta_guardado)
+        # Guardar ruta relativa en la BD (para url_for)
+        nueva_imagen = f"uploads/usuarios/{filename}"
+    else:
+        nueva_imagen = imagen_actual  # Mantener la misma imagen
+
+    # Actualizar usuario
+    cur.execute("""
+        UPDATE usuarios
+        SET nombre=%s, rol=%s, apellido=%s, documento=%s, telefono=%s, correo=%s, foto=%s
+        WHERE idUsuario=%s
+    """, (nombre, rol, apellido, documento, telefono, correo, nueva_imagen, idUsuario))
 
     conn.commit()
     cur.close()
     conn.close()
 
-    return redirect(url_for("auth.ver_usuario",idUsuario=idUsuario))
+    flash("Usuario actualizado correctamente")
+    return redirect(url_for("auth.ver_usuario", idUsuario=idUsuario))
+
 
 # ---------------- ELIMINAR USUARIO ----------------
 @auth.route("/eliminar_usuario/<int:idUsuario>", methods=["POST"])
 def eliminar_usuario(idUsuario):
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("UPDATE usuarios SET activo = 0 WHERE idUsuario=%s",(idUsuario,))
+    cur.execute("UPDATE usuarios SET activo = 0 WHERE idUsuario=%s", (idUsuario,))
     conn.commit()
-
     cur.close()
     conn.close()
 
     return redirect(url_for("auth.ver_usuarios"))
+
 
 # ---------------- LOGOUT ----------------
 @auth.route("/logout")

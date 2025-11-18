@@ -21,6 +21,8 @@ from routes.alimento import alimento_bp
 
 app = Flask(__name__)
 app.secret_key = "super_clave_ultra_secreta_123"  
+app.config["UPLOAD_FOLDER"] = "static/uploads/usuarios"
+
 
 # Registrar blueprints
 app.register_blueprint(auth)

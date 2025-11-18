@@ -1,22 +1,23 @@
 {% extends "base.html" %}
 
-{% block titulo %}Crear Dieta{% endblock %}
+{% block titulo %}Editar Dieta{% endblock %}
 
 {% block contenido %}
-
 <div class="container my-4">
     <div class="card shadow p-4" style="border-radius: 20px;">
-        <h2 class="text-center mb-4">Crear Dieta</h2>
+        <h2 class="text-center mb-4">Editar Dieta</h2>
 
-        <form id="formCrearDieta" method="POST" action="{{ url_for('dietas.crear_dieta') }}">
-
+        <form id="formEditarDieta" method="POST" action="{{ url_for('dietas.editar_dieta', idDieta=dieta.idDieta) }}">
             <!-- Selección de Especie -->
             <div class="mb-3">
                 <label for="idEspecie" class="form-label"><strong>Especie*</strong></label>
-                <select id="idEspecie" name="idEspecie" class="form-select" required onchange="cargarAlimentos()">
+                <select id="idEspecie" name="idEspecie" class="form-select" required>
                     <option value="">-- Seleccionar especie --</option>
                     {% for especie in especies %}
-                        <option value="{{ especie.idEspecie }}">{{ especie.tipoEspecie }}</option>
+                        <option value="{{ especie.idEspecie }}" 
+                        {% if dieta.idEspecie == especie.idEspecie %}selected{% endif %}>
+                            {{ especie.tipoEspecie }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>
@@ -24,12 +25,13 @@
             <!-- Descripción -->
             <div class="mb-3">
                 <label for="descripcion" class="form-label"><strong>Descripción*</strong></label>
-                <input type="text" id="descripcion" name="descripcion" class="form-control" required>
+                <input type="text" id="descripcion" name="descripcion" class="form-control" value="{{ dieta.tipoDieta }}" required>
             </div>
 
             <!-- Definitivo -->
             <div class="mb-3 form-check">
-                <input type="checkbox" id="definitivo" name="definitivo" value="1" class="form-check-input">
+                <input type="checkbox" id="definitivo" name="definitivo" value="1" class="form-check-input"
+                {% if dieta.definitivo == 1 %}checked{% endif %}>
                 <label for="definitivo" class="form-check-label">¿Definitivo?</label>
             </div>
 
@@ -39,78 +41,58 @@
             <button type="button" class="btn btn-secondary mt-2" id="btnAgregar">+ Agregar alimento</button>
 
             <br><br>
-            <button type="submit" id="btnGuardarDieta" class="btn btn-success w-100">Guardar</button>
+            <button type="submit" id="btnGuardarDieta" class="btn btn-success w-100">Guardar cambios</button>
         </form>
     </div>
 </div>
-
 {% endblock %}
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-let alimentosDisponibles = [];
+let alimentosDisponibles = {{ alimentosDisponibles | tojson | safe }};
+let alimentosIniciales = {{ alimentos | tojson | safe }};
 
-// ---------- Cargar alimentos ----------
-function cargarAlimentos() {
-    const idEspecie = document.getElementById('idEspecie').value;
-    document.getElementById('contenedorAlimentos').innerHTML = '';
-    
-    if (!idEspecie) {
-        alimentosDisponibles = [];
-        return;
-    }
-
-    fetch(`/dietas/alimentos_por_especie/${idEspecie}`)
-        .then(res => res.json())
-        .then(data => {
-            if (!data.success) throw new Error("Backend devolvió error");
-            alimentosDisponibles = data.alimentos || [];
-            document.querySelectorAll('.alimento-select').forEach(select => actualizarOpciones(select));
-        })
-        .catch(err => {
-            console.error(err);
-            Swal.fire('Error', 'No se pudieron cargar los alimentos para la especie seleccionada.', 'error');
-        });
-}
-
-// ---------- Actualizar opciones ----------
-function actualizarOpciones(select) {
-    select.innerHTML = '<option value="">Seleccione un alimento</option>';
-    alimentosDisponibles.forEach(al => {
-        const opt = document.createElement('option');
-        opt.value = al.idAlimento;
-        opt.textContent = al.Origen;
-        select.appendChild(opt);
-    });
-}
-
-// ---------- Agregar fila ----------
-function agregarFila() {
+// ---------- Función para crear fila ----------
+function agregarFila(alimento = null) {
     const contenedor = document.getElementById('contenedorAlimentos');
     const fila = document.createElement('div');
     fila.className = 'fila-alimento mb-2 d-flex gap-2 align-items-start';
 
+    // Select
     const select = document.createElement('select');
     select.name = 'idAlimento[]';
     select.className = 'form-select alimento-select';
     select.required = true;
     select.style.minWidth = '220px';
-    actualizarOpciones(select);
 
+    alimentosDisponibles.forEach(al => {
+        const opt = document.createElement('option');
+        opt.value = al.idAlimento;
+        opt.textContent = al.nombre;
+        select.appendChild(opt);
+    });
+
+    if (alimento) select.value = alimento.idAlimento;
+
+    // Cantidad
     const cantidad = document.createElement('input');
     cantidad.name = 'cantidadAlimento[]';
     cantidad.placeholder = 'Cantidad';
     cantidad.className = 'form-control';
     cantidad.required = true;
+    cantidad.value = alimento ? alimento.cantidadAlimento : '';
 
+    // Frecuencia
     const frecuencia = document.createElement('input');
     frecuencia.name = 'frecuenciaAlimento[]';
     frecuencia.placeholder = 'Frecuencia';
     frecuencia.className = 'form-control';
     frecuencia.required = true;
+    frecuencia.value = alimento ? alimento.frecuenciaAlimento : '';
 
+    // Botón eliminar
     const btnEliminar = document.createElement('button');
     btnEliminar.type = 'button';
     btnEliminar.className = 'btn btn-danger';
@@ -125,24 +107,29 @@ function agregarFila() {
     contenedor.appendChild(fila);
 }
 
-// ---------- LOAD ----------
-window.addEventListener('load', agregarFila);
+// ---------- Cargar filas iniciales ----------
+window.addEventListener('load', () => {
+    if (alimentosIniciales.length > 0) {
+        alimentosIniciales.forEach(a => agregarFila(a));
+    } else {
+        agregarFila();
+    }
+});
 
-// ---------- Agregar alimento ----------
+// ---------- Botón agregar fila ----------
 document.getElementById('btnAgregar').addEventListener('click', () => {
     if (alimentosDisponibles.length === 0) {
-        Swal.fire('Atención', 'Selecciona primero una especie para cargar sus alimentos.', 'info');
+        Swal.fire('Atención', 'No hay alimentos disponibles para esta especie.', 'info');
         return;
     }
     agregarFila();
 });
 
-// ---------- Enviar dieta ----------
-document.getElementById("formCrearDieta").addEventListener("submit", function(e) {
+// ---------- Guardar cambios ----------
+document.getElementById("formEditarDieta").addEventListener("submit", function(e){
     e.preventDefault();
     const form = e.target;
     const btn = document.getElementById('btnGuardarDieta');
-
     btn.disabled = true;
     btn.textContent = 'Guardando...';
 
@@ -153,24 +140,16 @@ document.getElementById("formCrearDieta").addEventListener("submit", function(e)
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            Swal.fire({
-                title: 'Éxito',
-                text: 'La dieta se creó correctamente.',
-                icon: 'success',
-                confirmButtonText: 'Ir a Dietas'
-            }).then(() => {
-                window.location.href = "{{ url_for('dietas.ver_dietas') }}";
-            });
+            Swal.fire('Éxito', 'La dieta se actualizó correctamente.', 'success')
+            .then(() => window.location.href = "{{ url_for('dietas.ver_dietas') }}");
         } else {
             Swal.fire('Error', data.error || 'No se pudo guardar la dieta.', 'error');
         }
     })
-    .catch(() => {
-        Swal.fire('Error', 'Ocurrió un error al guardar.', 'error');
-    })
+    .catch(() => Swal.fire('Error', 'Ocurrió un error al guardar la dieta.', 'error'))
     .finally(() => {
         btn.disabled = false;
-        btn.textContent = 'Guardar';
+        btn.textContent = 'Guardar cambios';
     });
 });
 </script>
