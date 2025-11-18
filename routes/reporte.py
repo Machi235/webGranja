@@ -3,16 +3,15 @@ from db import get_connection
 
 reporte = Blueprint('reporte', __name__)
 
-# ==========================================================
-# 🔹 Mostrar todos los reportes de un animal (con filtro)
-# ==========================================================
+
 @reporte.route('/reportes/<int:id_animal>', methods=['GET', 'POST'])
 def reportes(id_animal):
     try:
         conn = get_connection()
         cur = conn.cursor(dictionary=True)
 
-        query = "SELECT * FROM vista_reportes WHERE idAnimal = %s"
+        
+        query = "SELECT * FROM vista_reportes WHERE idAnimal = %s AND activo = 1"
         params = [id_animal]
 
         if request.method == "POST":
@@ -42,9 +41,8 @@ def reportes(id_animal):
         return redirect(url_for("animales.ver_animal", idAnimal=id_animal))
 
 
-# ==========================================================
-# 🔹 Mostrar detalle de un reporte
-# ==========================================================
+
+
 @reporte.route('/reportes/detalle/<int:id_registro>')
 def detalle_reporte(id_registro):
     conn = get_connection()
@@ -95,9 +93,7 @@ def detalle_reporte(id_registro):
     return render_template("detalle_reporte.html", reporte=reporte, tipo=tipo, id_registro=id_registro, id_animal=id_animal)
 
 
-# ==========================================================
-# 🔹 Eliminar (desactivar) un reporte
-# ==========================================================
+
 @reporte.route('/reportes/eliminar', methods=['POST'])
 def eliminar_reporte():
     try:
@@ -164,65 +160,76 @@ def eliminar_reporte():
     return redirect(url_for('reporte.reportes', id_animal=id_animal))
 
 
-# ==========================================================
-# 🔹 Editar un reporte
-# ==========================================================
 @reporte.route("/reportes/editar/<int:id_registro>", methods=["GET", "POST"])
 def editar_reporte(id_registro):
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
 
-    # Primero averiguar el tipo de reporte
-    cur.execute("SELECT tipo, idAnimal FROM vista_reportes WHERE id_registro = %s", (id_registro,))
-    info = cur.fetchone()
-    if not info:
-        flash(" Reporte no encontrado en la vista", "danger")
-        return redirect(url_for("reporte.reportes", id_animal=1))
+    try:
+        
+        cur.execute("SELECT tipo, idAnimal FROM vista_reportes WHERE id_registro = %s", (id_registro,))
+        info = cur.fetchone()
 
-    tipo = info['tipo'].strip().lower()
-    id_animal = info['idAnimal']
+        if not info:
+            flash("❌ No se encontró el reporte en la vista", "danger")
+            return redirect(url_for("reporte.reportes", id_animal=1))
 
-    tablas = {
-        'vacuna': ('vacuna', 'idVacuna'),
-        'postoperatorio': ('postoperatorio', 'idPostoperatorio'),
-        'terapia física': ('terapiafisica', 'idTerapia'),
-        'terapiafisica': ('terapiafisica', 'idTerapia'),
-        'visita': ('visitas', 'idVisitas'),
-        'visitas': ('visitas', 'idVisitas'),
-        'medicación': ('medicacion', 'idMed'),
-        'medicacion': ('medicacion', 'idMed'),
-        'cirugia': ('cirugia', 'idCirugia'),
-        'cirugía': ('cirugia', 'idCirugia')
-    }
+        tipo = info["tipo"].strip().lower()
+        id_animal = info["idAnimal"]
 
-    if tipo not in tablas:
-        flash(f"Tipo '{tipo}' no reconocido", "danger")
-        return redirect(url_for("reporte.reportes", id_animal=id_animal))
+        tablas = {
+            'vacuna': ('vacuna', 'idVacuna'),
+            'postoperatorio': ('postoperatorio', 'idPostoperatorio'),
+            'terapia física': ('terapiafisica', 'idTerapia'),
+            'terapiafisica': ('terapiafisica', 'idTerapia'),
+            'visita': ('visitas', 'idVisitas'),
+            'visitas': ('visitas', 'idVisitas'),
+            'medicación': ('medicacion', 'idMed'),
+            'medicacion': ('medicacion', 'idMed'),
+            'cirugia': ('cirugia', 'idCirugia'),
+            'cirugía': ('cirugia', 'idCirugia')
+        }
 
-    tabla, campo_id = tablas[tipo]
+        if tipo not in tablas:
+            flash(f"Tipo '{tipo}' no reconocido", "danger")
+            return redirect(url_for("reporte.reportes", id_animal=id_animal))
 
-    # Obtener todos los datos del registro actual
-    cur.execute(f"SELECT * FROM {tabla} WHERE {campo_id} = %s", (id_registro,))
-    reporte = cur.fetchone()
+        tabla, campo_id = tablas[tipo]
 
-    if not reporte:
-        flash(" No se encontró el reporte original", "danger")
-        return redirect(url_for("reporte.reportes", id_animal=id_animal))
+        cur.execute(f"SELECT * FROM {tabla} WHERE {campo_id} = %s", (id_registro,))
+        reporte = cur.fetchone()
 
-    if request.method == "POST":
-        # Actualizar dinámicamente los campos que llegan
-        datos_actualizados = request.form.to_dict()
-        campos = ", ".join([f"{k} = %s" for k in datos_actualizados.keys()])
-        valores = list(datos_actualizados.values())
-        valores.append(id_registro)
+        if not reporte:
+            flash("❌ No se encontró el registro en su tabla real", "warning")
+            return redirect(url_for("reporte.reportes", id_animal=id_animal))
 
-        query = f"UPDATE {tabla} SET {campos} WHERE {campo_id} = %s"
-        cur.execute(query, valores)
-        conn.commit()
+        if request.method == "POST":
 
-        flash(" Reporte actualizado correctamente", "success")
-        return redirect(url_for("reporte.detalle_reporte", id_registro=id_registro))
+            datos = request.form.to_dict()
 
-    cur.close()
-    conn.close()
-    return render_template("editar_reporte.html", reporte=reporte, tipo=tipo)
+            if not datos:
+                flash("No se enviaron datos", "warning")
+                return redirect(url_for("reporte.editar_reporte", id_registro=id_registro))
+
+            campos = ", ".join([f"{k} = %s" for k in datos.keys()])
+            valores = list(datos.values())
+            valores.append(id_registro)
+
+            query = f"UPDATE {tabla} SET {campos} WHERE {campo_id} = %s"
+            cur.execute(query, valores)
+            conn.commit()
+
+            flash("✔️ Reporte actualizado correctamente", "success")
+            return redirect(url_for("reporte.detalle_reporte", id_registro=id_registro))
+
+        return render_template(
+            "editar_reporte.html",
+            reporte=reporte,
+            tipo=tipo,
+            id_registro=id_registro,
+            id_animal=id_animal
+        )
+
+    finally:
+        cur.close()
+        conn.close()
