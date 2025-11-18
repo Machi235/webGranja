@@ -30,7 +30,7 @@
   {% for animal in animales %}
     <a href="{{ url_for('animales.ver_animal', idAnimal=animal.idAnimal) }}" class="ficha">
         {% if animal.imagen %}
-          <img src="{{ url_for('static', filename='uploads/' + animal.imagen) }}">
+          <img src="{{ url_for('static', filename='uploads/' + animal.imagen) }}" class="imagen">
         {% endif %}
         <div class="informacion">
             <div class="datos">

@@ -131,18 +131,17 @@
 
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
+    {% set category, message = messages[0] %}
     <script>
-      {% for category, message in messages %}
         Swal.fire({
           icon: '{{ category }}',
-          title: '{{ message }}',
+          html: {{ message|tojson }},
           showConfirmButton: false,
           timer: 2000,
           timerProgressBar: true
         }).then(() => {
           window.location.href = "{{ url_for('actividad_bp.ver_actividades') }}";
         });
-      {% endfor %}
     </script>
   {% endif %}
 {% endwith %}

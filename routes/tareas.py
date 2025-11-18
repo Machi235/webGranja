@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash 
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from db import get_connection 
 tareas = Blueprint('tareas', __name__)
 
@@ -124,6 +124,8 @@ def eliminar_tarea(id):
 
 @tareas.route('/tareas/pendientes')
 def tareas_pendientes():
+    id_usuario = session["idUsuario"]
+
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
 
@@ -133,9 +135,8 @@ def tareas_pendientes():
                u.nombre AS empleado
         FROM tareas t
         JOIN usuarios u ON t.idUsuario = u.idUsuario
-        WHERE t.estado = 'Pendiente'
-        ORDER BY t.prioridad DESC
-    """)
+        WHERE t.estado = 'Pendiente' AND u.idUsuario = %s
+    """, (id_usuario,))
     pendientes = cur.fetchall()
 
     cur.close()

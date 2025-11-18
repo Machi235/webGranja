@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<div class="container mt-4">
+
+    <!-- NAV SUPERIOR (DEPENDE DEL ROL) -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h2>Agregar Alimentos</h2>
+
+        <div class="d-flex gap-3">
+
+            {% if session['rol'] == 'Admin' %}
+                <a href="{{ url_for('animales.ver_animales') }}" class="btn btn-outline-primary">
+                    <i class="bi bi-list-ul"></i> Ver Animales
+                </a>
+
+                <a href="{{ url_for('dietas.ver_dietas') }}" class="btn btn-outline-success">
+                    <i class="bi bi-basket"></i> Ver Dietas
+                </a>
+
+                <a href="{{ url_for('alimento_bp.agregar_alimento') }}" class="btn btn-outline-dark">
+                    <i class="bi bi-nut"></i> Agregar Alimentos
+                </a>
+
+            {% elif session['rol'] == 'Cuidador' %}
+                <a href="{{ url_for('dietas.ver_dietas') }}" class="btn btn-outline-success">
+                    <i class="bi bi-basket"></i> Dietas
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <!-- MENSAJE DE ÉXITO -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+
+    <!-- FORMULARIO -->
+    <form method="POST" action="{{ url_for('alimento_bp.agregar_alimento') }}" class="card p-4">
+
+        <div id="contenedor">
+
+            <!-- Primer alimento (por defecto) -->
+            <div class="item border rounded p-3 mb-2 bg-light">
+
+                <div class="mb-3">
+                    <label class="form-label">Origen del alimento:</label>
+                    <input type="text" name="origen[]" class="form-control" placeholder="Ej: Pasto, frutas, concentrado" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">ID Especie (opcional):</label>
+                    <input type="number" name="idEspecie[]" class="form-control" placeholder="Ej: 1, 2, 3">
+                </div>
+
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-success" onclick="agregarAlimento()">
+            <i class="bi bi-plus-lg"></i> Añadir otro alimento
+        </button>
+
+        <button type="submit" class="btn btn-primary mt-3">
+            <i class="bi bi-check2-circle"></i> Guardar
+        </button>
+    </form>
+</div>
+
+
+<!-- SCRIPT PARA AGREGAR MÁS ALIMENTOS -->
+<script>
+function agregarAlimento() {
+    const contenedor = document.getElementById("contenedor");
+
+    const item = document.createElement("div");
+    item.classList.add("item", "border", "rounded", "p-3", "mb-2", "bg-light");
+
+    item.innerHTML = `
+        <div class="mb-3">
+            <label class="form-label">Origen del alimento:</label>
+            <input type="text" name="origen[]" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">ID Especie (opcional):</label>
+            <input type="number" name="idEspecie[]" class="form-control">
+        </div>
+
+        <button type="button" class="btn btn-danger" onclick="this.parentNode.remove()">
+            <i class="bi bi-trash3"></i> Eliminar
+        </button>
+    `;
+
+    contenedor.appendChild(item);
+}
+</script>
+
+{% endblock %}

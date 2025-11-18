@@ -60,9 +60,11 @@
           <li><a class="nav-link" href="{{ url_for('eventos.evento') }}">Eventos</a></li>
           <li><a class="nav-link" href="/dietas/crear_dieta">Crear Dieta</a></li>
           <li><a class="nav-link" href="{{ url_for('dietas.ver_dietas') }}">Ver Dietas</a></li>
+          <li><a class="nav-link" href="{{ url_for('alimento_bp.agregar_alimento') }}">Agregar Alimento</a></li>
           <li><a class="nav-link" href="{{ url_for('asignacion.asignar') }}">Asignar Hábitat</a></li>
           <li><a class="nav-link" href="{{ url_for('animales.registros_medicos', id_animal=1) }}">Reporte</a></li>
           <li><a class="nav-link" href="{{ url_for('buscarHabitat.buscar') }}">Buscar Hábitat</a></li>
+          <li><a class="nav-link" href="{{ url_for('tareas.tareas_pendientes') }}">Tareas</a></li>
           <li><a class="nav-link text-danger" href="{{ url_for('auth.logout') }}">
             <i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
         </ul>

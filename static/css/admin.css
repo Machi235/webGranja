@@ -500,3 +500,13 @@ footer {
   width: 900px;
   margin-top: 7%;
 }
+#perfil{
+  width: 30%;
+  text-align: left;
+  border-radius: 15px;
+  border: none;
+  font-family: "Montserrat", sans-serif;
+  background-color: #2a2a606b;
+  color: white;
+  padding: 30px;
+} 

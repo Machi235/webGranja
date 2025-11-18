@@ -54,14 +54,16 @@ def registro_cirugia():
         proxima = request.form.get("proximaCirugia")
         fecha = request.form.get("fechaCirugia")
 
+        fecha_evento = datetime.now()
+
         conn = get_connection()
         cur = conn.cursor()
         sql = """
             INSERT INTO cirugia
-            (idAnimal, responsableCirugia, procediientoCirugia, preparacionCirugia, proximaCirugia, fechaCirugia)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            (idAnimal, responsableCirugia, procediientoCirugia, preparacionCirugia, proximaCirugia, fechaCirugia, fecha_evento)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
-        cur.execute(sql, (id_animal, responsable, procedimiento, preparacion, proxima, fecha))
+        cur.execute(sql, (id_animal, responsable, procedimiento, preparacion, proxima, fecha, fecha_evento))
         conn.commit()
 
         enviar_notificacion("Nueva cirugía registrada",
@@ -100,14 +102,16 @@ def registro_medicacion():
         administracion = request.form.get("administracionMed")
         reacciones = request.form.get("reaccionesMed")
 
+        fecha_evento = datetime.now()
+
         conn = get_connection()
         cur = conn.cursor()
         sql = """
             INSERT INTO medicacion 
-            (idAnimal, nombreMed, dosisSuministradas, horaAplicacion, horaSiguienteAplicacion, administracionMed, reaccionesMed)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            (idAnimal, nombreMed, dosisSuministradas, horaAplicacion, horaSiguienteAplicacion, administracionMed, reaccionesMed, fecha_evento)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cur.execute(sql, (id_animal, nombre_med, f"{dosis} {unidad}", hora_aplicacion, hora_siguiente, administracion, reacciones))
+        cur.execute(sql, (id_animal, nombre_med, f"{dosis} {unidad}", hora_aplicacion, hora_siguiente, administracion, reacciones, fecha_evento))
         conn.commit()
 
         enviar_notificacion("Medicación aplicada",
@@ -147,14 +151,16 @@ def registro_postoperatorio():
         dieta = request.form.get("dietaEspecifica")
         control = request.form.get("controlPostoperatorio")
 
+        fecha_evento = datetime.now()
+
         conn = get_connection()
         cur = conn.cursor()
         sql = """
             INSERT INTO postoperatorio
-            (idAnimal, nombreMed, dosisSuministrada, frecuenciaMed, duracion, cuidadosEpecificos, dietaEspecifica, controlPostoperatorio)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            (idAnimal, nombreMed, dosisSuministrada, frecuenciaMed, duracion, cuidadosEpecificos, dietaEspecifica, controlPostoperatorio, fecha_evento)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cur.execute(sql, (id_animal, nombre_med, f"{dosis} {unidad}", frecuencia, duracion, cuidados, dieta, control))
+        cur.execute(sql, (id_animal, nombre_med, f"{dosis} {unidad}", frecuencia, duracion, cuidados, dieta, control, fecha_evento))
         conn.commit()
 
         enviar_notificacion("Postoperatorio registrado",
@@ -192,14 +198,16 @@ def registro_terapia():
         duracion = request.form.get("duracionSesion")
         evaluacion = request.form.get("evaluacion")
 
+        fecha_evento = datetime.now()
+
         conn = get_connection()
         cur = conn.cursor()
         sql = """
             INSERT INTO terapiafisica
-            (idAnimal, tipoTerapia, objetivoSesion, diaSesion, proximaSesion, duracionSesion, evaluacion)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            (idAnimal, tipoTerapia, objetivoSesion, diaSesion, proximaSesion, duracionSesion, evaluacion, fecha_evento)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cur.execute(sql, (id_animal, tipo_terapia, objetivo, dia, proxima, duracion, evaluacion))
+        cur.execute(sql, (id_animal, tipo_terapia, objetivo, dia, proxima, duracion, evaluacion, fecha_evento))
         conn.commit()
 
         enviar_notificacion("Terapia registrada",
@@ -242,14 +250,16 @@ def registro_vacuna():
         if filename:
             archivo.save(os.path.join(UPLOAD_FOLDER, filename))
 
+        fecha_evento = datetime.now()
+
         conn = get_connection()
         cur = conn.cursor()
         sql = """
             INSERT INTO vacuna
-            (idAnimal, responsable, tipoVacuna, laboratorio, lote, aplicacionVacuna, proximaVacuna, vacunasAplicadas, foto)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            (idAnimal, responsable, tipoVacuna, laboratorio, lote, aplicacionVacuna, proximaVacuna, vacunasAplicadas, foto, fecha_evento)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cur.execute(sql, (id_animal, responsable, tipo_vacuna, laboratorio, lote, fecha_aplicacion, fecha_proxima, 1, filename))
+        cur.execute(sql, (id_animal, responsable, tipo_vacuna, laboratorio, lote, fecha_aplicacion, fecha_proxima, 1, filename, fecha_evento))
         conn.commit()
 
         enviar_notificacion("Vacuna registrada",
@@ -274,7 +284,7 @@ def registro_vacuna():
     return render_template("vacuna.html", animales=animales)
 
 # ----------------------------------------------------------------
-# VISITA MEDICA
+# VISITA MÉDICA
 # ----------------------------------------------------------------
 @eventos.route("/registro_visita", methods=["GET", "POST"])
 def registro_visita():
@@ -287,14 +297,16 @@ def registro_visita():
         proxima_visita = request.form.get("fecha")
         estado = request.form.get("estado")
 
+        fecha_evento = datetime.now()
+
         conn = get_connection()
         cur = conn.cursor()
         sql = """
             INSERT INTO visitas
-            (idAnimal, veterinario, motivoConsulta, diagnostico, tratamiento, proximaVisita, estadoSalud)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            (idAnimal, veterinario, motivoConsulta, diagnostico, tratamiento, proximaVisita, estadoSalud, fecha_evento)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cur.execute(sql, (id_animal, veterinario, motivo, diagnostico, tratamiento, proxima_visita, estado))
+        cur.execute(sql, (id_animal, veterinario, motivo, diagnostico, tratamiento, proxima_visita, estado, fecha_evento))
         conn.commit()
 
         enviar_notificacion("Visita médica registrada",

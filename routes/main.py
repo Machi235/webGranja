@@ -77,3 +77,20 @@ def bienvenida():
             etiquetas=etiquetas,   # ✅ agregado
             valores=valores        # ✅ agregado
         )
+
+@main.route("/Perfil")
+def perfil():
+    id_usuario = session["idUsuario"]
+
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    # 🔹 Traer datos del usuario
+    cur.execute(""" SELECT u.idUsuario, nombre, apellido, rol, documento, telefono, correo, nombreTurno FROM usuarios AS u INNER JOIN usuarioturno AS t ON u.idUsuario = t.idUsuario 
+                INNER JOIN horariosturnos AS h ON t.idHorario = h.idHorario WHERE u.idUsuario = %s """, (id_usuario,))
+    usuario = cur.fetchone()
+
+    return render_template("verPerfil.html", usuario=usuario)

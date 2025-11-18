@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
@@ -58,7 +59,7 @@
         <div class="form-box">
             <div class="campo">
                 <label for="idEspecie">Especie:<span class="obligatorio">*</span></label>
-                <select id="idEspecie" name="idEspecie" class="select-multiple" multiple>
+                <select id="idEspecie" name="idEspecie" class="select-multiple" multiple disabled>
                     {% for especie in especies %}
                         <option value="{{ especie.idEspecie }}" {% if especie.idEspecie in selected_especies %} selected {% endif %}>{{ especie.tipoEspecie }}</option>
                     {% endfor %}
@@ -77,7 +78,7 @@
 
             <div class="campo">
                 <label for="habitat">Habitat:<span class="obligatorio">*</span></label>
-                <select id="habitat" name="idHabitat" class="select-multiple" multiple>
+                <select id="habitat" name="idHabitat" class="select-multiple" multiple disabled>
                     {% for hab in habitats %}
                         <option value="{{ hab.idHabitat }}" {% if hab.idHabitat in selected_habitats %} selected {% endif %}>{{ hab.nombreHabitat }}</option>
                     {% endfor %}

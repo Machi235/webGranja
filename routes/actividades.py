@@ -12,7 +12,9 @@ def registro_actividad():
         cur = conn.cursor(dictionary=True)
 
         # Para GET: traer datos para los selects
-        cur.execute("SELECT idEspecie, tipoEspecie FROM especie ORDER BY tipoEspecie")
+        cur.execute(""" SELECT e.idEspecie, e.tipoEspecie, COUNT(c.idActividad) AS usadas, e.limite, NOW() - INTERVAL e.periodo DAY AS fechaLimite FROM especie AS e
+                    LEFT JOIN actividades AS a ON a.idEspecie = e.idEspecie AND activo=1 LEFT JOIN cronogramaactividades AS c on c.idActividad = a.idActividad AND 
+                    c.fechaCreacion >= NOW() - INTERVAL e.periodo DAY GROUP BY e.idEspecie HAVING usadas < e.limite """)
         especies = cur.fetchall()
 
         cur.execute("SELECT idUsuario, nombre, apellido FROM usuarios  WHERE activo = 1 AND rol= 'Guia' ORDER BY nombre;")
@@ -27,7 +29,7 @@ def registro_actividad():
         return render_template("actividad.html", especies=especies, usuarios=usuarios, habitats=habitats)
 
     elif request.method == "POST":
-    # Capturar datos del formulario
+    
         id_especies = request.form.getlist("idEspecie")
         id_usuario = request.form.get("idUsuario")
         id_habitats = request.form.getlist("idHabitat")
@@ -36,52 +38,50 @@ def registro_actividad():
         minutos = request.form.get("minutos") or 0
         fechaRealizacion = request.form.get("fechaRealizacion")
         detalles = request.form.get("detalles")
-    
-    # Combinar horas y minutos en formato HH:MM
+   
         duracion = f"{int(horas):02d}:{int(minutos):02d}"
 
-    # Fecha actual para la actividad
         fecha = datetime.now().strftime("%Y-%m-%d")
 
         conn = get_connection()
         cur = conn.cursor()
 
-    # ✅ Insertar actividad principal
-        cur.execute(""" 
-            INSERT INTO cronogramaactividades (idUsuario, tipo, fechaCreacion, duracion, detalles, fechaRealizacion) 
-            VALUES (%s, %s, %s, %s, %s, %s)
-        """, (id_usuario, tipo, fecha, duracion, detalles, fechaRealizacion ))
+        if not id_especies or not  id_usuario or not tipo or not id_habitats or not horas or not minutos or not fechaRealizacion or not detalles :
+            flash("Faltan campos obligatorios", "error")
+            return redirect(url_for("actividad_bp.registro_actividad"))
+        else:
+            cur.execute(""" 
+                INSERT INTO cronogramaactividades (idUsuario, tipo, fechaCreacion, duracion, detalles, fechaRealizacion) 
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (id_usuario, tipo, fecha, duracion, detalles, fechaRealizacion ))
 
-        id_actividad = cur.lastrowid
+            id_actividad = cur.lastrowid
 
-    # ✅ Enviar notificación al guía asignado
+            mensajes = []
+            for id_especie in id_especies:
+                cur.callproc("limite_de_uso1",(id_especie,id_actividad))
+                resultados = list(cur.stored_results())
+                result=resultados[-1]
+                mensaje = result.fetchone()[0]
+                mensajes.append(mensaje.strip()) 
+    
+            for id_habitat in id_habitats:
+                cur.execute("""INSERT INTO actividades (idHabitat, idActividad ) VALUES (%s, %s)""",(id_habitat, id_actividad))
+
         titulo = "Nueva Actividad Asignada"
         descripcion = f"Se te ha asignado una actividad de tipo '{tipo}' para la fecha {fechaRealizacion}."
         cur.execute("""
-            INSERT INTO notificacion (idUsuario, titulo, rol, descripcion, fecha, leida)
-            VALUES (%s, %s, 'Guia', %s, NOW(), 0)
+            INSERT INTO notificacion (idUsuario, titulo, descripcion, fecha, leida)
+            VALUES (%s, %s, %s, NOW(), 0)
         """, (id_usuario, titulo, descripcion))
-
-    # ✅ Registrar especies en actividad (y límite)
-        for id_especie in id_especies:
-            cur.callproc("limite_de_uso1",(id_especie,id_actividad))
-            for result in cur.stored_results():
-                mensaje = result.fetchone()[0]
-
-    # ✅ Registrar habitats
-        for id_habitat in id_habitats:
-            cur.execute("""INSERT INTO actividades (idHabitat, idActividad ) VALUES (%s, %s)""",(id_habitat, id_actividad))
 
         conn.commit()
         cur.close()
         conn.close()
 
-    # ✅ Mantener tu lógica de mensajes intacta
-        if "asignado" in mensaje.lower():
-            flash(mensaje, "success")
-        else:
-            flash(mensaje, "warning")
-        
+        mensaje_unico = "<br>".join(mensajes)
+        flash(mensaje_unico, "success")
+
     return render_template("actividad.html")
 
 
@@ -167,15 +167,6 @@ def actualizar_actividad(idActividad):
     cur.execute(""" UPDATE cronogramaactividades SET idUsuario = %s, tipo = %s, duracion = %s, detalles = %s, fechaRealizacion = %s WHERE idActividad=%s""", 
                 (id_usuario, tipo, duracion,  detalles, fechaRealizacion, idActividad ))
     
-
-    cur.execute("DELETE FROM actividades WHERE idActividad = %s", (idActividad,))
-
-    for id_especie in id_especies:
-        cur.execute("""INSERT INTO actividades (idEspecie, idActividad) VALUES (%s, %s)""",(id_especie, idActividad))
-
-    for id_habitat in id_habitats:
-        cur.execute(""" INSERT INTO actividades (idHabitat, idActividad ) VALUES (%s, %s)""",(id_habitat, idActividad))
-
     conn.commit()
 
     cur.close()
@@ -189,6 +180,7 @@ def eliminar_actividad(idActividad):
     cur=conn.cursor()
 
     cur.execute(""" UPDATE cronogramaactividades SET estado = 0 WHERE idActividad = %s""",(idActividad,))
+    cur.execute(""" UPDATE actividades SET activo = 0 WHERE idActividad = %s""",(idActividad,))
 
     conn.commit()
 
