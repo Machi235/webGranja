@@ -4,6 +4,10 @@
 
 {% block contenido %}
 
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/verAnimal.css') }}">
+{% endblock %}
+
 <div class="container mt-4">
 
     <h2 class="mb-4">Detalle del Usuario</h2>

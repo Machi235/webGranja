@@ -1,97 +1,67 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro de Medicación</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/medicacion.css') }}">
+{% extends "base.html" %}
 
-</head>
+{% block contenido %}
 
-<body>
-<nav class="navbar">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-      <a class="navbar-brand text-white fw-bold">
-        <i class="bi bi-shield-check"></i> medicacion
-      </a>
-      <a href="{{ url_for('main.bienvenida') }}" class="btn btn-light fw-semibold">
-        <i class="bi bi-arrow-left-circle"></i> Volver al Menú Principal
-      </a>
-    </div>
-  </nav>
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/medicacion.css') }}">
+{% endblock %}
 
-
-  <div class="form-container">
-
-    
+<!-- Formulario Medicación -->
+<div class="form-container">
     <div class="form-box">
-      <h2>Control de Medicación</h2>
+        <form id="formMedicacion" action="{{ url_for('eventos.registro_medicacion') }}" method="POST">
+            <h2>Medicación</h2>
 
-      <form id="formVisita" action="{{ url_for('eventos.registro_medicacion') }}" method="POST">
+            <div class="form-row">
+                <label for="id_animal">Animal*</label>
+                <select class="form-control" name="id_animal" id="id_animal" required>
+                    <option value="">Selecciona un animal</option>
+                    {% for animal in animales %}
+                        <option value="{{ animal.idAnimal }}">{{ animal.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <div class="form-group">
-          <label for="idAnimal">Animal:</label>
-          <select id="idAnimal" name="idAnimal" required>
-            <option value="">Selecciona un animal</option>
-            {% for animal in animales %}
-              <option value="{{ animal.idAnimal }}">{{ animal.nombreAnimal }}</option>
-            {% endfor %}
-          </select>
-        </div>
+            <div class="form-row">
+                <label for="nombreMed">Nombre Medicamento*</label>
+                <input type="text" class="form-control" name="nombreMed" id="nombreMed" required>
+            </div>
 
-        <div class="form-group">
-          <label for="nombreMed">Medicamento:</label>
-          <input type="text" id="nombreMed" name="nombreMed" placeholder="Ej: Oxitetra 20%" required>
-        </div>
+            <div class="form-row">
+                <label for="dosisSuministradas">Dosis*</label>
+                <input type="number" class="form-control" name="dosisSuministradas" id="dosisSuministradas" required>
+            </div>
 
-        <div class="form-group inline">
-          <div>
-            <label for="dosisSuministradas">Dosis:</label>
-            <input type="text" id="dosisSuministradas" name="dosisSuministradas" placeholder="5">
-          </div>
-          <div>
-            <label>Unidad:</label>
-            <select name="unidad">
-              <option value="ml">ml</option>
-              <option value="mg">mg</option>
-            </select>
-          </div>
-        </div>
+            <div class="form-row">
+                <label for="unidad">Unidad*</label>
+                <input type="text" class="form-control" name="unidad" id="unidad" required>
+            </div>
 
-        <div class="form-group inline">
-          <div>
-            <label for="horaAplicacion">Hora aplicada:</label>
-            <input type="time" id="horaAplicacion" name="horaAplicacion" required>
-          </div>
-          <div>
-            <label for="horaSiguiente">Próxima hora:</label>
-            <input type="time" id="horaSiguiente" name="horaSiguiente" required>
-          </div>
-        </div>
+            <div class="form-row">
+                <label for="horaAplicacion">Hora de aplicación*</label>
+                <input type="time" class="form-control" name="horaAplicacion" id="horaAplicacion" required>
+            </div>
 
-        <div class="form-group">
-          <label for="administracionMed">Administración:</label>
-          <select id="administracionMed" name="administracionMed">
-            <option value="Oral">Oral</option>
-            <option value="Inyectable">Inyectable</option>
-            <option value="Tópica">Tópica</option>
-          </select>
-        </div>
+            <div class="form-row">
+                <label for="horaSiguiente">Próxima aplicación</label>
+                <input type="time" class="form-control" name="horaSiguiente" id="horaSiguiente">
+            </div>
 
-        <div class="form-group">
-          <label for="reaccionesMed">Reacciones:</label>
-          <textarea id="reaccionesMed" name="reaccionesMed" rows="3" placeholder="Describe las observaciones..."></textarea>
-        </div>
+            <div class="form-row">
+                <label for="administracionMed">Administración</label>
+                <input type="text" class="form-control" name="administracionMed" id="administracionMed">
+            </div>
 
-        <button type="submit" class="btn-registrar">Registrar</button>
-      </form>
+            <div class="form-row">
+                <label for="reaccionesMed">Reacciones</label>
+                <input type="text" class="form-control" name="reaccionesMed" id="reaccionesMed">
+            </div>
+
+            <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
+        </form>
     </div>
 
-  <div class="form-side">
+    <div class="form-side">
   <div class="info-card">
     <div class="icon"></div>
     <h2>Registro de Medicación</h2>
@@ -103,24 +73,21 @@
   </div>
 </div>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message"
+                     data-tipo="{{ category if category else 'success' }}"
+                     data-mensaje="{{ message }}"
+                     hidden></div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
 
-  </div>
-  
+{% endblock %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class="flash-message"
-           data-tipo="{{ category if category else 'success' }}"
-           data-mensaje="{{ message }}"
-           hidden></div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
-
+{% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
-
-</body>
-</html>
-
+{% endblock %}

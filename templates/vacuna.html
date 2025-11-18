@@ -1,106 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vacuna</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/vacuna.css') }}">
-</head>
-<body>
-<nav class="navbar">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-      <a class="navbar-brand text-white fw-bold">
-        <i class="bi bi-shield-check"></i> Vacunación Animal
-      </a>
-      <a href="{{ url_for('main.bienvenida') }}" class="btn btn-light fw-semibold">
-        <i class="bi bi-arrow-left-circle"></i> regresar
-      </a>
-    </div>
-  </nav>
+{% extends "base.html" %}
 
-      
-    
-          
+{% block contenido %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/vacuna.css') }}">
+{% endblock %}
+
 <div class="form-container">
 
-<div class="form-box">
-  
-<form id="formVacuna" action="{{ url_for('eventos.registro_vacuna') }}" method="POST" enctype="multipart/form-data">
+    <div class="form-box">
+        <form id="formVacuna" action="{{ url_for('eventos.registro_vacuna') }}" method="POST" enctype="multipart/form-data">
 
+            <h2>Vacunación Animal</h2>
 
+            <div class="form-row">
+                <label for="idAnimal">Animal*</label>
+                <select class="form-control" name="idAnimal" id="idAnimal" required>
+                    <option value="">Selecciona un animal</option>
+                    {% for animal in animales %}
+                        <option value="{{ animal.idAnimal }}">{{ animal.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-      <div class="form-row">
-    <label for="idAnimal">Animal*</label>
-    <select class="form-control" name="idAnimal" id="idAnimal" required>
-        <option value="">Selecciona un animal</option>
-        {% for animal in animales %}
-            <option value="{{ animal.idAnimal }}">{{ animal.nombre }}</option>
-        {% endfor %}
-    </select>
+            <div class="form-row">
+                <label for="responsable">Responsable*</label>
+                <input type="text" class="form-control" name="responsable" id="responsable" required>
+            </div>
+
+            <div class="form-row">
+                <label for="tipoVacuna">Tipo de Vacuna*</label>
+                <input type="text" class="form-control" name="tipoVacuna" id="tipoVacuna" required>
+            </div>
+
+            <div class="form-row">
+                <label for="laboratorio">Laboratorio*</label>
+                <input type="text" class="form-control" name="laboratorio" id="laboratorio" required>
+            </div>
+
+            <div class="form-row">
+                <label for="lote">Lote</label>
+                <input type="text" class="form-control" name="lote" id="lote">
+            </div>
+
+            <div class="form-row">
+                <label for="aplicacionVacuna">Día aplicada</label>
+                <input type="date" class="form-control" name="aplicacionVacuna" id="aplicacionVacuna" required>
+            </div>
+
+            <div class="form-row">
+                <label for="proximaVacuna">Próxima aplicación</label>
+                <input type="date" class="form-control" name="proximaVacuna" id="proximaVacuna" required>
+            </div>
+
+            <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
+
+        </form>
+    </div>
+
+    <div class="form-side">
+        <label class="drop-zone">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Arrastra tu imagen aquí<br>o haz clic para seleccionar</p>
+            <input type="file" name="file" accept="image/*">
+        </label>
+        <div id="preview"></div>
+    </div>
+
 </div>
-
-
-      <div class="form-row">
-    <label for="responsable">Responsable*</label>
-    <input type="text" class="form-control" name="responsable" id="responsable" required>
-</div>
-
-<div class="form-row">
-    <label for="tipoVacuna">Tipo de Vacuna*</label>
-    <input type="text" class="form-control" name="tipoVacuna" id="tipoVacuna" required>
-</div>
-
-<div class="form-row">
-    <label for="laboratorio">Laboratorio*</label>
-    <input type="text" class="form-control" name="laboratorio" id="laboratorio" required>
-</div>
-
-<div class="form-row">
-    <label for="lote">Lote</label>
-    <input type="text" class="form-control" name="lote" id="lote">
-</div>
-
-<div class="form-row">
-    <label for="aplicacionVacuna">Día aplicada</label>
-    <input type="date" class="form-control" name="aplicacionVacuna" id="aplicacionVacuna" required>
-</div>
-
-<div class="form-row">
-    <label for="proximaVacuna">Próxima aplicación</label>
-    <input type="date" class="form-control" name="proximaVacuna" id="proximaVacuna" required>
-</div>
-
-
-<button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
-
-    </form>
-  </div>
-<div class="form-side">
-<label class="drop-zone">
-  <i class="fas fa-cloud-upload-alt"></i>
-  <p>Arrastra tu imagen aquí<br>o haz clic para seleccionar</p>
-  <input type="file" name="file" accept="image/*">
-</label>
-<div id="preview"></div>
-  </div>
-</div>
-
 
 {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class="flash-message"
-           data-tipo="{{ category if category else 'success' }}"
-           data-mensaje="{{ message }}"
-           hidden></div>
-    {% endfor %}
-  {% endif %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash-message"
+                 data-tipo="{{ category if category else 'success' }}"
+                 data-mensaje="{{ message }}"
+                 hidden></div>
+        {% endfor %}
+    {% endif %}
 {% endwith %}
 
+{% endblock %}
+
+{% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
-</body>
-</html>
+{% endblock %}

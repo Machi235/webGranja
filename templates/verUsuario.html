@@ -2,6 +2,10 @@
 
 {% block contenido %}
 
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/verAnimal.css') }}">
+{% endblock %}
+
 <!-- Navegación por roles y opciones -->
 <div class="buscar">
   <div class="buscador">

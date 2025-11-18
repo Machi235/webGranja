@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block titulo %}Editar Especie{% endblock %}
+
+{% block contenido %}
+<div class="container my-4">
+    <h2>Editar Especie</h2>
+
+    <div class="card my-3">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('especies_bp.editar_especie', idEspecie=especie.idEspecie) }}">
+                <div class="mb-3">
+                    <label for="tipoEspecie" class="form-label">Tipo de Especie</label>
+                    <input type="text" class="form-control" id="tipoEspecie" name="tipoEspecie" value="{{ especie.tipoEspecie }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="limite" class="form-label">Límite</label>
+                    <input type="number" class="form-control" id="limite" name="limite" value="{{ especie.limite }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="periodo" class="form-label">Periodo</label>
+                    <input type="number" class="form-control" id="periodo" name="periodo" value="{{ especie.periodo }}" required>
+                </div>
+                <button type="submit" class="btn btn-success">Actualizar Especie</button>
+                <a href="{{ url_for('especies_bp.ver_especies') }}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
