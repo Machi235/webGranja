@@ -15,7 +15,7 @@ from routes.ventaBoleta import boleto
 from routes.notificacion import notificaciones_bp
 from routes.reporte import reporte
 from routes.tareas import tareas
-
+from routes.alimento import alimento_bp
 
 
 
@@ -34,9 +34,8 @@ app.register_blueprint(actividad_bp, url_prefix="/actividad")
 app.register_blueprint(buscarHabitat_bp)
 app.register_blueprint(dietas, url_prefix="/dietas")
 app.register_blueprint(eventos_general)
-
+app.register_blueprint(alimento_bp)
 app.register_blueprint(boleto)
-
 app.register_blueprint(notificaciones_bp)
 app.register_blueprint(reporte)
 app.register_blueprint(tareas)

@@ -48,10 +48,11 @@
   box-shadow: 0 15px 25px rgba(0,0,0,0.3);
   transform: translateY(-10px); 
 }
-img{
-    width: 120px;
-    margin: 10px;
-    border-radius:17px ;
+.imagen{
+    width: 120px !important;
+    height: 100% !important;
+    margin: 10px !important;
+    border-radius:17px !important;
 }
 
 .informacion{

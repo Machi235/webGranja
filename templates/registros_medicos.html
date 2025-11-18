@@ -81,7 +81,7 @@
                         <div class="card-body-custom">
                             <div class="info-row">
                                 <span class="info-label">Fecha:</span>
-                                <span class="info-value">{{ r.fecha or 'Sin fecha' }}</span>
+                                <span class="info-value">{{ (r.fecha_evento|string)[:10] if r.fecha_evento else 'Sin fecha' }}</span>
                             </div>
                             <div class="info-row">
                                 <span class="info-label">Detalle:</span>

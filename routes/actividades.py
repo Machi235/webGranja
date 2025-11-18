@@ -71,8 +71,8 @@ def registro_actividad():
         titulo = "Nueva Actividad Asignada"
         descripcion = f"Se te ha asignado una actividad de tipo '{tipo}' para la fecha {fechaRealizacion}."
         cur.execute("""
-            INSERT INTO notificacion (idUsuario, titulo, rol, descripcion, fecha, leida)
-            VALUES (%s, %s, 'Guia', %s, NOW(), 0)
+            INSERT INTO notificacion (idUsuario, titulo, descripcion, fecha, leida)
+            VALUES (%s, %s, %s, NOW(), 0)
         """, (id_usuario, titulo, descripcion))
 
         conn.commit()
