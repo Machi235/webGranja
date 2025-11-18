@@ -11,7 +11,7 @@
     <!-- google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <!-- estilo ccs -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/detalleAnimal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/habitat.css') }}">
   
 </head>
 <body>
@@ -52,23 +52,25 @@
     </div>
   </nav>
 
-<div class="animal">
+<div class="habitat">
     <div class="form-container" >
             <div class="campo">
                 <p class="titulo">Nombre:</p>
                 <p class="dato">{{habitat.nombreHabitat }}</p>
             </div>
-            <div class="campo">
-                <p class="titulo">Temperatura Maxima:</p>
-                <p p class="dato">{{ habitat.maxTemperatura }}</p>
-            </div>
-            <div class="campo">
-                <p class="titulo">Temperatura Minima:</p>
-                <p p class="dato">{{ habitat.minTemperatura }}</p>
+            <div class="datos">
+                <div class="campo">
+                    <p class="titulo">Temperatura Maxima:</p>
+                    <p class="dato">{{ habitat.maxTemperatura }}</p>
+                </div>
+                <div class="campo">
+                    <p class="titulo">Temperatura Minima:</p>
+                    <p class="dato">{{ habitat.minTemperatura }}</p>
+                </div>
             </div>
             <div class="campo">
                 <p class="titulo">Estado:</p>
-                <p p class="dato">{{ habitat.estado }}</p>
+                <p class="dato">{{ habitat.estado }}</p>
             </div>
 
             <div class="campo">

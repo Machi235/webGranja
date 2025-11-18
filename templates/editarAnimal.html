@@ -1,150 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha del Animal</title>
 
-    <!-- Bootstrap CSS y JS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-    <!-- Dropzone CSS y JS -->
-    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
-    <!-- Estilo personalizado -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/crearAnimal.css') }}">
-
-    <title>Crear Animal</title>
+  <!-- Estilo personalizado -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/detalleAnimal.css') }}">
 </head>
+
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-                </svg>
-                CREAR ANIMAL
-            </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<nav class="navbar bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <i class="bi bi-person-circle"></i> Ficha del Animal
+    </a>
+    <a href="{{ url_for('main.bienvenida') }}" class="btn btn-outline-primary">
+      <i class="bi bi-house-door"></i> Volver al menú
+    </a>
+  </div>
+</nav>
 
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title">Menú</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{{ url_for('animales.registro_animal') }}">Crear animal</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Crear Hábitat</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="EliminarH.html">Eliminar Hábitat</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Alerta Comida Diaria</a>
-                        </li>
-                        <div class="mt-4 text-center">
-        <a href="{{ url_for('main.bienvenida') }}" class="btn btn-outline-primary w-100">
-            <i class="bi bi-house-door"></i> Volver al Menú Principal
-        </a>
-    </div>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
+<div class="animal-card">
+  <div class="image-side">
+    {% if animal.imagen %}
+      <img src="{{ url_for('static', filename='uploads/' + animal.imagen) }}" alt="imagen {{ animal.nombre }}">
+    {% else %}
+      <img src="{{ url_for('static', filename='img/default.png') }}" alt="sin imagen">
+    {% endif %}
+  </div>
 
-    <!-- Formulario -->
-    <form id="miFormulario" enctype="multipart/form-data">
-    <div class="form-container">
-            <div class="campo">
-                <label for="nombre">Nombre:<span class="obligatorio">*</span></label>
-                <input type="text" id="nombre" name="nombre" value="{{animal.nombre }}" >
-            </div>
+  <div class="animal-info">
+    <h2>{{ animal.nombre }}</h2>
+    <p class="estado-salud">{{ animal.estadoSalud }}</p>
 
-            <div class="campo">
-                <label for="especie">Especie:<span class="obligatorio">*</span></label>
-                <input type="text" id="especie" name="especie" value="{{ animal.especie }}">
-            </div>
+    <!-- Tabs -->
+    <ul class="nav nav-tabs" id="animalTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="datos-tab" data-bs-toggle="tab" data-bs-target="#datos" type="button" role="tab">Datos generales</button>
+      </li>
+    </ul>
 
-            <div class="campo">
-                <label for="edad">Edad:<span class="obligatorio">*</span></label>
-                <input type="number" id="edad" name="edad" min="0" value="{{ animal.edad }}" >
-            </div>
-
-            <div class="campo">
-                <label for="nacimiento">Fecha de nacimiento:</label>
-                <input type="date" id="nacimiento" name="fechaNacimiento" value="{{ animal.fechaNacimiento }}">
-            </div>
-
-            <div class="campo">
-                <label for="ingreso">Fecha de ingreso:</label>
-                <input type="date" id="ingreso" name="fechaLlegada" value="{{ animal.fechaLlegada }}">
-            </div>
-
-            <div class="campo">
-                <label>Sexo:<span class="obligatorio">*</span></label>
-                <input type="radio" id="macho" name="sexo" value="{{ animal.sexo }}">
-            </div>
-
-            <div class="campo">
-                <label for="salud">Estado de Salud:<span class="obligatorio">*</span></label>
-                <select id="salud" name="salud">
-                    <option value="{{ animal.estadoSalud }}">Seleccione...</option>
-                    <option value="Sano">Sano</option>
-                    <option value="Enfermo">Enfermo</option>
-                    <option value="En recuperación">En recuperación</option>
+    <div class="tab-content" id="animalTabsContent">
+      <!-- DATOS GENERALES -->
+      <div class="tab-pane fade show active" id="datos" role="tabpanel">
+        <div class="info-item"><strong>Especie:</strong> <span>{{ animal.tipoEspecie }} </span></div>
+        <div class="info-item"><strong>Edad:</strong> <span>{{ animal.edad }}</span></div>
+        <div class="info-item"><strong>Sexo:</strong> <span>{{ animal.sexo }}</span></div>
+        <div class="info-item"><strong>Fecha nacimiento:</strong> <span>{{ animal.fechaNacimiento }}</span></div>
+        <div class="info-item"><strong>Fecha llegada:</strong> <span>{{ animal.fechaLlegada }}</span></div>
+        <div class="info-item"><strong>Observaciones:</strong> <span>{{ animal.observaciones }}</span></div>
+        <form id="miFormulario" action="{{ url_for('animales.actualizar_animal',idAnimal=animal.idAnimal) }}" method="post">
+            <div class="info-item"><strong>Habitat:</strong> 
+                <select id="habitat" name="habitat" class="selecciones">
+                    <option value="{{ animal.habitat }}" >{{ animal.nombreHabitat }}</option>
+                    {% for habitat in habitats %}
+                        <option value="{{ habitat.idHabitat }}">{{ habitat.nombreHabitat }}</option>
+                    {% endfor %}
                 </select>
             </div>
-
-            <div class="campo">
-                <label for="observaciones">Observaciones:<span class="obligatorio">*</span></label>
-                <textarea id="observaciones" name="observaciones">{{ animal.observaciones}}</textarea>
-            </div>
-
-            <div class="campo">
-                <label for="habitat">Hábitat:<span class="obligatorio">*</span></label>
-                <input type="text" id="habitat" name="habitat" value="{{ animal.habitat}}">
-            </div>
-
-            <button class="btn btn-danger w-100" id="btnRegistrar" type="button">actualizar</button>
-            <button class="btn btn-secondary mt-3 w-100" type="button" onclick="vaciarFormulario()">
-                <i class="bi bi-x-circle"></i> Vaciar
-            </button>
+            <button class="btn btn-danger mt-3 w-100" type="submit">Reasignar</button>
+        </form>
     </div>
-    <div class="form-side">
-        <label for="imagen"></label>
-        <div class="dropzone" id="myDropzone">
-        </div>
-    </div>
-</form>
-
-
-    <!-- Dialogs -->
-    <dialog id="camposVacios">
-        <h1>Los campos con <span class="obligatorio">*</span> son obligatorios, por favor complételos.</h1>
-        <button id="volver">OK</button>
-    </dialog>
-
-    <dialog id="camposCompletos">
-        <h1>Animal registrado correctamente</h1>
-    </dialog>
-
-    <!-- Scripts -->
-    <script src="{{ url_for('static', filename='js/crearAnimal.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+           
+  </div>
+</div>
 
 </body>
 </html>

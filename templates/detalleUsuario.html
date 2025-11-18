@@ -11,7 +11,7 @@
     <!-- google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <!-- estilo ccs -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/detalleAnimal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/editarUsuario.css') }}">
   
 </head>
 <body>
@@ -54,6 +54,7 @@
 
 <div class="animal">
     <div class="form-container" >
+        <div class="datos">
             <div class="campo">
                 <p class="titulo">Nombres:</p>
                 <p class="dato">{{usuario.nombre }}</p>
@@ -62,6 +63,8 @@
                 <p class="titulo">Apellidos:</p>
                 <p p class="dato">{{ usuario.apellido }}</p>
             </div>
+        </div>
+        <div class="datos">
             <div class="campo">
                 <p class="titulo">Rol:</p>
                 <p p class="dato">{{ usuario.rol }}</p>
@@ -71,7 +74,8 @@
                 <p class="titulo">Numero de documento:</p>
                 <p class="dato">{{ usuario.documento }}</p>
             </div>
-
+        </div>
+        <div class="datos">
             <div class="campo">
                 <p class="titulo">Telefono:</p>
                 <p class="dato">{{ usuario.telefono }}</p>
@@ -80,6 +84,7 @@
                 <p class="titulo">Correo:</p>
                 <p class="dato">{{ usuario.correo }}</p>
             </div>
+        </div>
             <a href="{{url_for('auth.editar_usuario', idUsuario=usuario.idUsuario) }}" class="btn btn-danger w-100">editar</a>
     </div>
     

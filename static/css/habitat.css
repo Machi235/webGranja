@@ -6,7 +6,7 @@
   appearance: a !important;
 }
 
-#miFormulario{
+#miFormulario, .habitat{
   display: flex !important;
   max-width: 63% !important;
   min-width: 53% !important;
@@ -17,9 +17,14 @@
   overflow: hidden !important;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3) !important;
   margin: 30px auto !important;
-  min-height: 600px !important;
   padding: 30px !important;
   gap: 10px ! important;
+}
+
+.form-container{
+  display: flex;
+  flex-direction: column !important;
+  gap: 20px ! important;
 }
 
 .form-box{
@@ -34,7 +39,7 @@
   gap: 5px !important;
 }
 
-.campo label {
+.campo label, .titulo {
   font-size: 18px !important;
   font-family: "Delius", cursive !important;
 }
@@ -58,36 +63,18 @@
 }
 
 .btn {
-  border-radius: 6px;
+  border-radius: 17px !important;
+  background-color: #6ca76c !important;
+  color: #f9fff9 !important;
 }
 
-.form-side {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; 
+p{
+  margin-bottom: 0;
 }
 
-.boton{
-    border: none;
-    background: none;
-    color: #af1c1c;
-    font-size: x-large;
-    margin-top: 5px;
-    font-family: "Delius", cursive;
+.datos{
+    display: flex;
+    gap: 20px;
 }
 
-
-#volver {
-    max-height: 30px;
-    max-width: 50px;
-    width: 50px;
-    border-radius: 10px;
-    margin-left: 90%;
-    background: none;
-    border: none;
-    color: #af1c1c;
-    font-size: x-large;
-}
 

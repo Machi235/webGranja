@@ -46,9 +46,6 @@
         <button class="nav-link active" id="datos-tab" data-bs-toggle="tab" data-bs-target="#datos" type="button" role="tab">Datos generales</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="habitat-tab" data-bs-toggle="tab" data-bs-target="#habitat" type="button" role="tab">Hábitat</button>
-      </li>
-      <li class="nav-item" role="presentation">
         <button class="nav-link" id="eventos-tab" data-bs-toggle="tab" data-bs-target="#eventos" type="button" role="tab">Registros clínicos</button>
       </li>
     </ul>
@@ -56,12 +53,13 @@
     <div class="tab-content" id="animalTabsContent">
       <!-- DATOS GENERALES -->
       <div class="tab-pane fade show active" id="datos" role="tabpanel">
-        <div class="info-item"><strong>Especie:</strong> <span>{{ animal.especie }}</span></div>
+        <div class="info-item"><strong>Especie:</strong> <span>{{ animal.tipoEspecie }} </span></div>
         <div class="info-item"><strong>Edad:</strong> <span>{{ animal.edad }}</span></div>
         <div class="info-item"><strong>Sexo:</strong> <span>{{ animal.sexo }}</span></div>
         <div class="info-item"><strong>Fecha nacimiento:</strong> <span>{{ animal.fechaNacimiento }}</span></div>
         <div class="info-item"><strong>Fecha llegada:</strong> <span>{{ animal.fechaLlegada }}</span></div>
         <div class="info-item"><strong>Observaciones:</strong> <span>{{ animal.observaciones }}</span></div>
+        <div class="info-item"><strong>Habitat:</strong> <span>{{ animal.nombreHabitat }}</span></div>
       </div>
 
       <!-- HABITAT -->
@@ -78,12 +76,10 @@
 </a>
 </div>
 
-
-
-
     <a href="{{ url_for('animales.generar_pdf', idAnimal=animal.idAnimal) }}" class="btn btn-danger mt-3 w-100">
       <i class="bi bi-filetype-pdf"></i> Imprimir ficha
     </a>
+    <a href="{{ url_for('animales.editar_animal', idAnimal=animal.idAnimal) }}" class="btn btn-danger mt-3 w-100"> Reasignar animal a un habitat</a>
   </div>
 </div>
 

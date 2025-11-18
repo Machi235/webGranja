@@ -13,7 +13,7 @@
     <select id="filtroEspecie">
       <option value="">Todas las especies</option>
       {% for especie in especies %}
-        <option value="{{ especie }}">{{ especie }}</option>
+        <option value="{{ especie.tipoEspecie }}">{{ especie.tipoEspecie }}</option>
       {% endfor %}
     </select>
 
@@ -26,7 +26,7 @@
   </div>
 </div>
 
-<div class="listaAnimales">
+<div class="listaAnimales" id="data">
   {% for animal in animales %}
     <a href="{{ url_for('animales.ver_animal', idAnimal=animal.idAnimal) }}" class="ficha">
         {% if animal.imagen %}
@@ -40,7 +40,7 @@
               </div>
               <div class="dato">
                 <p class="titulo">Especie:</p>
-                <p class="texto especie">{{ animal.especie }}</p>
+                <p class="texto especie">{{ animal.tipoEspecie }} </p>
               </div>
             </div>
             <div class="datos">
@@ -66,7 +66,7 @@
             <div class="datos">
               <div class="dato">
                 <p class="titulo">Habitat:</p>
-                <p class="texto">{{ animal.habitat }}</p>
+                <p class="texto">{{ animal.nombreHabitat }} </p>
               </div>
             </div>
             <form action="{{ url_for('animales.eliminar_animal', idAnimal=animal.idAnimal) }}" method="POST">

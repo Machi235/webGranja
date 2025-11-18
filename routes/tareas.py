@@ -131,8 +131,7 @@ def tareas_pendientes():
 
     cur.execute("""
         SELECT t.idTarea, t.nombreTarea, t.descripcion, t.prioridad, 
-               t.fechaInicio, t.fechaFin, t.estado,
-               u.nombre AS empleado
+               t.fechaInicio, t.fechaFin
         FROM tareas t
         JOIN usuarios u ON t.idUsuario = u.idUsuario
         WHERE t.estado = 'Pendiente' AND u.idUsuario = %s

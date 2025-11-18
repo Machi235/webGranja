@@ -1,0 +1,79 @@
+#miFormulario, .animal {
+  display: flex !important;
+  max-width: 63% !important;
+  min-width: 53% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3) !important;
+  margin: 100px 0px 30px 18% !important;
+}
+
+.form-container{
+  display: flex !important;
+  width: 100% !important;
+  flex-direction: column !important;
+  gap: 40px !important;
+  padding: 40px !important;
+  background: #ffff !important;
+  color: rgb(0, 0, 0) !important;
+}
+
+.fechas{
+  display: flex !important;
+  gap: 50px !important;
+  width: 500px !important;
+}
+
+.sexos{
+  display: flex !important;
+  gap: 20px !important;
+}
+.campo {
+  display: flex !important; 
+  flex-direction: column !important;
+  width: 100% !important;
+}
+
+input, select, textarea, .titulo, .dato {
+  border: none !important;
+  outline: none !important;
+  font-family: "Zalando Sans SemiExpanded", sans-serif !important;
+  font-style: normal !important;
+  font-weight: 200 !important;
+  color: black !important;
+}
+input{
+  border-bottom: 1px solid gray !important;
+  color: black !important;
+ }
+select{
+  appearance: auto !important;
+  border-bottom: 1px solid gray !important;
+  padding-bottom: 3px !important;
+}
+
+.selecciones{
+  color: #999 !important;
+}
+
+textarea{
+  border-bottom: 1px solid gray !important;
+}
+
+.btn {
+  border-radius: 17px !important;
+  background-color: #6ca76c !important;
+  color: #f9fff9 !important;
+}
+
+p{
+    margin-bottom: 0;
+}
+
+.datos{
+    display: flex;
+    gap: 20px;
+}

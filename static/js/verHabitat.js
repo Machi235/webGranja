@@ -8,7 +8,7 @@ function filtrarHabitats() {
     const tipo = filtroTipo.value.toLowerCase();
     const estado = filtroEstado.value.toLowerCase();
 
-    const cards = lista.getElementsByClassName('card');
+    const cards = lista.getElementsByClassName('ficha');
 
     for (let card of cards) {
         const nombreHabitat = card.querySelector('.nombre').textContent.toLowerCase();

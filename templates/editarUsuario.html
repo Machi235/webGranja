@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <!-- Estilo personalizado -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/crearAnimal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/editarUsuario.css') }}">
 
     <title>Crear Animal</title>
 </head>
@@ -50,7 +50,7 @@
                             <a class="nav-link" href="#">Crear Hábitat</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="EliminarH.html">Eliminar Hábitat</a>
+                            <a class="nav-link" href="Eliminar.html">Eliminar Hábitat</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Alerta Comida Diaria</a>
@@ -69,16 +69,17 @@
     <!-- Formulario -->
     <form id="miFormulario" method="post" action="{{ url_for('auth.actualizar_usuario', idUsuario=usuario.idUsuario) }}">
     <div class="form-container">
+        <div class="datos">
             <div class="campo">
                 <label for="nombre">Nombre:<span class="obligatorio">*</span></label>
                 <input type="text" id="nombre" name="nombre" value="{{usuario.nombre }}" >
             </div>
-
             <div class="campo">
                 <label for="especie">apellido:<span class="obligatorio">*</span></label>
                 <input type="text" id="especie" name="apellido" value="{{ usuario.apellido }}">
             </div>
-
+        </div>
+        <div class="datos">
             <div class="campo">
                 <label for="salud">Rol:<span class="obligatorio">*</span></label>
                 <select id="salud" name="rol">
@@ -93,7 +94,8 @@
                 <label for="nacimiento">documento</label>
                 <input type="text" id="nacimiento" name="documento" value="{{ usuario.documento }}">
             </div>
-
+        </div>
+        <div class="datos">
             <div class="campo">
                 <label for="ingreso">Telefono:</label>
                 <input type="text" id="ingreso" name="telefono" value="{{ usuario.telefono }}">
@@ -103,24 +105,13 @@
                 <label>Correo:<span class="obligatorio">*</span></label>
                 <input type="email" id="macho" name="correo" value="{{ usuario.correo }}">
             </div>
+        </div>
             <button class="btn btn-danger w-100" id="btnRegistrar" type="submit">actualizar</button>
             <button class="btn btn-secondary mt-3 w-100" type="button" onclick="vaciarFormulario()">
                 <i class="bi bi-x-circle"></i> Vaciar
             </button>
     </div>
 </form>
-
-
-    <!-- Dialogs -->
-    <dialog id="camposVacios">
-        <h1>Los campos con <span class="obligatorio">*</span> son obligatorios, por favor complételos.</h1>
-        <button id="volver">OK</button>
-    </dialog>
-
-    <dialog id="camposCompletos">
-        <h1>Animal registrado correctamente</h1>
-    </dialog>
-
     <!-- Scripts -->
     <script src=""></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
