@@ -26,6 +26,10 @@
     <!-- Botón Volver a lista de reportes usando id_animal -->
     <a href="{{ url_for('reporte.reportes', id_animal=id_animal) }}" 
        class="btn btn-secondary">⬅ Volver</a>
+    <a href="{{ url_for('reporte.pdf_reporte', id_registro=id_registro) }}" 
+   class="btn btn-danger">
+    Descargar PDF
+</a>
   </div>
 </div>
 

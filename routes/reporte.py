@@ -1,5 +1,11 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+import os
+from flask import Blueprint, make_response, render_template, request, redirect, url_for, flash
 from db import get_connection
+from io import BytesIO #Modulo de entradas y salidas
+from reportlab.lib.pagesizes import letter #tamaño de papel
+from reportlab.lib.styles import getSampleStyleSheet #Estilos de texto
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image #Contenido de pdf
+from reportlab.lib.units import cm #Usar unidades de medida 
 
 reporte = Blueprint('reporte', __name__)
 
@@ -233,3 +239,100 @@ def editar_reporte(id_registro):
     finally:
         cur.close()
         conn.close()
+
+@reporte.route("/reportes/pdf/<int:id_registro>")
+def pdf_reporte(id_registro):
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    # 1. Averiguar tipo y animal desde la vista
+    cur.execute("SELECT tipo, idAnimal FROM vista_reportes WHERE id_registro = %s", (id_registro,))
+    info = cur.fetchone()
+
+    if not info:
+        flash("No se encontró el reporte", "danger")
+        return redirect(url_for("reporte.reportes", id_animal=1))
+
+    tipo = info["tipo"].strip().lower()
+    id_animal = info["idAnimal"]
+
+    # Tabla + campo PK según el tipo
+    tablas = {
+        'vacuna': ('vacuna', 'idVacuna'),
+        'postoperatorio': ('postoperatorio', 'idPostoperatorio'),
+        'terapia física': ('terapiafisica', 'idTerapia'),
+        'terapiafisica': ('terapiafisica', 'idTerapia'),
+        'visita': ('visitas', 'idVisitas'),
+        'visitas': ('visitas', 'idVisitas'),
+        'medicación': ('medicacion', 'idMed'),
+        'medicacion': ('medicacion', 'idMed'),
+        'cirugia': ('cirugia', 'idCirugia'),
+        'cirugía': ('cirugia', 'idCirugia')
+    }
+
+    if tipo not in tablas:
+        flash("Tipo no reconocido", "danger")
+        return redirect(url_for("reporte.reportes", id_animal=id_animal))
+
+    tabla, campo_id = tablas[tipo]
+
+    # 2. Obtener todos los campos del reporte real
+    cur.execute(f"SELECT * FROM {tabla} WHERE {campo_id} = %s", (id_registro,))
+    reporte = cur.fetchone()
+
+    # 3. Cargar datos del animal
+    cur.execute("SELECT nombre, especie, imagen FROM animal WHERE idAnimal = %s", (id_animal,))
+    animal = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    # ==========================
+    # 4. CREACIÓN DEL PDF
+    # ==========================
+    buffer = BytesIO()
+    pdf = SimpleDocTemplate(buffer, pagesize=letter)
+    elements = []
+    styles = getSampleStyleSheet()
+
+    # Título dinámico
+    titulo = f"Reporte de {tipo.capitalize()}"
+    elements.append(Paragraph(f"<b>{titulo}</b>", styles["Title"]))
+    elements.append(Spacer(1, 12))
+
+    # Imagen del animal
+    if animal.get("imagen"):
+        ruta_imagen = os.path.join("static/uploads", animal["imagen"])
+        img = Image(ruta_imagen, width=5*cm, height=5*cm)
+        img.hAlign = "CENTER"
+        elements.append(img)
+        elements.append(Spacer(1, 12))
+
+    # ==========================
+    # 5. CONTENIDO DINÁMICO
+    # ==========================
+
+    # Datos básicos del animal
+    contenido = f"""
+    <b>Animal:</b> {animal['nombre']}<br/>
+    <b>Especie:</b> {animal['especie']}<br/><br/>
+    """
+
+    # Agregar todos los campos del reporte dinámicamente
+    for campo, valor in reporte.items():
+        if campo in [campo_id, "idAnimal", "activo"]:
+            continue  # Campos que no queremos mostrar
+
+        contenido += f"<b>{campo}:</b> {valor}<br/><br/>"
+
+    elements.append(Paragraph(contenido, styles["Normal"]))
+    elements.append(Spacer(1, 20))
+
+    pdf.build(elements)
+
+    # Respuesta final
+    response = make_response(buffer.getvalue())
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = f"inline; filename={tipo}.pdf"
+
+    return response
