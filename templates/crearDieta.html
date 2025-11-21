@@ -4,6 +4,10 @@
 
 {% block contenido %}
 
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/verAnimal.css') }}">
+{% endblock %}
+
 <div class="container my-4">
     <div class="card shadow p-4" style="border-radius: 20px;">
         <h2 class="text-center mb-4">Crear Dieta</h2>

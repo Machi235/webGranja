@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block contenido %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/verAnimal.css') }}">
+{% endblock %}
 
 <div class="buscar">
   <div class="buscador">

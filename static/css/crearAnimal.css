@@ -1,6 +1,6 @@
 #miFormulario{
   display: flex !important;
-  max-width: 63% !important;
+  max-width: 83% !important;
   min-width: 53% !important;
   width: 100% !important;
   height: 100% !important;
@@ -8,8 +8,8 @@
   border-radius: 12px !important;
   overflow: hidden !important;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3) !important;
-  margin: 100px 0px 30px 18% !important;
-  min-height: 600px !important;
+  margin: 100px 0px 30px 10% !important;
+  min-height: 500px !important;
 }
 
 .form-container{
@@ -24,7 +24,7 @@
 
 .fechas{
   display: flex !important;
-  gap: 50px !important;
+  gap: 20px !important;
   width: 500px !important;
 }
 
