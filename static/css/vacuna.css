@@ -8,15 +8,6 @@ body {
   min-height: 100vh;
 }
 
-/* Navbar */
-.navbar {
-  background-color: #16a34a; /* rojo veterinaria */
-  padding: 1rem 2rem;
-}
-
-.navbar-brand {
-  font-size: 1.5rem;
-}
 
 .btn-light {
   border-radius: 20px;

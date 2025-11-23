@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from db import get_connection
@@ -8,28 +8,36 @@ eventos = Blueprint("eventos", __name__)
 
 UPLOAD_FOLDER = "static/uploads"
 
-# --------- ENVIAR NOTIFICACIONES A ADMIN Y CUIDADORES ---------
-def enviar_notificacion(titulo, descripcion):
+# ------------------------ FUNCIONES AUXILIARES ------------------------
+def obtener_notificaciones(user_id):
+    """Obtiene todas las notificaciones y el conteo de no leídas"""
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
+    cur.execute("SELECT * FROM notificacion WHERE idUsuario=%s ORDER BY fecha DESC", (user_id,))
+    notificaciones = cur.fetchall()
+    cur.execute("SELECT COUNT(*) AS total_no_leidas FROM notificacion WHERE idUsuario=%s AND leida=0", (user_id,))
+    notificaciones_no_leidas = cur.fetchone()['total_no_leidas']
+    conn.close()
+    return notificaciones, notificaciones_no_leidas
 
+def enviar_notificacion(titulo, descripcion):
+    """Envia notificación a todos los Admin y Cuidadores activos"""
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idUsuario FROM usuarios WHERE rol IN ('Admin', 'Cuidador') AND activo = 1")
     destinatarios = cur.fetchall()
-
     fecha_actual = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
     for d in destinatarios:
         cur.execute("""
             INSERT INTO notificacion (idUsuario, titulo, descripcion, fecha, leida)
             VALUES (%s, %s, %s, %s, 0)
         """, (d['idUsuario'], titulo, descripcion, fecha_actual))
-
     conn.commit()
     cur.close()
     conn.close()
 
-# --------- GUARDAR RECORDATORIO ---------
 def guardar_recordatorio(id_animal, evento, fecha_proxima, mensaje):
+    """Guarda recordatorio si fecha_proxima existe"""
     if fecha_proxima:
         conn = get_connection()
         cur = conn.cursor()
@@ -41,9 +49,8 @@ def guardar_recordatorio(id_animal, evento, fecha_proxima, mensaje):
         cur.close()
         conn.close()
 
-# ----------------------------------------------------------------
-# CIRUGÍA
-# ----------------------------------------------------------------
+
+# ------------------------ CIRUGÍA ------------------------
 @eventos.route("/registro_cirugia", methods=["GET", "POST"])
 def registro_cirugia():
     if request.method == "POST":
@@ -53,7 +60,6 @@ def registro_cirugia():
         preparacion = request.form.get("preparacionCirugia")
         proxima = request.form.get("proximaCirugia")
         fecha = request.form.get("fechaCirugia")
-
         fecha_evento = datetime.now()
 
         conn = get_connection()
@@ -65,19 +71,18 @@ def registro_cirugia():
         """
         cur.execute(sql, (id_animal, responsable, procedimiento, preparacion, proxima, fecha, fecha_evento))
         conn.commit()
+        cur.close()
+        conn.close()
 
         enviar_notificacion("Nueva cirugía registrada",
             f"Animal {id_animal} tuvo cirugía. Próxima revisión: {proxima or 'No indicada'}.")
-
         guardar_recordatorio(id_animal, "Cirugía", proxima,
             f"Control post-quirúrgico del animal {id_animal}.")
-
-        cur.close()
-        conn.close()
 
         flash("Cirugía registrada correctamente", "success")
         return redirect(url_for("eventos.registro_cirugia"))
 
+    # GET
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
@@ -85,11 +90,21 @@ def registro_cirugia():
     cur.close()
     conn.close()
 
-    return render_template("cirugia.html", animales=animales)
+    # Rol y notificaciones
+    rol = session.get("rol")
+    user_id = session.get("idUsuario")
+    notificaciones, notificaciones_no_leidas = obtener_notificaciones(user_id)
 
-# ----------------------------------------------------------------
-# MEDICACIÓN
-# ----------------------------------------------------------------
+    return render_template(
+        "cirugia.html",
+        animales=animales,
+        rol=rol,
+        notificaciones=notificaciones,
+        notificaciones_no_leidas=notificaciones_no_leidas
+    )
+
+
+# ------------------------ MEDICACIÓN ------------------------
 @eventos.route("/registro_medicacion", methods=["GET", "POST"])
 def registro_medicacion():
     if request.method == "POST":
@@ -101,7 +116,6 @@ def registro_medicacion():
         hora_siguiente = request.form.get("horaSiguiente")
         administracion = request.form.get("administracionMed")
         reacciones = request.form.get("reaccionesMed")
-
         fecha_evento = datetime.now()
 
         conn = get_connection()
@@ -113,15 +127,13 @@ def registro_medicacion():
         """
         cur.execute(sql, (id_animal, nombre_med, f"{dosis} {unidad}", hora_aplicacion, hora_siguiente, administracion, reacciones, fecha_evento))
         conn.commit()
+        cur.close()
+        conn.close()
 
         enviar_notificacion("Medicación aplicada",
             f"Se aplicó '{nombre_med}' al animal {id_animal}. Próxima dosis: {hora_siguiente}.")
-
         guardar_recordatorio(id_animal, "Medicación", hora_siguiente,
             f"Re-aplicar medicación {nombre_med} al animal {id_animal}.")
-
-        cur.close()
-        conn.close()
 
         flash("Medicación registrada correctamente", "success")
         return redirect(url_for("eventos.registro_medicacion"))
@@ -133,11 +145,20 @@ def registro_medicacion():
     cur.close()
     conn.close()
 
-    return render_template("medicacion.html", animales=animales)
+    rol = session.get("rol")
+    user_id = session.get("idUsuario")
+    notificaciones, notificaciones_no_leidas = obtener_notificaciones(user_id)
 
-# ----------------------------------------------------------------
-# POSTOPERATORIO
-# ----------------------------------------------------------------
+    return render_template(
+        "medicacion.html",
+        animales=animales,
+        rol=rol,
+        notificaciones=notificaciones,
+        notificaciones_no_leidas=notificaciones_no_leidas
+    )
+
+
+# ------------------------ POSTOPERATORIO ------------------------
 @eventos.route("/registro_postoperatorio", methods=["GET", "POST"])
 def registro_postoperatorio():
     if request.method == "POST":
@@ -150,7 +171,6 @@ def registro_postoperatorio():
         cuidados = request.form.get("cuidadosEspecificos")
         dieta = request.form.get("dietaEspecifica")
         control = request.form.get("controlPostoperatorio")
-
         fecha_evento = datetime.now()
 
         conn = get_connection()
@@ -162,15 +182,13 @@ def registro_postoperatorio():
         """
         cur.execute(sql, (id_animal, nombre_med, f"{dosis} {unidad}", frecuencia, duracion, cuidados, dieta, control, fecha_evento))
         conn.commit()
+        cur.close()
+        conn.close()
 
         enviar_notificacion("Postoperatorio registrado",
             f"Animal {id_animal} está en postoperatorio. Control: {control}.")
-
         guardar_recordatorio(id_animal, "Postoperatorio", control,
             f"Revisar evolución de postoperatorio del animal {id_animal}.")
-
-        cur.close()
-        conn.close()
 
         flash("Postoperatorio registrado correctamente", "success")
         return redirect(url_for("eventos.registro_postoperatorio"))
@@ -182,11 +200,20 @@ def registro_postoperatorio():
     cur.close()
     conn.close()
 
-    return render_template("postoperatorio.html", animales=animales)
+    rol = session.get("rol")
+    user_id = session.get("idUsuario")
+    notificaciones, notificaciones_no_leidas = obtener_notificaciones(user_id)
 
-# ----------------------------------------------------------------
-# TERAPIA
-# ----------------------------------------------------------------
+    return render_template(
+        "postoperatorio.html",
+        animales=animales,
+        rol=rol,
+        notificaciones=notificaciones,
+        notificaciones_no_leidas=notificaciones_no_leidas
+    )
+
+
+# ------------------------ TERAPIA ------------------------
 @eventos.route("/registro_terapia", methods=["GET", "POST"])
 def registro_terapia():
     if request.method == "POST":
@@ -197,7 +224,6 @@ def registro_terapia():
         proxima = request.form.get("proximaSesion")
         duracion = request.form.get("duracionSesion")
         evaluacion = request.form.get("evaluacion")
-
         fecha_evento = datetime.now()
 
         conn = get_connection()
@@ -209,15 +235,13 @@ def registro_terapia():
         """
         cur.execute(sql, (id_animal, tipo_terapia, objetivo, dia, proxima, duracion, evaluacion, fecha_evento))
         conn.commit()
+        cur.close()
+        conn.close()
 
         enviar_notificacion("Terapia registrada",
             f"Animal {id_animal} tuvo terapia. Próxima sesión: {proxima}")
-
         guardar_recordatorio(id_animal, "Terapia física", proxima,
             f"Hoy se debe realizar la terapia física al animal {id_animal}.")
-
-        cur.close()
-        conn.close()
 
         flash("Terapia física registrada correctamente", "success")
         return redirect(url_for("eventos.registro_terapia"))
@@ -229,11 +253,20 @@ def registro_terapia():
     cur.close()
     conn.close()
 
-    return render_template("terapiafisica.html", animales=animales)
+    rol = session.get("rol")
+    user_id = session.get("idUsuario")
+    notificaciones, notificaciones_no_leidas = obtener_notificaciones(user_id)
 
-# ----------------------------------------------------------------
-# VACUNA
-# ----------------------------------------------------------------
+    return render_template(
+        "terapiafisica.html",
+        animales=animales,
+        rol=rol,
+        notificaciones=notificaciones,
+        notificaciones_no_leidas=notificaciones_no_leidas
+    )
+
+
+# ------------------------ VACUNA ------------------------
 @eventos.route("/registro_vacuna", methods=["GET", "POST"])
 def registro_vacuna():
     if request.method == "POST":
@@ -244,12 +277,10 @@ def registro_vacuna():
         lote = request.form.get("lote")
         fecha_aplicacion = request.form.get("aplicacionVacuna")
         fecha_proxima = request.form.get("proximaVacuna")
-
         archivo = request.files.get("foto")
         filename = secure_filename(archivo.filename) if archivo and archivo.filename else None
         if filename:
             archivo.save(os.path.join(UPLOAD_FOLDER, filename))
-
         fecha_evento = datetime.now()
 
         conn = get_connection()
@@ -261,15 +292,13 @@ def registro_vacuna():
         """
         cur.execute(sql, (id_animal, responsable, tipo_vacuna, laboratorio, lote, fecha_aplicacion, fecha_proxima, 1, filename, fecha_evento))
         conn.commit()
+        cur.close()
+        conn.close()
 
         enviar_notificacion("Vacuna registrada",
             f"Se aplicó vacuna {tipo_vacuna} a {id_animal}. Próxima dosis: {fecha_proxima}")
-
         guardar_recordatorio(id_animal, "Vacuna", fecha_proxima,
             f"Hoy toca vacunar nuevamente al animal {id_animal} con {tipo_vacuna}.")
-
-        cur.close()
-        conn.close()
 
         flash("Vacuna registrada correctamente", "success")
         return redirect(url_for("eventos.registro_vacuna"))
@@ -281,11 +310,20 @@ def registro_vacuna():
     cur.close()
     conn.close()
 
-    return render_template("vacuna.html", animales=animales)
+    rol = session.get("rol")
+    user_id = session.get("idUsuario")
+    notificaciones, notificaciones_no_leidas = obtener_notificaciones(user_id)
 
-# ----------------------------------------------------------------
-# VISITA MÉDICA
-# ----------------------------------------------------------------
+    return render_template(
+        "vacuna.html",
+        animales=animales,
+        rol=rol,
+        notificaciones=notificaciones,
+        notificaciones_no_leidas=notificaciones_no_leidas
+    )
+
+
+# ------------------------ VISITA MÉDICA ------------------------
 @eventos.route("/registro_visita", methods=["GET", "POST"])
 def registro_visita():
     if request.method == "POST":
@@ -296,7 +334,6 @@ def registro_visita():
         tratamiento = request.form.get("tratamiento")
         proxima_visita = request.form.get("fecha")
         estado = request.form.get("estado")
-
         fecha_evento = datetime.now()
 
         conn = get_connection()
@@ -308,15 +345,13 @@ def registro_visita():
         """
         cur.execute(sql, (id_animal, veterinario, motivo, diagnostico, tratamiento, proxima_visita, estado, fecha_evento))
         conn.commit()
+        cur.close()
+        conn.close()
 
         enviar_notificacion("Visita médica registrada",
             f"Animal {id_animal} fue atendido. Próxima visita: {proxima_visita}")
-
         guardar_recordatorio(id_animal, "Visita médica", proxima_visita,
             f"Hoy corresponde revisar al animal {id_animal} según visita médica anterior.")
-
-        cur.close()
-        conn.close()
 
         flash("Visita médica registrada correctamente", "success")
         return redirect(url_for("eventos.registro_visita"))
@@ -328,9 +363,29 @@ def registro_visita():
     cur.close()
     conn.close()
 
-    return render_template("visitamedica.html", animales=animales)
+    rol = session.get("rol")
+    user_id = session.get("idUsuario")
+    notificaciones, notificaciones_no_leidas = obtener_notificaciones(user_id)
+
+    return render_template(
+        "visitamedica.html",
+        animales=animales,
+        rol=rol,
+        notificaciones=notificaciones,
+        notificaciones_no_leidas=notificaciones_no_leidas
+    )
 
 
+# ------------------------ EVENTOS CLÍNICOS ------------------------
 @eventos.route('/eventosclinicos')
 def evento():
-    return render_template('eventos.html')
+    rol = session.get("rol")
+    user_id = session.get("idUsuario")
+    notificaciones, notificaciones_no_leidas = obtener_notificaciones(user_id)
+
+    return render_template(
+        'eventos.html',
+        rol=rol,
+        notificaciones=notificaciones,
+        notificaciones_no_leidas=notificaciones_no_leidas
+    )

@@ -11,32 +11,9 @@
 /* === ESTILOS GENERALES === */
 body {
   font-family: "Poppins", sans-serif;
-  background-color: var(--gris-claro);
+  background: linear-gradient(135deg, #b8e994, #78e08f);
   margin: 0;
   color: var(--gris-texto);
-}
-
-/* === NAVBAR === */
-.navbar {
-  background: linear-gradient(90deg, var(--verde-oscuro), var(--verde-medio));
-  padding: 0.8rem 2rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.navbar-brand {
-  font-size: 1.5rem;
-}
-
-.navbar .btn {
-  background-color: var(--blanco);
-  border: none;
-  color: var(--verde-oscuro);
-  transition: all 0.3s ease;
-}
-
-.navbar .btn:hover {
-  background-color: var(--verde-claro);
-  color: var(--verde-oscuro);
 }
 
 /* === CONTENEDOR PRINCIPAL === */

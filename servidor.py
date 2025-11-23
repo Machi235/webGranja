@@ -16,11 +16,17 @@ from routes.notificacion import notificaciones_bp
 from routes.reporte import reporte
 from routes.tareas import tareas
 from routes.alimento import alimento_bp
+from routes.especies import especies_bp
+from routes.access import access_bp
+
+
 
 
 
 app = Flask(__name__)
 app.secret_key = "super_clave_ultra_secreta_123"  
+app.config["UPLOAD_FOLDER"] = "static/uploads/usuarios"
+
 
 # Registrar blueprints
 app.register_blueprint(auth)
@@ -39,6 +45,8 @@ app.register_blueprint(boleto)
 app.register_blueprint(notificaciones_bp)
 app.register_blueprint(reporte)
 app.register_blueprint(tareas)
+app.register_blueprint(especies_bp)
+app.register_blueprint(access_bp)
 
 
 

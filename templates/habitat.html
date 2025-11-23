@@ -6,6 +6,10 @@
 {% else %}
     {% include "navCuidador.html" %}
 {% endif %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/habitat.css') }}">
+{% endblock %}
 <form id="miFormulario" method="post" action="{{ url_for('habitat_bp.crear_habitat') }}">
             <div class="campo">
                 <label for="nombreHabitat">Nombre de hábitat:<span class="obligatorio">*</span></label>

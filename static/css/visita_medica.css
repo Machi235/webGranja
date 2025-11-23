@@ -10,31 +10,6 @@ body {
   flex-direction: column;
 }
 
-/* === NAVBAR === */
-.navbar {
-  background-color: #218c74;
-  padding: 12px 25px;
-  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
-}
-
-.navbar .navbar-brand {
-  font-size: 1.4rem;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.navbar .btn {
-  background: #f6f6f6;
-  color: #218c74;
-  border-radius: 20px;
-  transition: 0.3s;
-}
-
-.navbar .btn:hover {
-  background-color: #20bf6b;
-  color: white;
-}
 
 /* === CONTENEDOR PRINCIPAL === */
 .form-container {

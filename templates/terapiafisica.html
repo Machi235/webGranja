@@ -1,113 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>terapia fisica</title>
-   
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+{% extends "base.html" %}
+
+{% block contenido %}
+
+{% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/terapiafisica.css') }}">
-</head>
-<body>
-   <nav class="navbar">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-      <a class="navbar-brand text-white fw-bold">
-        <i class="bi bi-shield-check"></i> terapiafisica
-      </a>
-      <a href="{{ url_for('main.bienvenida') }}" class="btn btn-light fw-semibold">
-        <i class="bi bi-arrow-left-circle"></i> Volver al Menú Principal
-      </a>
-    </div>
-  </nav>
-  
+{% endblock %}
 
 <div class="form-container">
 
-  <div class="form-box">
-  
- <form id="formVisita" action="{{ url_for('eventos.registro_terapia') }}" method="POST">
+    <div class="form-box">
+        <form id="formTerapia" action="{{ url_for('eventos.registro_terapia') }}" method="POST">
 
-      
- 
+            <h2>Terapia Física</h2>
 
-<div class="form-row">
-    <label for="idAnimal">Animal*</label>
-    <select class="form-control" name="idAnimal" id="idAnimal" required>
-        <option value="">Selecciona un animal</option>
-        {% for animal in animales %}
-            <option value="{{ animal.idAnimal }}">{{ animal.nombre }}</option>
-        {% endfor %}
-    </select>
+            <div class="form-row">
+                <label for="idAnimal">Animal*</label>
+                <select class="form-control" name="idAnimal" id="idAnimal" required>
+                    <option value="">Selecciona un animal</option>
+                    {% for animal in animales %}
+                        <option value="{{ animal.idAnimal }}">{{ animal.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="tipoTerapia">Tipo de terapia*</label>
+                <input type="text" class="form-control" name="tipoTerapia" id="tipoTerapia" required>
+            </div>
+
+            <div class="form-row">
+                <label for="objetivoSesion">Objetivo de la sesión*</label>
+                <input type="text" class="form-control" name="objetivoSesion" id="objetivoSesion" required>
+            </div>
+
+            <div class="form-row">
+                <label for="diaSesion">Día de la sesión*</label>
+                <input type="date" class="form-control" name="diaSesion" id="diaSesion" required>
+            </div>
+
+            <div class="form-row">
+                <label for="proximaSesion">Próxima sesión*</label>
+                <input type="date" class="form-control" name="proximaSesion" id="proximaSesion" required>
+            </div>
+
+            <div class="form-row">
+                <label for="duracionSesion">Duración*</label>
+                <input type="text" class="form-control" name="duracionSesion" id="duracionSesion" required>
+            </div>
+
+            <div class="form-row">
+                <label for="evaluacion">Evaluación</label>
+                <input type="text" class="form-control" name="evaluacion" id="evaluacion">
+            </div>
+
+            <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
+
+        </form>
+    </div>
+
+    <div class="form-side">
+        <div class="info-card">
+            <div class="icon">🐄</div>
+            <h2>Registro de Terapia Física</h2>
+            <p>
+                Lleva el control de cada terapia física y su próxima sesión del animal.  
+                Asegura el bienestar de tus animales con registros claros y precisos.
+            </p>
+            <a href="{{ url_for('animales.ver_animales') }}" class="btn-volver">Volver a los animales</a>
+        </div>
+    </div>
+
 </div>
-
-
-<div class="form-row">
-    <label for="tipoTerapia">Tipo de terapia*</label>
-    <input type="text" class="form-control" name="tipoTerapia" id="tipoTerapia" required>
-</div>
-
-<div class="form-row">
-    <label for="objetivoSesion">Objetivo de la sesión*</label>
-    <input type="text" class="form-control" name="objetivoSesion" id="objetivoSesion" required>
-</div>
-
-<div class="form-row">
-    <label for="diaSesion">Día de la sesión*</label>
-    <input type="date" class="form-control" name="diaSesion" id="diaSesion" required>
-</div>
-
-<div class="form-row">
-    <label for="proximaSesion">Próxima sesión*</label>
-    <input type="date" class="form-control" name="proximaSesion" id="proximaSesion" required>
-</div>
-
-<div class="form-row">
-    <label for="duracionSesion">Duración*</label>
-    <input type="text" class="form-control" name="duracionSesion" id="duracionSesion" required>
-</div>
-
-<div class="form-row">
-    <label for="evaluacion">Evaluación</label>
-    <input type="text" class="form-control" name="evaluacion" id="evaluacion">
-</div>
-
-<button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
-
-    </form>
-  </div>
- 
-
-  <div class="form-side">
-  <div class="info-card">
-    <div class="icon">🐄</div>
-    <h2>Registro de terapia fisica</h2>
-    <p>
-      Lleva el control de cada terapia fisica y su proxima sesion del animal.  
-      Asegura el bienestar de tus animales con registros claros y precisos. 
-    </p>
-    <a href="{{ url_for('animales.ver_animales') }}" class="btn-volver"> Volver a los animales</a>
-  </div>
-</div>
-</div>
-
 
 {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class="flash-message"
-           data-tipo="{{ category if category else 'success' }}"
-           data-mensaje="{{ message }}"
-           hidden></div>
-    {% endfor %}
-  {% endif %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash-message"
+                 data-tipo="{{ category if category else 'success' }}"
+                 data-mensaje="{{ message }}"
+                 hidden></div>
+        {% endfor %}
+    {% endif %}
 {% endwith %}
 
+{% endblock %}
+
+{% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
-
-
-
-</body>
-</html>
+{% endblock %}

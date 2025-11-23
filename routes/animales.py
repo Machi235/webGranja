@@ -79,7 +79,8 @@ def registro_animal():
     cur.execute("SELECT idEspecie, tipoEspecie FROM especie ORDER BY tipoEspecie")
     especies = cur.fetchall()
 
-    cur.execute("select count(*) as animales, idHabitat, habitat, nombreHabitat, capacidad from animal as a inner join habitat as h on a.habitat=h.idHabitat where h.activo = 1 group by habitat having animales < capacidad")
+    cur.execute("""select count(idAnimal) as animales, idHabitat, nombreHabitat, capacidad from habitat as h left join animal as a on a.habitat=h.idHabitat and 
+                a.activo = 1 where h.activo=1 group by h.idHabitat having animales < capacidad""")
     habitats = cur.fetchall()
 
 # Notificaciones RRHH para navRrhh.html
@@ -111,15 +112,15 @@ def ver_animales():
 
     # Obtener todos los animales
     cur.execute("""
-        SELECT idAnimal, nombre, especie, estadoSalud, edad, fechaNacimiento, fechaLlegada, habitat, sexo, imagen
-        FROM animal
+        SELECT idAnimal, nombre, tipoEspecie, estadoSalud, edad, fechaNacimiento, fechaLlegada, nombreHabitat, observaciones, sexo, imagen FROM animal as a 
+        INNER JOIN habitat as h on habitat = h.idHabitat INNER JOIN especie as e on a.especie = e.idEspecie
         ORDER BY nombre
     """)
     animales = cur.fetchall()
 
     # Filtros
-    cur.execute("SELECT DISTINCT especie FROM animal")
-    especies = [row["especie"] for row in cur.fetchall()]
+    cur.execute("SELECT idEspecie, tipoEspecie FROM especie")
+    especies = cur.fetchall()
 
     cur.execute("SELECT DISTINCT estadoSalud FROM animal")
     estados = [row["estadoSalud"] for row in cur.fetchall()]
@@ -152,11 +153,8 @@ def ver_animal(idAnimal):
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
 
-    cur.execute("""
-        SELECT idAnimal, nombre, especie, estadoSalud, edad, fechaNacimiento, fechaLlegada, habitat, observaciones, sexo, imagen
-        FROM animal
-        WHERE idAnimal = %s
-    """, (idAnimal,))
+    cur.execute(""" SELECT idAnimal, nombre, tipoEspecie, estadoSalud, edad, fechaNacimiento, fechaLlegada, nombreHabitat, observaciones, sexo, imagen FROM animal as a 
+                INNER JOIN habitat as h on habitat = h.idHabitat INNER JOIN especie as e on a.especie = e.idEspecie WHERE idAnimal = %s """, (idAnimal,))
     animal = cur.fetchone()
 
     cur.close()
@@ -274,3 +272,38 @@ def detalle_registro(id_registro):
     # 🔹 Aquí cambiamos el template (antes estaba mal)
     return render_template("detalle_reporte.html", reporte=registro)
 
+@animales.route("/Reasignar-animal/<int:idAnimal>", methods=["GET"])
+def editar_animal(idAnimal):
+    conn=get_connection()
+    cur=conn.cursor(dictionary=True)
+
+    cur.execute("select count(*) as animales, idHabitat, habitat, nombreHabitat, capacidad from animal as a inner join habitat as h on a.habitat=h.idHabitat where h.activo = 1 group by habitat having animales < capacidad")
+    habitats = cur.fetchall()
+
+    cur.execute("""
+        SELECT idAnimal, habitat, nombre, tipoEspecie, estadoSalud, edad, fechaNacimiento, fechaLlegada, nombreHabitat, observaciones, sexo, imagen FROM animal as a 
+        INNER JOIN habitat as h on habitat = h.idHabitat INNER JOIN especie as e on a.especie = e.idEspecie WHERE idAnimal = %s """, (idAnimal,))
+    animal = cur.fetchone()
+    
+    conn.close()
+    cur.close()
+
+    return render_template("editarAnimal.html", animal=animal , habitats=habitats)
+
+@animales.route("/Actualizar-animal/<int:idAnimal>", methods=["POST"])
+def actualizar_animal(idAnimal):
+
+    habitat = request.form.get("habitat")
+ 
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(""" UPDATE animal SET habitat = %s WHERE idAnimal = %s """, 
+                (habitat, idAnimal))
+    
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return redirect (url_for("animales.ver_animales"))

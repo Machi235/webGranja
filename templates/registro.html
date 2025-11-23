@@ -11,7 +11,8 @@
   <!-- Sección izquierda: formulario -->
   <div class="login-form">
     <h3>Registro</h3>
-    <form id="formRegistro" method="POST" action="{{ url_for('auth.registro') }}">
+    <!-- Agregamos enctype para subir archivos -->
+    <form id="formRegistro" method="POST" action="{{ url_for('auth.registro') }}" enctype="multipart/form-data">
       <div class="input-group">
         <input type="text" name="nombre" placeholder="Nombre de Usuario" required>
         {% if mensaje_usuario %}
@@ -37,6 +38,9 @@
         {% if mensaje_correo %}
           <p style="color:red">{{ mensaje_correo }}</p>
         {% endif %}
+        
+        <!-- Campo de foto -->
+        <input type="file" name="foto" accept="image/*"><br>
       </div>
 
       <button type="submit" class="btn">Registrar Usuario</button>

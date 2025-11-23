@@ -6,26 +6,22 @@
   <table class="table table-striped table-hover">
     <thead>
       <tr>
-        <th>ID</th>
         <th>Nombre</th>
-        <th>Empleado</th>
+        <th>Detalle</th>
         <th>Prioridad</th>
         <th>Inicio</th>
         <th>Fin</th>
-        <th>Estado</th>
         <th>Acción</th>
       </tr>
     </thead>
     <tbody>
       {% for t in pendientes %}
       <tr>
-        <td>{{ t.idTarea }}</td>
         <td>{{ t.nombreTarea }}</td>
-        <td>{{ t.empleado }}</td>
+        <td>{{ t.descripcion }}</td>
         <td>{{ t.prioridad }}</td>
         <td>{{ t.fechaInicio }}</td>
         <td>{{ t.fechaFin }}</td>
-        <td>{{ t.estado }}</td>
         <td>
           <a href="{{ url_for('tareas.cambiar_estado', id=t.idTarea, estado='Realizada') }}"
              class="btn btn-success btn-sm">Marcar Realizada</a>
@@ -35,4 +31,5 @@
     </tbody>
   </table>
 </div>
+
 {% endblock %}

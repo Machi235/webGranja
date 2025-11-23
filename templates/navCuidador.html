@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/inicio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
 
 <body>
@@ -57,14 +57,12 @@
           <li><a class="nav-link" href="{{ url_for('eventos.registro_terapia') }}">Terapia Física</a></li>
           <li><a class="nav-link" href="{{ url_for('eventos.registro_vacuna') }}">Vacunas</a></li>
           <li><a class="nav-link" href="{{ url_for('eventos.registro_visita') }}">Visitas</a></li>
-          <li><a class="nav-link" href="{{ url_for('eventos.evento') }}">Eventos</a></li>
           <li><a class="nav-link" href="/dietas/crear_dieta">Crear Dieta</a></li>
           <li><a class="nav-link" href="{{ url_for('dietas.ver_dietas') }}">Ver Dietas</a></li>
           <li><a class="nav-link" href="{{ url_for('alimento_bp.agregar_alimento') }}">Agregar Alimento</a></li>
-          <li><a class="nav-link" href="{{ url_for('asignacion.asignar') }}">Asignar Hábitat</a></li>
-          <li><a class="nav-link" href="{{ url_for('animales.registros_medicos', id_animal=1) }}">Reporte</a></li>
           <li><a class="nav-link" href="{{ url_for('buscarHabitat.buscar') }}">Buscar Hábitat</a></li>
           <li><a class="nav-link" href="{{ url_for('tareas.tareas_pendientes') }}">Tareas</a></li>
+          <li><a class="nav-link" href="{{ url_for('main.perfil') }}">Ver perfil</a></li>
           <li><a class="nav-link text-danger" href="{{ url_for('auth.logout') }}">
             <i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
         </ul>

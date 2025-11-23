@@ -1,35 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>proyecto Granja</title>
+{% extends "base.html" %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/visita_medica.css') }}">
-</head>
-<body>
-   <nav class="navbar">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-      <a class="navbar-brand text-white fw-bold">
-        <i class="bi bi-shield-check"></i> Visita medica
-      </a>
-      <a href="{{ url_for('main.bienvenida') }}" class="btn btn-light fw-semibold">
-        <i class="bi bi-arrow-left-circle"></i> Volver al Menú Principal
-      </a>
-    </div>
-  </nav>
+{% block contenido %}
 
-
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/visita_medica.css') }}">
+{% endblock %}
 
 <div class="form-container">
 
   <div class="form-box">
-  
     <form action="{{ url_for('eventos.registro_visita') }}" method="POST">
+
+        <h2>Visita Médica</h2>
 
         <div class="mb-3">
             <label for="idAnimal" class="form-label">Animal*</label>
@@ -81,20 +63,19 @@
     </form>
   </div>
 
-<div class="form-side">
-  <div class="info-card">
-    <div class="icon">🐄</div>
-    <h2>Registro de visita medica</h2>
-    <p>
-      Lleva el control de cada visita medica,tratamiento y diagnostico del animal.  
-      Asegura el bienestar de tus animales con registros claros y precisos. 
-    </p>
-    <a href="{{ url_for('animales.ver_animales') }}" class="btn-volver"> Volver a los animales</a>
+  <div class="form-side">
+    <div class="info-card">
+      <div class="icon">🐄</div>
+      <h2>Registro de Visita Médica</h2>
+      <p>
+        Lleva el control de cada visita médica, tratamiento y diagnóstico del animal.  
+        Asegura el bienestar de tus animales con registros claros y precisos.
+      </p>
+      <a href="{{ url_for('animales.ver_animales') }}" class="btn-volver"> Volver a los animales</a>
+    </div>
   </div>
-</div>
-</div>
 
-</dialog>
+</div>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
@@ -107,7 +88,9 @@
   {% endif %}
 {% endwith %}
 
+{% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
-</body>
-</html>
+{% endblock %}
+
+{% endblock %}

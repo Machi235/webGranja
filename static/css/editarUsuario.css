@@ -1,6 +1,6 @@
-#miFormulario{
+#miFormulario, .animal {
   display: flex !important;
-  max-width: 83% !important;
+  max-width: 63% !important;
   min-width: 53% !important;
   width: 100% !important;
   height: 100% !important;
@@ -8,15 +8,14 @@
   border-radius: 12px !important;
   overflow: hidden !important;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3) !important;
-  margin: 100px 0px 30px 10% !important;
-  min-height: 500px !important;
+  margin: 100px 0px 30px 18% !important;
 }
 
 .form-container{
   display: flex !important;
-  width: 55% !important;
+  width: 100% !important;
   flex-direction: column !important;
-  gap: 30px !important;
+  gap: 40px !important;
   padding: 40px !important;
   background: #ffff !important;
   color: rgb(0, 0, 0) !important;
@@ -24,7 +23,7 @@
 
 .fechas{
   display: flex !important;
-  gap: 20px !important;
+  gap: 50px !important;
   width: 500px !important;
 }
 
@@ -38,7 +37,7 @@
   width: 100% !important;
 }
 
-input, select, textarea {
+input, select, textarea, .titulo, .dato {
   border: none !important;
   outline: none !important;
   font-family: "Zalando Sans SemiExpanded", sans-serif !important;
@@ -64,29 +63,17 @@ textarea{
   border-bottom: 1px solid gray !important;
 }
 
-#myDropzone {
-  display: flex !important;
-  background: linear-gradient(145deg, #a8e6cf, #dcedc1) !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border-radius: 0 12px 12px 0 !important;
-  border: none !important;
-  overflow: hidden !important;
-  height: 642px !important;
-  width:45% !important;
-  font-size: large !important;
-  
-}
-
 .btn {
   border-radius: 17px !important;
   background-color: #6ca76c !important;
   color: #f9fff9 !important;
 }
 
-/* Target al img que Dropzone inserta */
-#myDropzone .dz-image {
-  width: 100% !important;
-  height: 100% !important;
-  background: none !important;
+p{
+    margin-bottom: 0;
+}
+
+.datos{
+    display: flex;
+    gap: 20px;
 }

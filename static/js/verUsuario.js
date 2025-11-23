@@ -1,28 +1,27 @@
-const buscador = document.getElementById('buscador');
-const filtroRol = document.getElementById('filtroRol');
-const lista = document.getElementById('data');
+document.addEventListener("DOMContentLoaded", () => {
+    const buscador = document.getElementById("buscador");
+    const filtroRol = document.getElementById("filtroRol");
+    const fichas = document.querySelectorAll(".ficha");
 
-function filtrarUsuarios() {
-    const nombre = buscador.value.toLowerCase();
-    const rol = filtroRol.value.toLowerCase();
+    function filtrar() {
+        const textoBusqueda = buscador.value.toLowerCase();
+        const rolSeleccionado = filtroRol.value;
 
-    const cards = lista.getElementsByClassName('card');
+        fichas.forEach(ficha => {
+            const nombre = ficha.querySelector(".nombre").textContent.toLowerCase();
+            const rol = ficha.querySelector(".rol").textContent;
 
-    for (let card of cards) {
-        const nombreUsuario = card.querySelector('.nombre').textContent.toLowerCase();
-        const rolUsuario = card.querySelector('.rol').textContent.toLowerCase();
+            const coincideNombre = nombre.includes(textoBusqueda);
+            const coincideRol = rolSeleccionado === "" || rol === rolSeleccionado;
 
-        if (
-            (nombre === "" || nombreUsuario.includes(nombre)) &&
-            (rol === "" || rolUsuario.includes(rol))
-        ) {
-            card.style.display = "flex";
-        } else {
-            card.style.display = "none";
-        }
+            if (coincideNombre && coincideRol) {
+                ficha.style.display = "flex";
+            } else {
+                ficha.style.display = "none";
+            }
+        });
     }
-}
 
-buscador.addEventListener('input', filtrarUsuarios);
-filtroRol.addEventListener('change', filtrarUsuarios);
-
+    buscador.addEventListener("input", filtrar);
+    filtroRol.addEventListener("change", filtrar);
+});

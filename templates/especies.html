@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block titulo %}Registro de Especies{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/especies.css') }}">
+{% endblock %}
+
+{% block contenido %}
+<div class="container my-4">
+    <h2>Registro de Especies</h2>
+
+    <!-- Formulario para agregar especie -->
+    <div class="card my-3">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('especies_bp.registrar_especie') }}">
+                <div class="mb-3">
+                    <label for="tipoEspecie" class="form-label">Tipo de Especie</label>
+                    <input type="text" class="form-control" id="tipoEspecie" name="tipoEspecie" required>
+                </div>
+                <div class="mb-3">
+                    <label for="limite" class="form-label">Límite</label>
+                    <input type="number" class="form-control" id="limite" name="limite" required>
+                </div>
+                <div class="mb-3">
+                    <label for="periodo" class="form-label">Periodo</label>
+                    <input type="number" class="form-control" id="periodo" name="periodo" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Agregar Especie</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabla de especies existentes -->
+    <table class="table table-bordered table-striped mt-4">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tipo de Especie</th>
+                <th>Límite</th>
+                <th>Periodo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for especie in especies %}
+            <tr>
+                <td>{{ especie.idEspecie }}</td>
+                <td>{{ especie.tipoEspecie }}</td>
+                <td>{{ especie.limite }}</td>
+                <td>{{ especie.periodo }}</td>
+                <td>
+                    <a href="{{ url_for('especies_bp.editar_especie', idEspecie=especie.idEspecie) }}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{{ url_for('especies_bp.eliminar_especie', idEspecie=especie.idEspecie) }}" class="btn btn-danger btn-sm">Borrar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

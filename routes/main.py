@@ -89,8 +89,8 @@ def perfil():
     cur = conn.cursor(dictionary=True)
 
     # 🔹 Traer datos del usuario
-    cur.execute(""" SELECT u.idUsuario, nombre, apellido, rol, documento, telefono, correo, nombreTurno FROM usuarios AS u INNER JOIN usuarioturno AS t ON u.idUsuario = t.idUsuario 
-                INNER JOIN horariosturnos AS h ON t.idHorario = h.idHorario WHERE u.idUsuario = %s """, (id_usuario,))
+    cur.execute(""" SELECT u.idUsuario, nombre, apellido, rol, documento, telefono, correo, nombreTurno, foto FROM usuarios AS u LEFT JOIN usuarioturno AS t 
+                ON u.idUsuario = t.idUsuario LEFT JOIN horariosturnos AS h ON t.idHorario = h.idHorario  WHERE u.idUsuario = %s """, (id_usuario,))
     usuario = cur.fetchone()
 
     return render_template("verPerfil.html", usuario=usuario)

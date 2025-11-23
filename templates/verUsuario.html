@@ -1,61 +1,16 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>verAnimal</title>
-    <!-- bootstrap css y js -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-    <!-- Iconos de bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <!-- google fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <!-- estilo ccs -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/verUsuario.css') }}">
-  
-</head>
-<body>
-     <nav class="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-            </svg>CREAR ANIMAL</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="../moduloAnimal/crearAnimal.html">Crear animal</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../moduloHabitat/habitat.html">Crear Habitat</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="EliminarH.html">Eliminar Habitat</a>
-                    </li><li class="nav-item">
-                    <a class="nav-link" href="#">Alerta Comida Diaria</a>
-                    </li>
-                    <div class="mt-4 text-center">
-        <a href="{{ url_for('main.bienvenida') }}" class="btn btn-outline-primary w-100">
-            <i class="bi bi-house-door"></i> Volver al Menú Principal
-        </a>
-    </div>
-        </div>
-      </div>
-    </div>
-  </nav>
+{% extends "base.html" %}
 
-  <div class="buscar container-fluid">
+{% block contenido %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/verAnimal.css') }}">
+{% endblock %}
+
+<!-- Navegación por roles y opciones -->
+<div class="buscar">
   <div class="buscador">
     <input class="form-control" type="search" placeholder="Nombre del usuario" id="buscador">
-  </div>  
+  </div>
   <div class="filtros">
     <a href="{{ url_for('auth.registro') }}">
       <i class="bi bi-plus-lg"></i>
@@ -69,51 +24,60 @@
   </div>
 </div>
 
-<div class="listaUsuarios" id="data">
+<!-- Lista de usuarios -->
+<div class="listaUsuarios">
   {% for usuario in usuarios %}
-     <a href="{{url_for('auth.ver_usuario', idUsuario=usuario.idUsuario) }}" class="card">
+    <a href="{{ url_for('auth.ver_usuario', idUsuario=usuario.idUsuario) }}" class="ficha">
+        {% if usuario.foto %}
+          <img src="{{ url_for('static', filename=usuario.foto) }}" class="imagen">
+        {% else %}
+          <img src="{{ url_for('static', filename='img/default_user.png') }}" class="imagen">
+        {% endif %}
         <div class="informacion">
-          <div class="datos">
-            <div class="dato">
-              <p class="titulo">Nombres:</p>
-              <p class="texto nombre">{{ usuario.nombre }}</p>
+            <div class="datos">
+              <div class="dato">
+                <p class="titulo">Nombre</p>
+                <p class="texto nombre">{{ usuario.nombre }}</p>
+              </div>
+              <div class="dato">
+                <p class="titulo">Apellido</p>
+                <p class="texto">{{ usuario.apellido }}</p>
+              </div>
             </div>
-            <div class="dato">
-              <p class="titulo">Apellidos:</p>
-              <p class="texto">{{ usuario.apellido }}</p>
+            <div class="datos">
+              <div class="dato">
+                <p class="titulo">Rol</p>
+                <p class="texto rol">{{ usuario.rol }}</p>
+              </div>
+              <div class="dato">
+                <p class="titulo">Documento</p>
+                <p class="texto">{{ usuario.documento }}</p>
+              </div>
             </div>
-          </div>
-          <div class="datos">
-            <div class="dato">
-              <p class="titulo">Rol:</p>
-              <p class="texto rol">{{ usuario.rol }}</p>
-            </div>
-            <div class="dato">
-              <p class="titulo">Numero de documento:</p>
-              <p class="texto">{{ usuario.documento }}</p>
-            </div>
-          </div>
-          <div class="datos">
-            <div class="dato">
-              <p class="titulo">Telefono:</p>
-              <p class="texto">{{ usuario.telefono }}</p>
-            </div>
-            <div class="dato">
-              <p class="titulo">Correo:</p>
-              <p class="texto">{{ usuario.correo }}</p>
-            </div>
-          </div>
-          <form action="{{url_for('auth.eliminar_usuario', idUsuario=usuario.idUsuario) }}" method="POST">
-            <button type="submit" class="boton" onclick="return confirm('estas seguro de que quieres eliminar este animal');">
-              <i class="bi bi-trash3"></i>
-            </button>
-          </form>
+            <div class="datos">
+              <div class="dato">
+                <p class="titulo">Teléfono</p>
+                <p class="texto">{{ usuario.telefono }}</p>
+              </div>
+              <div class="dato">
+                <p class="titulo">Correo</p>
+                <p class="texto">{{ usuario.correo }}</p>
+              </div>
+            </div> 
+            <form action="{{ url_for('auth.eliminar_usuario', idUsuario=usuario.idUsuario) }}" method="POST">
+              <button type="submit" class="boton" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?');">
+                <i class="bi bi-trash3"></i>
+              </button>
+            </form>
+           
+
         </div>
-      </a> 
+    </a> 
   {% endfor %}
 </div>
 
-
+{% block scripts %}
 <script src="{{ url_for('static', filename='js/verUsuario.js') }}"></script>
-</body>
-</html>
+{% endblock %}
+
+{% endblock %}

@@ -8,12 +8,12 @@ function filtrarAnimales() {
     const especie = filtroEspecie.value.toLowerCase();
     const salud = filtroSalud.value.toLowerCase();
 
-    const cards = lista.getElementsByClassName('animal');
+    const cards = lista.getElementsByClassName('ficha');
 
     for (let card of cards) {
-        const nombreAnimal = card.querySelector('.card-title').textContent.toLowerCase();
-        const especieAnimal = card.querySelector('.card-especie').textContent.toLowerCase();
-        const saludAnimal = card.querySelector('.card-salud').textContent.toLowerCase();
+        const nombreAnimal = card.querySelector('.nombre').textContent.toLowerCase();
+        const especieAnimal = card.querySelector('.especie').textContent.toLowerCase();
+        const saludAnimal = card.querySelector('.salud').textContent.toLowerCase();
 
         // Mostrar si cumple todas las condiciones
         if (
