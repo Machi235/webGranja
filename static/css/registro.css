@@ -1,16 +1,15 @@
-/* === GENERAL === */
-body {
+* {
   margin: 0;
-  font-family: "Poppins", sans-serif;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: #f4f6f7;
-}
+  padding: 0;
+  box-sizing: border-box;
+  }
 
-/* === NAVBAR === */
 .container-fluid {
+  display: flex;
   background-color: #6a9b5d;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 8px;
 }
 
 .navbar-brand span {
@@ -20,13 +19,23 @@ body {
 .titulo2{
   color:white;
 }
-.logo{
-  border-radius: 50%;
-  width: 70px;
-  height: 70px;
-  margin-right: 1rem;
-}
 
+.logo{
+  border-radius: 50% !important;
+  width: 60px !important;
+  height: 60px !important;
+  margin-right: 1rem !important;
+}
+.volver {
+  display: flex;
+  height: 100% !important;
+  border: 1px solid white;
+  border-radius: 15px !important;
+  background-color: #6ca76c !important;
+  color: #f9fff9 !important;
+  text-decoration: none !important;
+  padding:  10px ;
+}
 
 /* === CONTENEDOR LOGIN === */
 .login-container {
@@ -118,7 +127,7 @@ body {
   text-decoration: underline;
 }
 
-/* Botón ingresar */
+
 .btn {
   background: transparent;
   border: 2px solid green;
@@ -182,25 +191,4 @@ body {
   font-weight: bold;
   color: #9d0707;
 }
-footer {
-  background-color: #1c1c1c;
-  color: #fff;
-  text-align: center;
-  padding: 1rem 0;
-  margin-top: auto;
-  width: 100%;
-}
 
-/* === RESPONSIVO === */
-@media (max-width: 768px) {
-  .login-container {
-    flex-direction: column;
-    width: 95%;
-    height: auto;
-  }
-
-  .login-welcome {
-    clip-path: none;
-    border-radius: 0;
-  }
-}

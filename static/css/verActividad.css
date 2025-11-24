@@ -48,14 +48,22 @@
 }
 
 #limiteAnimal{
-    width: 30%;
-    border-radius: 15px;
-    border: 1px solid black;
-    font-family: "Montserrat", sans-serif;
-    background-color: #ffffff;
-    color: white;
-    
+    width: 30% !important;
+    border-radius: 15px !important;
+    border: 1px solid black !important;
+    font-family: "Montserrat", sans-serif !important;
+    background-color: #ffffff !important;
+    color: white !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
 } 
+
+#limiteAnimal::backdrop {
+    background: rgba(0,0,0,0.5);
+}
+
 .cerrar{
     display: flex;
     justify-content: right;

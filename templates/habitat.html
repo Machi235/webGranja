@@ -1,15 +1,25 @@
-{% extends "base.html" %}
-
-{% block contenido %}
-{% if rol_usuario == 'Admin' %}
-    {% include "navAdmi.html" %}
-{% else %}
-    {% include "navCuidador.html" %}
-{% endif %}
-
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/habitat.css') }}">
-{% endblock %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/habitat.css') }}">
+</head>
+<body>
+    <nav class="navbarr">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" 
+             alt="Logo Granja Machis"  class="me-2">
+        <span class="titulo-2">Livestock Log</span>
+      </a>
+    <a href="{{ url_for('habitat_bp.ver_habitats') }}" class="volver btn-outline-light w-20 ">Volver a lista de habitats</a>
+    </div>
+  </nav>
 <form id="miFormulario" method="post" action="{{ url_for('habitat_bp.crear_habitat') }}">
             <div class="campo">
                 <label for="nombreHabitat">Nombre de hábitat:<span class="obligatorio">*</span></label>
@@ -53,8 +63,8 @@
             </div> 
 
         <!-- Botones -->
-        <button id="registrar" class="btn btn-danger mt-3 w-100" type="button" onclick="validar()">Registrar</button>
-        <button class="btn btn-secondary mt-2 w-100" type="button" onclick="vaciarFormulario()">Vaciar</button>
+        <button id="registrar" class="btn mt-3 w-100" type="button" onclick="validar()">Registrar</button>
+        <button class="btn w-100" type="button" onclick="vaciarFormulario()">Vaciar</button>
     
 </form>
 
@@ -88,5 +98,5 @@
     </script>
   {% endif %}
 {% endwith %}
-
-{% endblock %}
+</body>
+</html>

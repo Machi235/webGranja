@@ -1,15 +1,21 @@
-{% extends "base.html" %}
-
-{% block contenido %}
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/verAnimal.css') }}">
-{% endblock %}
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/verAnimal.css') }}">
+</head>
+<body>
+  {% include "navAHome.html" %}
 <div class="buscar">
   <div class="buscador">
     <input class="form-control" type="search" placeholder="Nombre del animal" id="buscador">
   </div> 
   <div class="filtros">
+    <a href="{{ url_for('especies_bp.ver_especies') }}">
+      <i class="bi bi-bookmark-plus"></i>
+    </a>
     <a href="{{ url_for('animales.registro_animal') }}">
       <i class="bi bi-plus-lg"></i>
     </a>
@@ -82,8 +88,8 @@
   {% endfor %}
 </div>
 
-{% block scripts %}
 <script src="{{ url_for('static', filename='js/verAnimal.js') }}"></script>
-{% endblock %}
+</body>
+</html> 
 
-{% endblock %}
+

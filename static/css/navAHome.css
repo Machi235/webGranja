@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  }
+
+.container-fluid {
+  display: flex;
+  background-color: #6a9b5d;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 8px;
+}
+
+.navbar-brand span {
+  color: #ffffff;
+  font-size: 1.3rem;
+}
+.titulo2{
+  color:white;
+}
+
+.logo{
+  border-radius: 50% !important;
+  width: 60px !important;
+  height: 60px !important;
+  margin-right: 1rem !important;
+}
+.volver {
+  display: flex;
+  height: 100% !important;
+  border: 1px solid white;
+  border-radius: 15px !important;
+  background-color: #6ca76c !important;
+  color: #f9fff9 !important;
+  text-decoration: none !important;
+  padding:  10px ;
+}

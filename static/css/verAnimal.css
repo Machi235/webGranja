@@ -2,9 +2,11 @@
     display: flex;
     justify-content: space-between;
     margin-block: 20px;
+    padding-left: 20px;
 }
 .buscador{
     display: flex;
+    width: 30%;
 }
 .form-control{
     width: 400px;
@@ -102,7 +104,7 @@ p{
     border: none;
 }
 
-.bi-plus-lg{
+.bi-plus-lg, .bi-bookmark-plus{
     font-size: 30px;
     color: black;
 }
