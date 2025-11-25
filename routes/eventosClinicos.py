@@ -9,6 +9,7 @@ eventos = Blueprint("eventos", __name__)
 UPLOAD_FOLDER = "static/uploads"
 
 # ------------------------ FUNCIONES AUXILIARES ------------------------
+
 def obtener_notificaciones(user_id):
     """Obtiene todas las notificaciones y el conteo de no leídas"""
     conn = get_connection()
@@ -20,8 +21,20 @@ def obtener_notificaciones(user_id):
     conn.close()
     return notificaciones, notificaciones_no_leidas
 
+
+def obtener_nombre_animal(id_animal):
+    """Devuelve el nombre del animal a partir de su ID"""
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT nombre FROM animal WHERE idAnimal = %s", (id_animal,))
+    nombre = cur.fetchone()
+    cur.close()
+    conn.close()
+    return nombre[0] if nombre else "Animal desconocido"
+
+
 def enviar_notificacion(titulo, descripcion):
-    """Envia notificación a todos los Admin y Cuidadores activos"""
+    """Envía notificación a todos los Admin y Cuidadores activos"""
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idUsuario FROM usuarios WHERE rol IN ('Admin', 'Cuidador') AND activo = 1")
@@ -35,6 +48,7 @@ def enviar_notificacion(titulo, descripcion):
     conn.commit()
     cur.close()
     conn.close()
+
 
 def guardar_recordatorio(id_animal, evento, fecha_proxima, mensaje):
     """Guarda recordatorio si fecha_proxima existe"""
@@ -62,6 +76,8 @@ def registro_cirugia():
         fecha = request.form.get("fechaCirugia")
         fecha_evento = datetime.now()
 
+        nombre_animal = obtener_nombre_animal(id_animal)
+
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -74,15 +90,21 @@ def registro_cirugia():
         cur.close()
         conn.close()
 
-        enviar_notificacion("Nueva cirugía registrada",
-            f"Animal {id_animal} tuvo cirugía. Próxima revisión: {proxima or 'No indicada'}.")
-        guardar_recordatorio(id_animal, "Cirugía", proxima,
-            f"Control post-quirúrgico del animal {id_animal}.")
+        enviar_notificacion(
+            "Nueva cirugía registrada",
+            f"El animal {nombre_animal} tuvo una cirugía. Próxima revisión: {proxima or 'No indicada'}."
+        )
+
+        guardar_recordatorio(
+            id_animal,
+            "Cirugía",
+            proxima,
+            f"Control post-quirúrgico del animal {nombre_animal}."
+        )
 
         flash("Cirugía registrada correctamente", "success")
         return redirect(url_for("eventos.registro_cirugia"))
 
-    # GET
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("SELECT idAnimal, nombre FROM animal ORDER BY nombre")
@@ -90,7 +112,6 @@ def registro_cirugia():
     cur.close()
     conn.close()
 
-    # Rol y notificaciones
     rol = session.get("rol")
     user_id = session.get("idUsuario")
     notificaciones, notificaciones_no_leidas = obtener_notificaciones(user_id)
@@ -118,6 +139,8 @@ def registro_medicacion():
         reacciones = request.form.get("reaccionesMed")
         fecha_evento = datetime.now()
 
+        nombre_animal = obtener_nombre_animal(id_animal)
+
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -125,15 +148,25 @@ def registro_medicacion():
             (idAnimal, nombreMed, dosisSuministradas, horaAplicacion, horaSiguienteAplicacion, administracionMed, reaccionesMed, fecha_evento)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cur.execute(sql, (id_animal, nombre_med, f"{dosis} {unidad}", hora_aplicacion, hora_siguiente, administracion, reacciones, fecha_evento))
+        cur.execute(sql, (
+            id_animal, nombre_med, f"{dosis} {unidad}", hora_aplicacion,
+            hora_siguiente, administracion, reacciones, fecha_evento
+        ))
         conn.commit()
         cur.close()
         conn.close()
 
-        enviar_notificacion("Medicación aplicada",
-            f"Se aplicó '{nombre_med}' al animal {id_animal}. Próxima dosis: {hora_siguiente}.")
-        guardar_recordatorio(id_animal, "Medicación", hora_siguiente,
-            f"Re-aplicar medicación {nombre_med} al animal {id_animal}.")
+        enviar_notificacion(
+            "Medicación aplicada",
+            f"Se aplicó '{nombre_med}' al animal {nombre_animal}. Próxima dosis: {hora_siguiente}."
+        )
+
+        guardar_recordatorio(
+            id_animal,
+            "Medicación",
+            hora_siguiente,
+            f"Re-aplicar medicación {nombre_med} al animal {nombre_animal}."
+        )
 
         flash("Medicación registrada correctamente", "success")
         return redirect(url_for("eventos.registro_medicacion"))
@@ -173,6 +206,8 @@ def registro_postoperatorio():
         control = request.form.get("controlPostoperatorio")
         fecha_evento = datetime.now()
 
+        nombre_animal = obtener_nombre_animal(id_animal)
+
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -180,15 +215,25 @@ def registro_postoperatorio():
             (idAnimal, nombreMed, dosisSuministrada, frecuenciaMed, duracion, cuidadosEpecificos, dietaEspecifica, controlPostoperatorio, fecha_evento)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cur.execute(sql, (id_animal, nombre_med, f"{dosis} {unidad}", frecuencia, duracion, cuidados, dieta, control, fecha_evento))
+        cur.execute(sql, (
+            id_animal, nombre_med, f"{dosis} {unidad}", frecuencia,
+            duracion, cuidados, dieta, control, fecha_evento
+        ))
         conn.commit()
         cur.close()
         conn.close()
 
-        enviar_notificacion("Postoperatorio registrado",
-            f"Animal {id_animal} está en postoperatorio. Control: {control}.")
-        guardar_recordatorio(id_animal, "Postoperatorio", control,
-            f"Revisar evolución de postoperatorio del animal {id_animal}.")
+        enviar_notificacion(
+            "Postoperatorio registrado",
+            f"El animal {nombre_animal} está en postoperatorio. Control: {control}."
+        )
+
+        guardar_recordatorio(
+            id_animal,
+            "Postoperatorio",
+            control,
+            f"Revisar evolución del postoperatorio del animal {nombre_animal}."
+        )
 
         flash("Postoperatorio registrado correctamente", "success")
         return redirect(url_for("eventos.registro_postoperatorio"))
@@ -226,6 +271,8 @@ def registro_terapia():
         evaluacion = request.form.get("evaluacion")
         fecha_evento = datetime.now()
 
+        nombre_animal = obtener_nombre_animal(id_animal)
+
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -233,15 +280,25 @@ def registro_terapia():
             (idAnimal, tipoTerapia, objetivoSesion, diaSesion, proximaSesion, duracionSesion, evaluacion, fecha_evento)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cur.execute(sql, (id_animal, tipo_terapia, objetivo, dia, proxima, duracion, evaluacion, fecha_evento))
+        cur.execute(sql, (
+            id_animal, tipo_terapia, objetivo, dia, proxima, duracion,
+            evaluacion, fecha_evento
+        ))
         conn.commit()
         cur.close()
         conn.close()
 
-        enviar_notificacion("Terapia registrada",
-            f"Animal {id_animal} tuvo terapia. Próxima sesión: {proxima}")
-        guardar_recordatorio(id_animal, "Terapia física", proxima,
-            f"Hoy se debe realizar la terapia física al animal {id_animal}.")
+        enviar_notificacion(
+            "Terapia registrada",
+            f"El animal {nombre_animal} tuvo una sesión de terapia. Próxima sesión: {proxima}."
+        )
+
+        guardar_recordatorio(
+            id_animal,
+            "Terapia física",
+            proxima,
+            f"Hoy se debe realizar terapia física al animal {nombre_animal}."
+        )
 
         flash("Terapia física registrada correctamente", "success")
         return redirect(url_for("eventos.registro_terapia"))
@@ -283,6 +340,8 @@ def registro_vacuna():
             archivo.save(os.path.join(UPLOAD_FOLDER, filename))
         fecha_evento = datetime.now()
 
+        nombre_animal = obtener_nombre_animal(id_animal)
+
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -290,15 +349,25 @@ def registro_vacuna():
             (idAnimal, responsable, tipoVacuna, laboratorio, lote, aplicacionVacuna, proximaVacuna, vacunasAplicadas, foto, fecha_evento)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cur.execute(sql, (id_animal, responsable, tipo_vacuna, laboratorio, lote, fecha_aplicacion, fecha_proxima, 1, filename, fecha_evento))
+        cur.execute(sql, (
+            id_animal, responsable, tipo_vacuna, laboratorio, lote,
+            fecha_aplicacion, fecha_proxima, 1, filename, fecha_evento
+        ))
         conn.commit()
         cur.close()
         conn.close()
 
-        enviar_notificacion("Vacuna registrada",
-            f"Se aplicó vacuna {tipo_vacuna} a {id_animal}. Próxima dosis: {fecha_proxima}")
-        guardar_recordatorio(id_animal, "Vacuna", fecha_proxima,
-            f"Hoy toca vacunar nuevamente al animal {id_animal} con {tipo_vacuna}.")
+        enviar_notificacion(
+            "Vacuna registrada",
+            f"Se aplicó la vacuna {tipo_vacuna} al animal {nombre_animal}. Próxima dosis: {fecha_proxima}."
+        )
+
+        guardar_recordatorio(
+            id_animal,
+            "Vacuna",
+            fecha_proxima,
+            f"Hoy corresponde vacunar nuevamente al animal {nombre_animal}."
+        )
 
         flash("Vacuna registrada correctamente", "success")
         return redirect(url_for("eventos.registro_vacuna"))
@@ -336,6 +405,8 @@ def registro_visita():
         estado = request.form.get("estado")
         fecha_evento = datetime.now()
 
+        nombre_animal = obtener_nombre_animal(id_animal)
+
         conn = get_connection()
         cur = conn.cursor()
         sql = """
@@ -343,15 +414,25 @@ def registro_visita():
             (idAnimal, veterinario, motivoConsulta, diagnostico, tratamiento, proximaVisita, estadoSalud, fecha_evento)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cur.execute(sql, (id_animal, veterinario, motivo, diagnostico, tratamiento, proxima_visita, estado, fecha_evento))
+        cur.execute(sql, (
+            id_animal, veterinario, motivo, diagnostico, tratamiento,
+            proxima_visita, estado, fecha_evento
+        ))
         conn.commit()
         cur.close()
         conn.close()
 
-        enviar_notificacion("Visita médica registrada",
-            f"Animal {id_animal} fue atendido. Próxima visita: {proxima_visita}")
-        guardar_recordatorio(id_animal, "Visita médica", proxima_visita,
-            f"Hoy corresponde revisar al animal {id_animal} según visita médica anterior.")
+        enviar_notificacion(
+            "Visita médica registrada",
+            f"El animal {nombre_animal} fue atendido. Próxima visita: {proxima_visita}."
+        )
+
+        guardar_recordatorio(
+            id_animal,
+            "Visita médica",
+            proxima_visita,
+            f"Hoy corresponde revisar al animal {nombre_animal} según la visita médica anterior."
+        )
 
         flash("Visita médica registrada correctamente", "success")
         return redirect(url_for("eventos.registro_visita"))
