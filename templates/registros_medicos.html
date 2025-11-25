@@ -17,19 +17,16 @@
 <body>
 
 <!-- HEADER -->
-<div class="header-section">
-    <div class="container">
-        <div class="header-content">
-            <div class="header-title">
-                <h1 style="margin: 0; font-size: 2rem; font-weight: 700;">Historial Clínico</h1>
-            </div>
-            <a href="{{ url_for('animales.ver_animal', idAnimal=id_animal) }}" class="btn-back">
-                <i class="bi bi-arrow-left"></i> Volver a la ficha
-            </a>
-        </div>
+<nav class="navbarr">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" 
+             alt="Logo Granja Machis"  class="me-2">
+        <span class="titulo-2">Livestock Log</span>
+      </a>
+    <a href="{{ url_for('animales.ver_animal', idAnimal=id_animal) }}" class="volver btn-outline-light w-20 ">Volver a la ficha del animal</a>
     </div>
-</div>
-
+  </nav>
 <!-- CONTENIDO -->
 <div class="container mb-5">
     <!-- FILTROS -->

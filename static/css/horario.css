@@ -58,7 +58,10 @@
     background-color: #aecc8bce ;
     color: white;
     text-align: left; 
-    padding: 0px 30px 30px;    
+    padding: 0px 30px 30px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);    
 }
 
 #listaTurnos{
@@ -69,9 +72,11 @@
 .cerrar{
     display: flex;
     justify-content: right;
+    padding-top: 10px;
+    padding-right: 5px;
 }
 .bi-x-circle{
-    color: black;
+    color: rgb(0, 0, 0);
 }
 
 
@@ -122,9 +127,9 @@ select{
 }
 
 .btn{
-    background-color: #fff6d9;
-    color: #4b7a4b ;
-    border: none;
+    background-color: #fff6d9 !important;
+    color: #4b7a4b !important;
+    border: none !important;
 }
 
 .button{

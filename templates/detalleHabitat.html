@@ -15,43 +15,16 @@
   
 </head>
 <body>
-     <nav class="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-            </svg>CREAR ANIMAL</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="../moduloAnimal/crearAnimal.html">Crear animal</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../moduloHabitat/habitat.html">Crear Habitat</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="EliminarH.html">Eliminar Habitat</a>
-                    </li><li class="nav-item">
-                    <a class="nav-link" href="#">Alerta Comida Diaria</a>
-                    </li>
-                    <div class="mt-4 text-center">
-        <a href="{{ url_for('main.bienvenida') }}" class="btn btn-outline-primary w-100">
-            <i class="bi bi-house-door"></i> Volver al Menú Principal
-        </a>
-    </div>
-        </div>
-      </div>
+    <nav class="navbarr">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" 
+             alt="Logo Granja Machis"  class="me-2">
+        <span class="titulo-2">Livestock Log</span>
+      </a>
+    <a href="{{ url_for('habitat_bp.ver_habitats') }}"class="volver btn-outline-light w-20 ">Volver a lista de habitats</a>
     </div>
   </nav>
-
 <div class="habitat">
     <div class="form-container" >
             <div class="campo">

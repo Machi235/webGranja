@@ -5,29 +5,43 @@ body {
 }
 
 /* ---------------- HEADER ---------------- */
-.header-section {
-    background: #ffffff;
-    padding: 20px 0;
-    border-bottom: 1px solid #e6e6e6;
-    margin-bottom: 20px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  }
+
+.container-fluid {
+  display: flex;
+  background-color: #6a9b5d;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 8px;
 }
 
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.navbar-brand span {
+  color: #ffffff;
+  font-size: 1.3rem;
+}
+.titulo2{
+  color:white;
 }
 
-.btn-back {
-    font-size: 16px;
-    color: #2e7d32;
-    font-weight: 600;
-    text-decoration: none;
-    transition: 0.2s;
+.logo{
+  border-radius: 50% !important;
+  width: 60px !important;
+  height: 60px !important;
+  margin-right: 1rem !important;
 }
-
-.btn-back:hover {
-    color: #1b5e20;
+.volver {
+  display: flex;
+  height: 100% !important;
+  border: 1px solid white;
+  border-radius: 15px !important;
+  background-color: #6ca76c !important;
+  color: #f9fff9 !important;
+  text-decoration: none !important;
+  padding:  10px ;
 }
 
 /* ---------------- FILTROS ---------------- */
@@ -37,7 +51,7 @@ body {
     padding: 20px;
     border-radius: 14px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    margin-bottom: 30px;
+    margin-block: 30px;
 }
 
 .btn-filter {

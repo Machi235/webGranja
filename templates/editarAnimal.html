@@ -16,16 +16,16 @@
 
 <body>
 
-<nav class="navbar bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-      <i class="bi bi-person-circle"></i> Ficha del Animal
-    </a>
-    <a href="{{ url_for('main.bienvenida') }}" class="btn btn-outline-primary">
-      <i class="bi bi-house-door"></i> Volver al menú
-    </a>
-  </div>
-</nav>
+<nav class="navbarr">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" 
+             alt="Logo Granja Machis"  class="me-2">
+        <span class="titulo-2">Livestock Log</span>
+      </a>
+    <a href="{{ url_for('animales.ver_animales') }}"class="volver btn-outline-light w-20 ">Volver a lista de animales</a>
+    </div>
+  </nav>
 
 <div class="animal-card">
   <div class="image-side">

@@ -5,7 +5,7 @@ def get_connection():
         host="localhost",
         user="root",
         password="",
-        database="granjaa",
+        database="granjadatos",
         autocommit=True,
         buffered=True 
     )
