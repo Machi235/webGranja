@@ -1,10 +1,13 @@
-{% extends "base.html" %}
-
-{% block contenido %}
-
-{% block css %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/postoperatorio.css') }}">
-{% endblock %}
+</head>
+<body>
+{% include "navEventos.html" %}
 
 <div class="form-container">
 
@@ -67,22 +70,11 @@
                 <input type="date" class="form-control" name="controlPostoperatorio" id="controlPostoperatorio" required>
             </div>
 
-            <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
+            <button type="submit" class="btn btn-danger  mt-3 w-100">Guardar</button>
 
         </form>
     </div>
 
-    <div class="form-side">
-        <div class="info-card">
-            <div class="icon">🐄</div>
-            <h2>Registro de Postoperatorio</h2>
-            <p>
-                Lleva el control de cada tratamiento, dosis y aplicación.  
-                Asegura el bienestar de tus animales con registros claros y precisos.
-            </p>
-            <a href="{{ url_for('animales.ver_animales') }}" class="btn-volver">Volver a los animales</a>
-        </div>
-    </div>
 
 </div>
 
@@ -97,9 +89,11 @@
     {% endif %}
 {% endwith %}
 
-{% endblock %}
 
-{% block scripts %}
+
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
-{% endblock %}
+
+</body>
+</html>

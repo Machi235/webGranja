@@ -12,7 +12,6 @@
 /* === ESTILOS GENERALES === */
 body {
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg, #b8e994, #78e08f);
   margin: 0;
   color: var(--gris-texto);
 }

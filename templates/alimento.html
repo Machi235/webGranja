@@ -1,10 +1,14 @@
-{% extends "base.html" %}
-
-{% block contenido %}
-{% block css %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/verAnimal.css') }}">
-{% endblock %}
 
+</head>
+<body>
+    {% include "navAHome.html" %}
 <div class="container mt-4">
 
     <!-- NAV SUPERIOR (DEPENDE DEL ROL) -->
@@ -71,11 +75,11 @@
         </div>
 
         <button type="button" class="btn btn-success" onclick="agregarAlimento()">
-            <i class="bi bi-plus-lg"></i> Añadir otro alimento
+            Añadir otro alimento
         </button>
 
         <button type="submit" class="btn btn-primary mt-3">
-            <i class="bi bi-check2-circle"></i> Guardar
+             Guardar
         </button>
     </form>
 </div>
@@ -108,5 +112,5 @@ function agregarAlimento() {
     contenedor.appendChild(item);
 }
 </script>
-
-{% endblock %}
+</body>
+</html>

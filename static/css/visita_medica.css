@@ -1,6 +1,5 @@
 /* === ESTILO GENERAL === */
 body {
-  background: linear-gradient(135deg, #b8e994, #78e08f);
   font-family: "Poppins", sans-serif;
   color: #333;
   margin: 0;
@@ -48,7 +47,6 @@ body {
 select,
 input[type="text"],
 input[type="date"] {
-  border: 2px solid #b8e994;
   border-radius: 10px;
   padding: 10px;
   font-size: 1rem;
@@ -66,7 +64,7 @@ input:focus {
 /* === BOTÓN GUARDAR === */
 .btn-danger {
   background-color: #20bf6b !important;
-  border: none;
+  border: none !important;
   font-weight: 600;
   padding: 12px;
   border-radius: 12px;

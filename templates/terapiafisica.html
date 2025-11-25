@@ -1,10 +1,13 @@
-{% extends "base.html" %}
-
-{% block contenido %}
-
-{% block css %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/terapiafisica.css') }}">
-{% endblock %}
+</head>
+<body>
+{% include "navEventos.html" %}
 
 <div class="form-container">
 
@@ -58,17 +61,7 @@
         </form>
     </div>
 
-    <div class="form-side">
-        <div class="info-card">
-            <div class="icon">🐄</div>
-            <h2>Registro de Terapia Física</h2>
-            <p>
-                Lleva el control de cada terapia física y su próxima sesión del animal.  
-                Asegura el bienestar de tus animales con registros claros y precisos.
-            </p>
-            <a href="{{ url_for('animales.ver_animales') }}" class="btn-volver">Volver a los animales</a>
-        </div>
-    </div>
+
 
 </div>
 
@@ -83,9 +76,6 @@
     {% endif %}
 {% endwith %}
 
-{% endblock %}
-
-{% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
-{% endblock %}
+

@@ -1,7 +1,13 @@
-{% extends "base.html" %}
-
-{% block contenido %}
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/eventosClinicos.css') }}">
+</head>
+<body>
+{% include "navEventos.html" %}
 <!-- Formulario Cirugía -->
 <div class="form-container">
     <div class="form-box">
@@ -59,9 +65,11 @@
     {% endwith %}
 </div>
 
-{% endblock %}
 
-{% block scripts %}
+
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
-{% endblock %}
+
+</body>
+</html>

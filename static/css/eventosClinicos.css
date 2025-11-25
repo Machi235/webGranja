@@ -16,9 +16,7 @@ h2{
 }
 /* === ESTILOS GENERALES === */
 body {
-
   font-family: "Poppins", sans-serif !important;
-  background: linear-gradient(135deg, #b8e994, #78e08f) !important;
   margin: 0 !important;
   color: var(--gris-texto) !important;
 }
@@ -37,7 +35,6 @@ body {
 
 /* === CONTENEDOR PRINCIPAL === */
 .form-container {
-  background: linear-gradient(135deg, #b8e994, #78e08f) !important;
   display: flex !important;
   justify-content: center !important;
   align-items: flex-start !important;

@@ -1,6 +1,5 @@
 /* === ESTILO GENERAL === */
 body {
-  background: linear-gradient(135deg, #b8e994, #78e08f);
   font-family: "Poppins", sans-serif;
   color: #333;
   margin: 0;
@@ -59,7 +58,6 @@ input[type="date"],
 input[type="time"] {
   width: 100%;
   padding: 10px;
-  border: 2px solid #b8e994;
   border-radius: 10px;
   font-size: 1rem;
   outline: none;
@@ -87,7 +85,7 @@ textarea:focus {
 /* === BOTÓN GUARDAR === */
 .btn-danger {
   background-color: #20bf6b !important;
-  border: none;
+  border: none !important;
   font-weight: 600;
   padding: 10px;
   border-radius: 12px;
