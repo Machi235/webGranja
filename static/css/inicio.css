@@ -168,15 +168,6 @@
     text-align: center;
 }
 
-.chart-container {
-  display: flex;
-  justify-content: center;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  border: 2px solid #e8f5e9;
-  padding: 60px 0px;
-}
 /* FOOTER */
 footer {
   background: linear-gradient(135deg, #1a3010 0%, #2d5016 100%);
@@ -223,17 +214,40 @@ footer {
   width: 20% !important;
   color: #ddd;
 }
-
-
-.grafica{
+.stats-section {
   display: flex;
-  flex-direction: column;
-  border-radius: 12px;
-  width: 50%;
-  height: 20%;
   justify-content: center;
-  align-items: center;
+  padding: 20px;
 }
+
+.animalesEstado {
+  width: 100%;
+  max-width: 900px;
+}
+
+.stats-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+.chart-container {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  border: 2px solid #e8f5e9;
+  display: flex;
+  justify-content: center;
+}
+
+#grafica {
+  width: 100% !important;
+  max-width: 700px;
+  height: 500px !important;
+}
+
 .containerdiv{
   display: flex;
   width: 900px;

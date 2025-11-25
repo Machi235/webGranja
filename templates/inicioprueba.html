@@ -84,7 +84,7 @@
 
     <!-- SECCIÓN DE ESTADÍSTICAS / GRÁFICA -->
     <section class="stats-section">
-        <div class="grafica">
+        <div class="animalesEstado">
             <h3 class="stats-title">ESTADÍSTICAS DE ANIMALES SEGUN SU ESTADO DE SALUD</h3>
             <div class="chart-container">
               <canvas id="grafica"></canvas>
@@ -106,37 +106,26 @@
     </footer>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // Convertimos las variables de Python a JS usando JSON.stringify
-  const etiquetas = JSON.parse('{{ etiquetas | tojson | safe }}');
-  const valores = JSON.parse('{{ valores | tojson | safe }}');
-
-  const ctx = document.getElementById('grafica').getContext('2d');
+const ctx = document.getElementById('grafica');
 
   new Chart(ctx, {
-    type: 'doughnut',
+    type:'doughnut',
     data: {
-      labels: etiquetas,
+      labels:{{ etiquetas | tojson }},
       datasets: [{
-        data: valores,
-        backgroundColor: [
-          'rgb(255, 99, 132)',
-          'rgb(54, 162, 235)',
-          'rgb(255, 205, 86)',
-        ],
-        borderColor: '#ffffff',
+        data: {{ valores | tojson }},
+        backgroundColor:['rgb(255, 99, 132)','rgb(54, 162, 235)','rgb(255, 205, 86)'],
+        borderColor: '#ffff',
         borderWidth: 1
       }]
     },
     options: {
-      responsive: true,
+      responsive:false,
       plugins: {
-        legend: {
-          position: 'right',
-          labels: { font: { size: 16 }, padding: 20 }
-        }
+        legend: { position: 'right', labels:{ font:{ size:20 }, padding:30 } }
       }
     }
-  });
+  })
 </script>
 
 
