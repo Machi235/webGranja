@@ -63,6 +63,7 @@
                 <p class="dato">{{ habitat.capacidad }}</p>
             </div>
             <a href="{{url_for('habitat_bp.editar_habitat',idHabitat=habitat.idHabitat)}}" class="btn btn-danger w-100">Editar</a>
+            <a href="{{ url_for('habitat_bp.generar_pdf', idHabitat=habitat.idHabitat) }}" class="btn btn-danger w-100"> Imprimir </a>
     </div>  
 </div>
 </body>

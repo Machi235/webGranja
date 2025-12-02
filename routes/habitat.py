@@ -1,5 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, make_response, render_template, request, redirect, url_for, flash, session
 from db import get_connection
+from io import BytesIO #Modulo de entradas y salidas
+from reportlab.lib.pagesizes import letter #tamaño de papel
+from reportlab.lib.styles import getSampleStyleSheet #Estilos de texto
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image #Contenido de pdf
+from reportlab.lib.units import cm #Usar unidades de medida 
 
 habitat_bp = Blueprint("habitat_bp", __name__)
 
@@ -158,3 +163,49 @@ def eliminar_habitat(idHabitat):
     conn.close()
 
     return redirect(url_for("habitat_bp.ver_habitats")) 
+
+@habitat_bp.route("/pdf_habitat<int:idHabitat>")
+def generar_pdf(idHabitat):
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    cur.execute(""" SELECT idHabitat, nombreHabitat, maxTemperatura, estado, humedad,  ubicacion, tipo, tamaño, capacidad, minTemperatura FROM habitat WHERE idHabitat = %s """,
+    (idHabitat,))
+
+    habitat = cur.fetchone()
+
+    buffer = BytesIO() #Crea un espacio temporal en memoria
+    pdf = SimpleDocTemplate(buffer, pagesize=letter) #Se crea el documento pdf
+    elements = [] #Lista vacia donde se pone el contenido
+    styles = getSampleStyleSheet() #conjunto de estilos 
+
+    elements.append(Paragraph(f"<b>Habitat</b>", styles["Title"])) #Agrgar un parrafro al pdf
+    elements.append(Spacer(1,12)) #Inserta un espacio entre cada elemento 
+
+    contenido = f"""
+    <b>Nombre: </b>{habitat['nombreHabitat']}<br/>
+    <b>Temperatura minima: </b>{habitat['minTemperatura']}<br/>
+    <b>Temperatura maxima: </b>{habitat['maxTemperatura']}<br/>
+    <b>Estado: </b>{habitat['estado']}<br/>
+    <b>Humedad: </b>{habitat['humedad']}<br/>
+    <b>Tipo: </b>{habitat['tipo']}<br/>
+    <b>Tamaño: </b>{habitat['tamaño']}<br/>
+    <b>Capacidad: </b>{habitat['capacidad']}<br/>"""
+
+    elements.append(Spacer(1,12)) 
+
+    styles = getSampleStyleSheet()
+    estilo_grande = styles["Normal"].clone('estilo_grande')
+    estilo_grande.fontSize = 14   # tamaño de letra
+    estilo_grande.leading = 45    # espacio entre líneas
+
+    elements.append(Paragraph(contenido, estilo_grande))
+
+    elements.append(Spacer(1, 20)) #Pie de pagina
+
+    pdf.build(elements) #Crea el pdf con todos elementos en el mismo orden  
+
+    response = make_response(buffer.getvalue()) # sE crea una respuesta http con los bytes obtenidos en el buffer    
+    response.headers["Content-Type"] = "application/pdf" #Dice que el contenido es un pdf
+    response.headers["Content-Disposition"] = "inline; filename=animal.pdf" #Lo abre directamente
+    return response 

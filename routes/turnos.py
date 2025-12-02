@@ -1,5 +1,12 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+import os
+from flask import Blueprint, make_response, render_template, request, redirect, url_for, flash
 from db import get_connection  # tu función de conexión
+from io import BytesIO #Modulo de entradas y salidas
+from reportlab.lib.pagesizes import letter #tamaño de papel
+from reportlab.lib.styles import getSampleStyleSheet #Estilos de texto
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer #Contenido de pdf
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib import colors
 
 turnos_bp = Blueprint("turnos_bp", __name__)
 
@@ -121,3 +128,64 @@ def eliminar_turno(idHorario):
     conn.close()
 
     return redirect(url_for("turnos_bp.horarios"))
+
+@turnos_bp.route("/pdf_horarios")
+def generar_pdf():
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    cur.execute("""
+        SELECT 
+            u.nombre, 
+            u.apellido,
+            u.rol AS area,
+            h.nombreTurno AS turno
+        FROM usuarioturno ut
+        JOIN horariosturnos h ON ut.idHorario = h.idHorario
+        JOIN usuarios u ON ut.idUsuario = u.idUsuario
+        WHERE u.activo = 1
+        ORDER BY h.nombreTurno DESC
+    """)
+    asignaciones = cur.fetchall()
+
+    buffer = BytesIO() #Crea un espacio temporal en memoria
+    pdf = SimpleDocTemplate(buffer, pagesize=letter) #Se crea el documento pdf
+    elements = [] #Lista vacia donde se pone el contenido
+    styles = getSampleStyleSheet() #conjunto de estilos 
+
+    elements.append(Paragraph(f"<b>Turnos</b>", styles["Title"])) #Agrgar un parrafro al pdf
+
+    datos = [["Nombre", "Apellido", "Area", "Turno"]]
+
+    for fila in asignaciones:
+        datos.append([
+            fila["nombre"],
+            fila["apellido"],
+            fila["area"],
+            fila["turno"],
+        ])
+    
+    tabla = Table(datos, colWidths=[100,100,100,100])
+
+    tabla.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.lightgrey),
+        ("TEXTCOLOR", (0,0), (-1,0), colors.black),
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,0), 10),
+
+        ("BOTTOMPADDING", (0,0), (-1,0), 8),
+        ("BACKGROUND", (0,1), (-1,-1), colors.white),
+        ("GRID", (0,0), (-1,-1), 1, colors.black),
+    ]))
+
+    elements.append(Spacer(1, 20)) #Pie de pagina
+    elements.append(tabla)
+
+
+    pdf.build(elements) #Crea el pdf con todos elementos en el mismo orden  
+
+    response = make_response(buffer.getvalue()) # sE crea una respuesta http con los bytes obtenidos en el buffer    
+    response.headers["Content-Type"] = "application/pdf" #Dice que el contenido es un pdf
+    response.headers["Content-Disposition"] = "inline; filename=animal.pdf" #Lo abre directamente
+    return response 

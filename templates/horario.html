@@ -17,7 +17,10 @@
      {% include "navAHome.html" %}
 <div class="menu">
 <!--------------------------------Ver turnos---------------------------------------------> 
+<div>  
   <button id="verTurnos" class="verTurnos" type="button" >Ver turnos</button>
+  <a href="{{ url_for('turnos_bp.generar_pdf') }}" class="verTurnos">Imprimir</a>
+</div>
 <!--- --------------------------lista de turnos--------------------------------------------------------------------->
   <dialog id="listaTurnos">
     <div class="cerrar"><button  id="cerrarTurnos" type="button"><i class="bi bi-x-circle"></i></button></div>

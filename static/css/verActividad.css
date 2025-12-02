@@ -114,3 +114,12 @@ button {
     background: none;
     border: none;
 }
+
+.imprimir{
+    border-radius: 17px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #aecc8bce;
+    text-decoration: none;
+    color: black;
+}

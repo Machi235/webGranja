@@ -10,7 +10,9 @@
     border-radius: 17px;
     padding: 10px 20px;
     border: none;
-    background-color: #aecc8bce
+    background-color: #aecc8bce;
+    text-decoration: none;
+    color: black;
 }
 
 .botonesMenu, .botonEditar, #cerrarEditarHorario, #cerrarTurno, #cerrarHorario, #cerrarTurnos{

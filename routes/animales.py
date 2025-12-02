@@ -172,10 +172,8 @@ def generar_pdf(idAnimal):
     cur = conn.cursor(dictionary=True)
 
     cur.execute("""
-        SELECT idAnimal, nombre, especie, estadoSalud, edad, fechaNacimiento, fechaLlegada, habitat, observaciones, sexo, imagen
-        FROM animal
-        WHERE idAnimal = %s
-    """, (idAnimal,))
+        SELECT idAnimal, nombre, tipoEspecie, estadoSalud, edad, fechaNacimiento, fechaLlegada, nombreHabitat, observaciones, sexo, imagen FROM animal as a 
+                INNER JOIN habitat as h on habitat = h.idHabitat INNER JOIN especie as e on a.especie = e.idEspecie WHERE idAnimal = %s """, (idAnimal,))
     animal = cur.fetchone()
 
     buffer = BytesIO() #Crea un espacio temporal en memoria
@@ -184,28 +182,31 @@ def generar_pdf(idAnimal):
     styles = getSampleStyleSheet() #conjunto de estilos 
 
     elements.append(Paragraph(f"<b>Ficha del animal</b>", styles["Title"])) #Agrgar un parrafro al pdf
-    elements.append(Spacer(1,12)) #Inserta un espacio entre cada elemento 
 
     ruta_imagen = os.path.join("static/uploads", animal["imagen"]) #Une la ruta base con el nombre de la imagen
-    img = Image(ruta_imagen, width=5*cm, height=5*cm) #Carga la imagen ajustandolo al tamaño
+    img = Image(ruta_imagen, width=8*cm, height=8*cm) #Carga la imagen ajustandolo al tamaño
     img.hAlign = "CENTER" #Ajusta la imagen
     elements.append(img)
-    elements.append(Spacer(1, 12))
+    elements.append(Spacer(1, 30))
 
     contenido = f"""
     <b>Nombre:</b>{animal['nombre']}<br/>
-    <b>Especie:</b>{animal['especie']}<br/>
+    <b>Especie:</b>{animal['tipoEspecie']}<br/>
     <b>Estado salud:</b>{animal['estadoSalud']}<br/>
     <b>Edad:</b>{animal['edad']}<br/>
     <b>Fecha de nacimiento:</b>{animal['fechaNacimiento']}<br/>
     <b>Fecha de llegada:</b>{animal['fechaLlegada']}<br/>
-    <b>Habitat:</b>{animal['habitat']}<br/>
+    <b>Habitat:</b>{animal['nombreHabitat']}<br/>
     <b>Observaciones:</b>{animal['observaciones']}<br/>
     <b>Sexo:</b>{animal['sexo']}<br/>"""
 
-    elements.append(Paragraph(contenido,styles["Normal"]))
+    styles = getSampleStyleSheet()
+    estilo_grande = styles["Normal"].clone('estilo_grande')
+    estilo_grande.fontSize = 14   # tamaño de letra
+    estilo_grande.leading = 37    # espacio entre líneas
 
-    elements.append(Spacer(1, 20)) #Pie de pagina
+    elements.append(Paragraph(contenido, estilo_grande))
+
 
     pdf.build(elements) #Crea el pdf con todos elementos en el mismo orden  
 

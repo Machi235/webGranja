@@ -9,6 +9,7 @@
   <body>
      {% include "navAHome.html" %}
 <div class="menu">
+  <a href="{{ url_for('actividad_bp.generar_pdf') }}" class="imprimir">Imprimir</a>
   <button class="botonEditar" id="ponerlimite" type="button">
     <i class="bi bi-sort-up-alt"></i>
   </button>
@@ -35,7 +36,7 @@
         <th>ESPECIES</th>
         <th>HABITATS</th>
         <th>FECHA DE CREACION</th>
-        <th>DURACIOM</th>
+        <th>DURACION</th>
         <th>DETALLES</th>
         <th>FECHA DE REALIZACION</th>
       </tr>

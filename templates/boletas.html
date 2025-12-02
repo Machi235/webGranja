@@ -22,14 +22,17 @@
     {% include "navAHome.html" %}
 <body>
 <div class="menu">
+  <a href="{{ url_for('ventaBoleto.generar_pdf') }}" class="imprimir">Imprimir</a>
   <button class="abrirRegistro" id="boleta" type="button">
     <i class="bi bi-ticket"></i>
   </button>
     <dialog id="venderBoleta">
-      <div class="cerrar"><button id="cerrarVenta" type="button"><i class="bi bi-x-circle"></i></button></div>
+      <div class="cerrar">
+        <button id="cerrarVenta" type="button"><i class="bi bi-x-circle"></i></button>
+      </div>
         <form id="miFormulario" method="post" action="{{ url_for('ventaBoleto.boleta')}}">
             <!-- Nombre -->
-            <input type="text" id="nombre" name="nombre" placeholder="Nombre del animal *" required>
+            <input type="text" id="nombre" name="nombre" placeholder="Nombre *" required>
                 
             <!-- Correo -->
             <input type="email" id="correo" name="correo" placeholder="Correo electronico *" required>

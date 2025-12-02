@@ -1,6 +1,13 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, make_response, render_template, request, redirect, url_for, flash
 from db import get_connection
 from datetime import datetime
+from io import BytesIO #Modulo de entradas y salidas
+from reportlab.lib.pagesizes import letter, landscape #tamaño de papel
+from reportlab.lib.styles import getSampleStyleSheet #Estilos de texto
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer#Contenido de pdf
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib import colors
+
 
 actividad_bp = Blueprint("actividad_bp", __name__)
 
@@ -188,4 +195,61 @@ def eliminar_actividad(idActividad):
     cur.close()
 
     return redirect (url_for("actividad_bp.ver_actividades"))
+
+@actividad_bp.route("/pdf_horarios")
+def generar_pdf():
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    cur.execute("""select C.idActividad, nombre, apellido, group_concat(distinct tipoEspecie separator ',') as especie, group_concat(distinct nombreHabitat separator ',') 
+                as habitat, c.tipo, fechaCreacion, duracion, detalles, fechaRealizacion, limite from cronogramaactividades as c inner join actividades as a on 
+                c.idActividad = a.idActividad left join usuarios as u on c.idUsuario = u.idUsuario left join especie as e on a.idEspecie =e.idEspecie left join habitat as h 
+                on a.idHabitat = h.idHabitat WHERE c.estado = 1 and c.fechaRealizacion between curdate() and date_add(curdate(), interval 7 day)  group by a.idActividad order by fechaRealizacion""")
+    actividades=cur.fetchall()
+
+    buffer = BytesIO() #Crea un espacio temporal en memoria
+    pdf = SimpleDocTemplate(buffer, pagesize=landscape(letter)) #Se crea el documento pdf
+    elements = [] #Lista vacia donde se pone el contenido
+    styles = getSampleStyleSheet() #conjunto de estilos 
+
+    elements.append(Paragraph(f"<b>Actividades</b>", styles["Title"])) #Agrgar un parrafro al pdf
+    elements.append(Spacer(1,12)) #Inserta un espacio entre cada elemento 
+
+    datos = [["Guia", "Tipo", "Especies", "Habitats", "Duracion", "Detalles", "Fecha de realizacion"]]
+
+    for fila in actividades:
+        datos.append([
+            Paragraph(fila["nombre"] + " " + fila["apellido"], styles["BodyText"]),
+            fila["tipo"],
+            Paragraph(fila["especie"], styles["BodyText"]),
+            Paragraph(fila["habitat"], styles["BodyText"]),
+            fila["duracion"],
+            Paragraph(fila["detalles"], styles["BodyText"]),
+            fila["fechaRealizacion"]
+        ])
+    
+    tabla = Table(datos, colWidths=[80,110,110,100,60,200,105])
+
+    tabla.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.lightgrey),
+        ("TEXTCOLOR", (0,0), (-1,0), colors.black),
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,0), 10),
+
+        ("BOTTOMPADDING", (0,0), (-1,0), 8),
+        ("BACKGROUND", (0,1), (-1,-1), colors.white),
+        ("GRID", (0,0), (-1,-1), 1, colors.black),
+    ]))
+
+    elements.append(Spacer(1, 20)) #Pie de pagina
+    elements.append(tabla)
+
+
+    pdf.build(elements) #Crea el pdf con todos elementos en el mismo orden  
+
+    response = make_response(buffer.getvalue()) # sE crea una respuesta http con los bytes obtenidos en el buffer    
+    response.headers["Content-Type"] = "application/pdf" #Dice que el contenido es un pdf
+    response.headers["Content-Disposition"] = "inline; filename=animal.pdf" #Lo abre directamente
+    return response 
 

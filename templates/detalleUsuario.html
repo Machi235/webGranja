@@ -29,6 +29,10 @@
                     Editar Usuario
                 </a>
 
+                <a href="{{ url_for('auth.generar_pdf', idUsuario=usuario.idUsuario) }}" class="btn btn-primary">
+                     Imprimir ficha
+                </a>
+
                 <!-- Botón Volver -->
                 <a href="{{ url_for('auth.ver_usuarios') }}" class="btn btn-secondary">
                     Volver

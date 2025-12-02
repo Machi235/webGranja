@@ -1,10 +1,15 @@
-from flask import Blueprint, flash, render_template, request, redirect, url_for, session, current_app
+from flask import Blueprint, flash, make_response, render_template, request, redirect, url_for, session, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from db import get_connection
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask_mail import Message
 from werkzeug.utils import secure_filename
 import os
+from io import BytesIO #Modulo de entradas y salidas
+from reportlab.lib.pagesizes import letter #tamaño de papel
+from reportlab.lib.styles import getSampleStyleSheet #Estilos de texto
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image #Contenido de pdf
+from reportlab.lib.units import cm #Usar unidades de medida 
 
 
 auth = Blueprint("auth", __name__)
@@ -391,9 +396,59 @@ def eliminar_usuario(idUsuario):
 
     return redirect(url_for("auth.ver_usuarios"))
 
+@auth.route("/pdf_usuario/<int:idUsuario>")
+def generar_pdf(idUsuario):
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    cur.execute("""
+        SELECT u.idUsuario, nombre, apellido, rol, documento, telefono, correo, nombreTurno, foto FROM usuarios AS u LEFT JOIN usuarioturno AS t 
+                ON u.idUsuario = t.idUsuario LEFT JOIN horariosturnos AS h ON t.idHorario = h.idHorario  WHERE u.idUsuario = %s """, (idUsuario,))
+    usuario = cur.fetchone()
+
+    buffer = BytesIO() #Crea un espacio temporal en memoria
+    pdf = SimpleDocTemplate(buffer, pagesize=letter) #Se crea el documento pdf
+    elements = [] #Lista vacia donde se pone el contenido
+    styles = getSampleStyleSheet() #conjunto de estilos 
+
+    elements.append(Paragraph(f"<b>Ficha del usuario</b>", styles["Title"])) #Agrgar un parrafro al pdf
+
+    ruta_imagen = os.path.join("static", usuario["foto"]) #Une la ruta base con el nombre de la imagen
+    img = Image(ruta_imagen, width=8*cm, height=8*cm) #Carga la imagen ajustandolo al tamaño
+    img.hAlign = "CENTER" #Ajusta la imagen
+    elements.append(img)
+    elements.append(Spacer(1, 30))
+
+    contenido = f"""
+    <b>Nombre: </b>{usuario['nombre']}<br/>
+    <b>Apellido: </b>{usuario['apellido']}<br/>
+    <b>Rol: </b>{usuario['rol']}<br/>
+    <b>Documento: </b>{usuario['documento']}<br/>
+    <b>Telefono: </b>{usuario['telefono']}<br/>
+    <b>Correo electronica: </b>{usuario['correo']}<br/>
+    <b>Turno asigando: </b>{usuario['nombreTurno']}<br/>"""
+    
+
+    styles = getSampleStyleSheet()
+    estilo_grande = styles["Normal"].clone('estilo_grande')
+    estilo_grande.fontSize = 14   # tamaño de letra
+    estilo_grande.leading = 40    # espacio entre líneas
+
+    elements.append(Paragraph(contenido, estilo_grande))
+
+
+    pdf.build(elements) #Crea el pdf con todos elementos en el mismo orden  
+
+    response = make_response(buffer.getvalue()) # sE crea una respuesta http con los bytes obtenidos en el buffer    
+    response.headers["Content-Type"] = "application/pdf" #Dice que el contenido es un pdf
+    response.headers["Content-Disposition"] = "inline; filename=animal.pdf" #Lo abre directamente
+    return response 
+
+
 
 # ---------------- LOGOUT ----------------
 @auth.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("auth.formulario"))
+
