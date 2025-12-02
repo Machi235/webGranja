@@ -419,11 +419,7 @@ h2 {
   resize: none;
 }
 
-                               
-.crearNotificacion{
-  background: none;
-  border: none;
-}
+
 
 .bi{
   font-size: 30px;
@@ -433,20 +429,35 @@ h2 {
 .modal-header{
   background-color: #6ca76c;
 }
-.btn {
-  background: transparent;
-  border: 2px solid green;
-  color: green;
-  padding: 5px 30px;
-  border-radius: 25px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: 0.3s;
+.btn-primary {
+  background: transparent !important;
+  border: 2px solid green !important;
+  color: green !important;
+  padding: 5px 30px !important;
+  border-radius: 25px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  transition: 0.3s !important;
 }
-.btn:hover {
-  background: green;
-  color: white;
-  border-color: #fff;
+.btn-primary:hover {
+  background: green !important;
+  color: white !important;
+  border-color: #fff !important;
+}
+.btn-warning {
+  background: transparent !important;
+  border: 2px solid green !important;
+  color: green !important;
+  padding: 5px 30px !important;
+  border-radius: 25px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  transition: 0.3s !important;
+}
+.btn-warning:hover {
+  background: green !important;
+  color: white !important;
+  border-color: #fff !important;
 }
 
 footer {

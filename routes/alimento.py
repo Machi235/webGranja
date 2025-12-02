@@ -36,18 +36,29 @@ def agregar_alimento():
     # ============================
     #   MÉTODO POST → Insertar BD
     # ============================
-    nombre = request.form["nombre"]
-    tipo = request.form["tipo"]
-    cantidad = request.form["cantidad"]
 
-    cur.execute("""
-        INSERT INTO alimento (nombre, tipo, cantidad)
-        VALUES (%s, %s, %s)
-    """, (nombre, tipo, cantidad))
+    # Recibir listas del formulario
+    origenes = request.form.getlist("origen[]")
+    especies = request.form.getlist("idEspecie[]")
+
+    # Validación simple
+    if not origenes:
+        flash("Debe agregar al menos un alimento.", "danger")
+        return redirect(url_for("alimento_bp.agregar_alimento"))
+
+    # Insertar cada alimento
+    for origen, especie in zip(origenes, especies):
+        if origen.strip() == "":
+            continue  # Saltar entradas vacías
+
+        cur.execute("""
+            INSERT INTO alimento (origen, idEspecie)
+            VALUES (%s, %s)
+        """, (origen, especie if especie != "" else None))
 
     conn.commit()
     cur.close()
     conn.close()
 
-    flash("Alimento agregado correctamente", "success")
+    flash("Alimentos agregados correctamente", "success")
     return redirect(url_for("alimento_bp.agregar_alimento"))

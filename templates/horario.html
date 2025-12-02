@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <!-- estilo ccs -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/horario.css') }}">
-    <title>CREAR HABITAT</title>
+    <title>Turnos</title>
 </head>
   <body>
      {% include "navAHome.html" %}
@@ -135,12 +135,17 @@
 <!---------------------------------------Editar asignacion de turno--------------------------------------------------------> 
  <dialog id="editarAsignacionTurno">
     <div class="cerrar"><button id="cerrarEditarHorario" type="button"><i class="bi bi-x-circle"></i></button></div>
+
+    <!-- IMPORTANTE: así se envía la solicitud al admin -->
     <form method="post" action="{{ url_for('turnos_bp.actualizar_asignar_turno') }}">
+      
       <input type="hidden" id="idUsuarioturno" name="idUsuarioturno">
+
       <div class="campo">
         <label for="idUsuario">Empleado:</label>
         <input type="text" id="empleado" name="empleado" readonly>
       </div>
+
       <div class="campo">
         <label for="idHorario">Turno:</label>
         <select class="form-control" id="turno" name="idHorario">
@@ -150,9 +155,11 @@
           {% endfor %}
         </select>
       </div>
+
       <button type="submit" class="btn btn-danger mt-3 w-100">Guardar</button>
     </form>
-  </dialog>
+</dialog>
+
 
 <script src="{{ url_for('static', filename='js/horario.js') }}"></script>
    

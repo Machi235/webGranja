@@ -1,12 +1,13 @@
-{% extends "base.html" %}
-
-{% block titulo %}Registro de Especies{% endblock %}
-
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/especies.css') }}">
-{% endblock %}
-
-{% block contenido %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/especies.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    {% include "navAHome.html" %}
 <div class="container my-4">
     <h2>Registro de Especies</h2>
 
@@ -58,4 +59,7 @@
         </tbody>
     </table>
 </div>
-{% endblock %}
+
+
+</body>
+</html>

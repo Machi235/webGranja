@@ -30,6 +30,16 @@ li:hover {
   border-color: green;
   padding: 2px 30px;
 }
+li.nav-item{
+  background-color: #fff;
+  border: 1px solid rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
+  padding: 5px 30px;
+  border-radius: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s;
+}
 
 .logo{
   border-radius: 50%;
@@ -56,9 +66,10 @@ li:hover {
   text-decoration: none;
   transition: 0.3s;
 }
-.btn {
+
+.btn-outline-primary {
   background: transparent;
-  border: 2px solid green;
+  border: 2px solid rgb(6, 7, 6);
   color: green;
   padding: 5px 30px;
   border-radius: 25px;
@@ -66,12 +77,14 @@ li:hover {
   text-decoration: none;
   transition: 0.3s;
 }
-.btn:hover {
-  background: green;
+.btn-outline-primary:hover {
+  background: rgb(255, 255, 255);
   color: white;
-  border-color: #fff;
+  border-color: #000000;
 }
-
+.nav-link{
+  color: #4a7c2c;
+}
 /* OFFCANVAS */
 .offcanvas-header {
   background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 100%);
