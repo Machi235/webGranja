@@ -78,7 +78,7 @@
                         <div class="card-body-custom">
                             <div class="info-row">
                                 <span class="info-label">Fecha:</span>
-                                <span class="info-value">{{ (r.fecha_evento|string)[:10] if r.fecha_evento else 'Sin fecha' }}</span>
+                                <span class="info-value">{{ (r.fecha|string)[:10] if r.fecha else 'Sin fecha' }}</span>
                             </div>
                             <div class="info-row">
                                 <span class="info-label">Detalle:</span>
@@ -129,6 +129,42 @@
         </div>
     {% endif %}
 </div>
+<!-- PAGINACIÓN -->
+{% if total_paginas > 1 %}
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+
+        <!-- Botón ANTERIOR -->
+        <li class="page-item {% if pagina == 1 %}disabled{% endif %}">
+            <a class="page-link"
+               href="{{ url_for('animales.registros_medicos', id_animal=id_animal, page=(pagina-1 if pagina > 1 else 1)) }}">
+               &laquo; Anterior
+            </a>
+        </li>
+
+        <!-- Números -->
+        {% for p in range(1, total_paginas + 1) %}
+            <li class="page-item {% if p == pagina %}active{% endif %}">
+                <a class="page-link"
+                   href="{{ url_for('animales.registros_medicos', id_animal=id_animal, page=p) }}">
+                    {{ p }}
+                </a>
+            </li>
+        {% endfor %}
+
+        <!-- Botón SIGUIENTE -->
+        <li class="page-item {% if pagina == total_paginas %}disabled{% endif %}">
+            <a class="page-link"
+               href="{{ url_for('animales.registros_medicos', id_animal=id_animal, page=pagina+1) }}">
+                Siguiente &raquo;
+            </a>
+        </li>
+
+    </ul>
+</nav>
+{% endif %}
+
+
 
 <!-- FLASH MESSAGES -->
 {% with mensajes = get_flashed_messages(with_categories=true) %}

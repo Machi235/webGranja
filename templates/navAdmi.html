@@ -53,6 +53,7 @@
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li><a class="nav-link" href="{{ url_for('turnos_bp.horarios') }}">Turnos</a></li>
             <li><a class="nav-link" href="{{ url_for('animales.ver_animales') }}">Ver Animales</a></li>
+            <li><a class="nav-link" href="{{ url_for('dietas.ver_dietas') }}">Ver Dietas</a></li>
             <li><a class="nav-link" href="{{ url_for('auth.ver_usuarios') }}">Ver Usuarios</a></li>
             <li><a class="nav-link" href="{{ url_for('habitat_bp.ver_habitats') }}">Ver Hábitats</a></li>
             <li><a class="nav-link" href="{{ url_for('eventos.registro_cirugia') }}">Eventos clinicos</a></li>
@@ -61,6 +62,7 @@
             <li><a class="nav-link" href="{{ url_for('tareas.listar_tareas') }}">Tareas</a></li>
             <li><a class="nav-link" href="{{ url_for('main.perfil') }}">Ver perfil</a></li>
             <li><a class="nav-link" href="{{ url_for('alimento_bp.agregar_alimento') }}">Agregar Alimento</a></li>
+            <li><a class="nav-link" href="/dietas/crear_dieta">Crear Dieta</a></li>
             <li><a class="nav-link text-danger" href="{{ url_for('auth.logout') }}">
               <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
             </a></li>

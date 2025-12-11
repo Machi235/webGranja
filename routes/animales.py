@@ -228,14 +228,39 @@ def eliminar_animal(idAnimal):
 
 @animales.route("/registros_medicos/<int:id_animal>", methods=["GET", "POST"])
 def registros_medicos(id_animal):
-    """Muestra los eventos clínicos del animal usando la vista vista_reportes"""
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
 
-    tipo = request.form.get("tipo")
-    fecha = request.form.get("fecha")
+    # --- Filtros ---
+    tipo = request.form.get("tipo") if request.method == "POST" else request.args.get("tipo")
+    fecha = request.form.get("fecha") if request.method == "POST" else request.args.get("fecha")
 
-    query = "SELECT id_registro, tipo, descripcion, fecha FROM vista_reportes WHERE idAnimal = %s"
+    # --- Paginación ---
+    pagina = int(request.args.get("page", 1))
+    por_pagina = 6
+    offset = (pagina - 1) * por_pagina
+
+    # --- Contar total de registros filtrados ---
+    count_query = "SELECT COUNT(*) AS total FROM vista_reportes WHERE idAnimal = %s"
+    params = [id_animal]
+
+    if tipo:
+        count_query += " AND tipo = %s"
+        params.append(tipo)
+    if fecha:
+        count_query += " AND fecha = %s"
+        params.append(fecha)
+
+    cur.execute(count_query, params)
+    total_registros = cur.fetchone()["total"]
+    total_paginas = (total_registros + por_pagina - 1) // por_pagina
+
+    # --- Obtener registros paginados ---
+    query = """
+        SELECT id_registro, tipo, descripcion, fecha 
+        FROM vista_reportes 
+        WHERE idAnimal = %s
+    """
     params = [id_animal]
 
     if tipo:
@@ -245,15 +270,26 @@ def registros_medicos(id_animal):
         query += " AND fecha = %s"
         params.append(fecha)
 
-    query += " ORDER BY fecha ASC"
+    query += " ORDER BY fecha ASC LIMIT %s OFFSET %s"
+    params.extend([por_pagina, offset])
+
     cur.execute(query, params)
     registros = cur.fetchall()
 
     cur.close()
     conn.close()
 
-    return render_template("registros_medicos.html", registros=registros, id_animal=id_animal)
-
+    return render_template(
+        "registros_medicos.html",
+        registros=registros,
+        id_animal=id_animal,
+        pagina=pagina,
+        total_paginas=total_paginas,
+        has_prev=pagina > 1,
+        has_next=pagina < total_paginas,
+        tipo=tipo,
+        fecha=fecha
+    )
 
 @animales.route("/detalle_registro/<int:id_registro>")
 def detalle_registro(id_registro):

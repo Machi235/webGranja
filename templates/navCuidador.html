@@ -41,10 +41,11 @@
         <h5 class="offcanvas-title">Menú</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
       </div>
+
       <div class="offcanvas-body">
         <ul class="navbar-nav">
           <li><a class="nav-link" href="{{ url_for('animales.ver_animales') }}">Ver Animales</a></li>
-          <li><a class="nav-link" href="{{ url_for('eventos.registro_cirugia') }}">Eventos clinicos</a></li>
+          <li><a class="nav-link" href="{{ url_for('eventos.registro_cirugia') }}">Eventos clínicos</a></li>
           <li><a class="nav-link" href="/dietas/crear_dieta">Crear Dieta</a></li>
           <li><a class="nav-link" href="{{ url_for('dietas.ver_dietas') }}">Ver Dietas</a></li>
           <li><a class="nav-link" href="{{ url_for('alimento_bp.agregar_alimento') }}">Agregar Alimento</a></li>
@@ -52,132 +53,157 @@
           <li><a class="nav-link" href="{{ url_for('tareas.tareas_pendientes') }}">Tareas</a></li>
           <li><a class="nav-link" href="{{ url_for('main.perfil') }}">Ver perfil</a></li>
           <li><a class="nav-link text-danger" href="{{ url_for('auth.logout') }}">
-            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+            <i class="bi bi-box-arrow-right"></i> Cerrar sesión</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
   <!-- Modal Notificaciones -->
-  <div class="modal fade" id="modalNotificaciones" tabindex="-1" aria-labelledby="modalNotificacionesLabel" aria-hidden="true">
+  <div class="modal fade" id="modalNotificaciones" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
+
         <div class="modal-header text-white">
-          <h5 class="modal-title" id="modalNotificacionesLabel">Notificaciones Recibidas</h5>
+          <h5 class="modal-title">Notificaciones Recibidas</h5>
         </div>
+
         <div class="modal-body">
-          <ul class="nav nav-tabs" id="notiTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="nuevas-tab" data-bs-toggle="tab" data-bs-target="#nuevas" type="button" role="tab">Nuevas</button>
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <button class="nav-link active" id="nuevas-tab" data-bs-toggle="tab" data-bs-target="#nuevas">Nuevas</button>
             </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="historial-tab" data-bs-toggle="tab" data-bs-target="#historial" type="button" role="tab">Historial</button>
+            <li class="nav-item">
+              <button class="nav-link" id="historial-tab" data-bs-toggle="tab" data-bs-target="#historial">Historial</button>
             </li>
           </ul>
+
           <div class="tab-content mt-3">
-            <div class="tab-pane fade show active" id="nuevas" role="tabpanel">
+            <div class="tab-pane fade show active" id="nuevas">
               <div id="nuevas-notificaciones"></div>
             </div>
-            <div class="tab-pane fade" id="historial" role="tabpanel">
+
+            <div class="tab-pane fade" id="historial">
               <div id="historial-notificaciones"></div>
             </div>
           </div>
         </div>
+
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>
+
       </div>
     </div>
   </div>
 
   <script>
-    // Función para cargar notificaciones
+    // Cargar notificaciones
     function cargarNotificaciones() {
       fetch('/mis_notificaciones')
         .then(res => res.json())
         .then(data => {
-          const nuevasContainer = document.getElementById('nuevas-notificaciones');
-          const historialContainer = document.getElementById('historial-notificaciones');
-
-          nuevasContainer.innerHTML = '';
-          historialContainer.innerHTML = '';
-
           const nuevas = data.filter(n => !n.leida);
           const historial = data.filter(n => n.leida);
 
-          // NUEVAS
+          const nuevasDiv = document.getElementById("nuevas-notificaciones");
+          const histDiv = document.getElementById("historial-notificaciones");
+
+          nuevasDiv.innerHTML = "";
+          histDiv.innerHTML = "";
+
+          // ------------------ NUEVAS ------------------
           if (nuevas.length === 0) {
-            nuevasContainer.innerHTML = '<p class="text-center text-muted">No tienes notificaciones nuevas.</p>';
+            nuevasDiv.innerHTML = `<p class="text-center text-muted">No tienes notificaciones nuevas.</p>`;
           } else {
             nuevas.forEach(n => {
-              const card = document.createElement('div');
-              card.className = 'card mb-2 border-warning';
-              card.id = `notificacion-${n.id}`;
-              card.innerHTML = `
-                <div class="card-body d-flex justify-content-between align-items-start">
-                  <div>
-                    <h6 class="card-title"><i class="bi bi-info-circle"></i> ${n.titulo}</h6>
-                    <p class="card-text">${n.descripcion}</p>
-                    <small class="text-muted">📅 ${new Date(n.fecha).toLocaleString()}</small>
+              let botones = "";
+              let idDieta = null;
+
+              if (n.descripcion.includes("¿El animal comió?")) {
+                const partes = n.descripcion.split("|");
+                idDieta = partes[1];
+
+                botones = `
+                  <div class="mt-3 d-flex gap-2">
+
+                    <button class="btn btn-success btn-sm responder-comida"
+                            data-id="${n.id}" data-resp="si">
+                      Sí
+                    </button>
+
+                    <button class="btn btn-danger btn-sm responder-comida"
+                            data-id="${n.id}" data-resp="no">
+                      No
+                    </button>
+
                   </div>
-                  <button class="btn btn-sm btn-success ms-2 btn-leido" data-id="${n.id}">
-                    <i class="bi bi-check2"></i>
-                  </button>
-                </div>
-              `;
-              nuevasContainer.appendChild(card);
+                `;
+              }
+
+              nuevasDiv.innerHTML += `
+                <div class="card mb-2" id="noti-${n.id}">
+                  <div class="card-body">
+                    <h6><i class="bi bi-info-circle"></i> ${n.titulo}</h6>
+                    <p>${n.descripcion.replace("|", "<br><b>ID Dieta:</b> ")}</p>
+                    <small class="text-muted">${new Date(n.fecha).toLocaleString()}</small>
+                    ${botones}
+                  </div>
+                </div>`;
             });
           }
 
-          // HISTORIAL
+          // ---------------- HISTORIAL ----------------
           if (historial.length === 0) {
-            historialContainer.innerHTML = '<p class="text-center text-muted">No tienes historial de notificaciones.</p>';
+            histDiv.innerHTML = `<p class="text-center text-muted">No hay historial.</p>`;
           } else {
             historial.forEach(n => {
-              const card = document.createElement('div');
-              card.className = 'card mb-2';
-              card.innerHTML = `
+              histDiv.innerHTML += `
+              <div class="card mb-2">
                 <div class="card-body">
-                  <h6 class="card-title"><i class="bi bi-info-circle"></i> ${n.titulo}</h6>
-                  <p class="card-text">${n.descripcion}</p>
-                  <small class="text-muted">📅 ${new Date(n.fecha).toLocaleString()}</small>
+                  <h6><i class="bi bi-info-circle"></i> ${n.titulo}</h6>
+                  <p>${n.descripcion}</p>
+                  <small class="text-muted">${new Date(n.fecha).toLocaleString()}</small>
                 </div>
-              `;
-              historialContainer.appendChild(card);
+              </div>`;
             });
           }
         });
     }
 
-    // Ejecutar al abrir el modal
-    document.getElementById('btnNotificaciones').addEventListener('click', cargarNotificaciones);
+    // Abrir modal → cargar
+    document.getElementById("btnNotificaciones").addEventListener("click", cargarNotificaciones);
 
-    // Marcar notificación como leída
-    document.addEventListener('click', function(e) {
-      if(e.target.closest('.btn-leido')) {
-        const btn = e.target.closest('.btn-leido');
-        const id = btn.dataset.id;
+    // Manejar "Sí" / "No"
+    document.addEventListener("click", function (e) {
+      if (e.target.classList.contains("responder-comida")) {
 
-        fetch(`/marcar_notificacion/${id}`, { method: 'POST' })
-        .then(res => res.json())
-        .then(data => {
-          if(data.success) {
-            // Recargar notificaciones para actualizar nuevas e historial
-            cargarNotificaciones();
-            // Actualizar contador de campana
-            const badge = document.querySelector('#btnNotificaciones .badge');
-            if(badge) {
-              let count = parseInt(badge.textContent);
-              count--;
-              if(count > 0) badge.textContent = count;
-              else badge.remove();
+        const id = e.target.dataset.id;
+        const resp = e.target.dataset.resp;
+
+        fetch(`/dietas/responder_comida/${id}/${resp}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              // Quitar de nuevas
+              const card = document.getElementById(`noti-${id}`);
+              if (card) card.remove();
+
+              // Recargar historial
+              cargarNotificaciones();
+
+              // Reducir contador
+              const badge = document.querySelector('#btnNotificaciones .badge');
+              if (badge) {
+                let count = parseInt(badge.textContent) - 1;
+                if (count > 0) badge.textContent = count;
+                else badge.remove();
+              }
             }
-          } else {
-            alert('No se pudo marcar como leído.');
-          }
-        }).catch(err => console.error(err));
+          });
       }
     });
   </script>
+
 </body>
 </html>

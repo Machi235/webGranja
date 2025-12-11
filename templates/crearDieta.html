@@ -1,13 +1,20 @@
-{% extends "base.html" %}
-
-{% block titulo %}Crear Dieta{% endblock %}
-
-{% block contenido %}
-
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/verAnimal.css') }}">
-{% endblock %}
-
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- bootstrap css y js -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <!-- google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Delius&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+     <!-- Iconos de bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!-- estilo ccs -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/verAnimal.css') }}">
+    <title>Turnos</title>
+</head>
+  <body>
+     {% include "navAHome.html" %}
 <div class="container my-4">
     <div class="card shadow p-4" style="border-radius: 20px;">
         <h2 class="text-center mb-4">Crear Dieta</h2>
@@ -36,6 +43,23 @@
                 <input type="checkbox" id="definitivo" name="definitivo" value="1" class="form-check-input">
                 <label for="definitivo" class="form-check-label">¿Definitivo?</label>
             </div>
+            <!-- CUIDADOR ASIGNADO -->
+<div class="mb-3">
+    <label class="form-label"><strong>Cuidador asignado*</strong></label>
+    <select id="idCuidador" name="idCuidador" class="form-select" required>
+        <option value="">-- Seleccionar cuidador --</option>
+        {% for c in cuidadores %}
+            <option value="{{ c.idUsuario }}">{{ c.nombre }} {{ c.apellido }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<!-- HORA DE LA DIETA -->
+<div class="mb-3">
+    <label class="form-label"><strong>Hora de la dieta*</strong></label>
+    <input type="time" id="horaDieta" name="horaDieta" class="form-control" required>
+</div>
+
 
             <!-- Alimentos -->
             <h4 class="mt-4">Alimentos de la Dieta</h4>
@@ -47,10 +71,6 @@
         </form>
     </div>
 </div>
-
-{% endblock %}
-
-{% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
@@ -178,4 +198,6 @@ document.getElementById("formCrearDieta").addEventListener("submit", function(e)
     });
 });
 </script>
-{% endblock %}
+   
+  </body>
+</html>

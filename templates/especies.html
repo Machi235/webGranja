@@ -20,10 +20,6 @@
                     <input type="text" class="form-control" id="tipoEspecie" name="tipoEspecie" required>
                 </div>
                 <div class="mb-3">
-                    <label for="limite" class="form-label">Límite</label>
-                    <input type="number" class="form-control" id="limite" name="limite" required>
-                </div>
-                <div class="mb-3">
                     <label for="periodo" class="form-label">Periodo</label>
                     <input type="number" class="form-control" id="periodo" name="periodo" required>
                 </div>
@@ -38,7 +34,6 @@
             <tr>
                 <th>ID</th>
                 <th>Tipo de Especie</th>
-                <th>Límite</th>
                 <th>Periodo</th>
                 <th>Acciones</th>
             </tr>
@@ -48,7 +43,6 @@
             <tr>
                 <td>{{ especie.idEspecie }}</td>
                 <td>{{ especie.tipoEspecie }}</td>
-                <td>{{ especie.limite }}</td>
                 <td>{{ especie.periodo }}</td>
                 <td>
                     <a href="{{ url_for('especies_bp.editar_especie', idEspecie=especie.idEspecie) }}" class="btn btn-warning btn-sm">Editar</a>

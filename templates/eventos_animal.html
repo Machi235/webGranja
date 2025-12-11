@@ -9,7 +9,7 @@
 <body>
 <div class="container mt-4">
   <h2>🐾 Eventos clínicos del animal #{{ id_animal }}</h2>
-  <a href="{{ url_for('animal.detalle_animal', id_animal=id_animal) }}" class="btn btn-secondary mb-3">⬅ Volver a la ficha</a>
+  <a href="{{ url_for('animales.ver_animal', idAnimal=id_animal) }}" class="btn btn-secondary mb-3">⬅ Volver a la ficha</a>
 
   <div class="row">
     {% for e in eventos %}

@@ -1,8 +1,15 @@
-{% extends "base.html" %}
-
-{% block contenido %}
-
-<h2>Accesos a módulos por rol</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/accesos.css') }}">
+  <title>Document</title>
+</head>
+<body>
+  {% include "navAHome.html" %}
+  <div class="titulo"><h1>Accesos a módulos por rol</h2></div>
+  
 
 <div class="roles-modulos-table">
 
@@ -72,45 +79,5 @@
 
 </div>
 
-<style>
-.roles-modulos-table {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-.rol {
-  background-color: #f3f4f6;
-  border-radius: 10px;
-  padding: 1rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.rol h3 {
-  text-align: center;
-  color: #14532d;
-  margin-bottom: 0.8rem;
-}
-
-.rol ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.rol ul li {
-  background-color: #ffffff;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 6px;
-  border-left: 4px solid #16a34a;
-  transition: background 0.3s ease;
-}
-
-.rol ul li:hover {
-  background-color: #bbf7d0;
-}
-</style>
-
-{% endblock %}
+</body>
+</html>

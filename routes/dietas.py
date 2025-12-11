@@ -22,12 +22,15 @@ def crear_dieta():
             idEspecie = request.form.get("idEspecie")
             descripcion = request.form.get("descripcion")
             definitivo = 1 if request.form.get("definitivo") else 0
+            idCuidador = request.form.get("idCuidador")
+            horaDieta = request.form.get("horaDieta")
 
             # Insertar dieta
             cur.execute("""
-                INSERT INTO dieta (idEspecie, descripcion, definitivo)
-                VALUES (%s, %s, %s)
-            """, (idEspecie, descripcion, definitivo))
+                        INSERT INTO dieta (idEspecie, descripcion, definitivo, horaDieta, idCuidador)
+                        VALUES (%s, %s, %s, %s, %s)
+                    """, (idEspecie, descripcion, definitivo, horaDieta, idCuidador))
+
             idDieta = cur.lastrowid
 
             # Guardar alimentos
@@ -41,11 +44,16 @@ def crear_dieta():
                     VALUES (%s, %s, %s, %s)
                 """, (idDieta, idAlimentos[i], cantidades[i], frecuencias[i]))
 
+            # Obtener nombre de la especie para la notificación
+            cur.execute("SELECT tipoEspecie FROM especie WHERE idEspecie = %s", (idEspecie,))
+            especie_row = cur.fetchone()
+            nombre_especie = especie_row["tipoEspecie"] if especie_row else "Especie desconocida"
+
             # Crear notificaciones
             cur.execute("SELECT idUsuario FROM usuarios WHERE rol IN ('Admin','Cuidador') AND activo=1")
             destinatarios = cur.fetchall()
             titulo = "Nueva Dieta Registrada"
-            desc_notif = f"Se registró una dieta para la especie ID: {idEspecie}"
+            desc_notif = f"Se registró una dieta para la especie: {nombre_especie}"
             fecha_actual = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             for d in destinatarios:
                 cur.execute("""
@@ -67,10 +75,18 @@ def crear_dieta():
             cur.execute("SELECT * FROM notificacion WHERE idUsuario = %s", (session["idUsuario"],))
             notificaciones = cur.fetchall()
             notificaciones_no_leidas = sum(1 for n in notificaciones if not n.get("leida"))
+            
+        cur.execute("""
+                    SELECT idUsuario, nombre, apellido
+                    FROM usuarios
+                    WHERE rol = 'Cuidador' AND activo = 1
+                """)
+        cuidadores = cur.fetchall()
 
         return render_template(
             "crearDieta.html",
             especies=especies,
+            cuidadores=cuidadores,
             rol=rol,
             notificaciones=notificaciones,
             notificaciones_no_leidas=notificaciones_no_leidas
@@ -92,8 +108,30 @@ def ver_dietas():
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     try:
+        # --------------- PAGINACIÓN ---------------
+        pagina = request.args.get("page", default=1, type=int)
+        limite = 6  # dietas por página
+        offset = (pagina - 1) * limite
+
+        # --------------- FILTRO POR ESPECIE ---------------
         idEspecie_filtro = request.args.get("idEspecie", type=int)
 
+        # Primero contar cuántas dietas hay (para calcular total paginado)
+        sql_count = """
+            SELECT COUNT(*) AS total
+            FROM dieta d
+        """
+        params = ()
+
+        if idEspecie_filtro:
+            sql_count += " WHERE d.idEspecie = %s"
+            params = (idEspecie_filtro,)
+
+        cur.execute(sql_count, params)
+        total_registros = cur.fetchone()["total"]
+        total_paginas = (total_registros + limite - 1) // limite
+
+        # --------------- OBTENER DIETAS PAGINADAS ---------------
         sql = """
             SELECT
                 d.idDieta,
@@ -111,11 +149,14 @@ def ver_dietas():
             LEFT JOIN dietaalimento da ON d.idDieta = da.idDieta
             LEFT JOIN alimento al ON da.idAlimento = al.idAlimento
         """
-        params = ()
+
         if idEspecie_filtro:
             sql += " WHERE d.idEspecie = %s"
-            params = (idEspecie_filtro,)
-        sql += " ORDER BY d.idDieta DESC"
+            sql += " ORDER BY d.idDieta DESC LIMIT %s OFFSET %s"
+            params = (idEspecie_filtro, limite, offset)
+        else:
+            sql += " ORDER BY d.idDieta DESC LIMIT %s OFFSET %s"
+            params = (limite, offset)
 
         cur.execute(sql, params)
         rows = cur.fetchall()
@@ -164,7 +205,9 @@ def ver_dietas():
             rol=rol,
             notificaciones=notificaciones,
             notificaciones_no_leidas=notificaciones_no_leidas,
-            filtro_idEspecie=idEspecie_filtro
+            filtro_idEspecie=idEspecie_filtro,
+            pagina=pagina,
+            total_paginas=total_paginas
         )
 
     except Exception as e:
@@ -174,6 +217,7 @@ def ver_dietas():
     finally:
         cur.close()
         conn.close()
+
 
 # =========================================================
 #           ALIMENTOS POR ESPECIE
@@ -377,3 +421,126 @@ def generar_pdf(idDieta):
     response.headers["Content-Type"] = "application/pdf" #Dice que el contenido es un pdf
     response.headers["Content-Disposition"] = "inline; filename=animal.pdf" #Lo abre directamente
     return response 
+
+@dietas.route("/check_dietas")
+def check_dietas():
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    cur.execute("""
+        SELECT d.idDieta, d.descripcion, d.horaDieta, d.idCuidador, e.tipoEspecie
+        FROM dieta d
+        JOIN especie e ON d.idEspecie = e.idEspecie
+        WHERE d.horaDieta IS NOT NULL
+          AND d.notificada = 0
+          AND TIME(d.horaDieta) <= TIME(NOW())
+    """)
+    dietas = cur.fetchall()
+
+    for d in dietas:
+        cur.execute("""
+            INSERT INTO notificacion (idUsuario, titulo, descripcion, fecha, leida)
+            VALUES (%s, %s, %s, NOW(), 0)
+        """, (
+            d["idCuidador"],
+            "Confirmar alimentación",
+            f"Dieta {d['descripcion']} de especie {d['tipoEspecie']} — ¿El animal comió? |{d['idDieta']}",
+        ))
+
+        cur.execute("UPDATE dieta SET notificada = 1 WHERE idDieta=%s", (d["idDieta"],))
+
+    conn.commit()
+    return jsonify({"success": True})
+
+@dietas.route("/responder_comida/<int:idNoti>/<string:respuesta>")
+def responder_comida(idNoti, respuesta):
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    # 1. Obtener ID de la dieta desde la notificación original
+    cur.execute("SELECT descripcion FROM notificacion WHERE id=%s", (idNoti,))
+    row = cur.fetchone()
+
+    if not row:
+        return jsonify({"success": False, "error": "Notificación no encontrada"})
+
+    desc = row["descripcion"]
+
+    try:
+        idDieta = desc.split("|")[1]  # Extrae ID de dieta
+    except:
+        return jsonify({"success": False, "error": "Descripción inválida"})
+
+    # 2. Determinar si comió
+    comio = 1 if respuesta == "si" else 0
+
+    # 3. Obtener descripción REAL de la dieta
+    cur.execute("SELECT descripcion FROM dieta WHERE idDieta = %s", (idDieta,))
+    row_dieta = cur.fetchone()
+    descripcion_dieta = row_dieta["descripcion"] if row_dieta else "Dieta sin descripción"
+
+    # 4. Registrar historial
+    cur.execute("""
+        INSERT INTO dieta_historial (idDieta, fecha, hora, comio, idCuidador)
+        VALUES (%s, CURDATE(), CURTIME(), %s, %s)
+    """, (idDieta, comio, session["idUsuario"]))
+
+    # 5. SI NO comió → notificar a TODOS los admins pero con DESCRIPCIÓN
+    if not comio:
+
+        cur.execute("SELECT idUsuario FROM usuarios WHERE rol = 'Admin'")
+        admins = cur.fetchall()
+
+        for admin in admins:
+            cur.execute("""
+                INSERT INTO notificacion (idUsuario, titulo, descripcion, fecha, leida)
+                VALUES (%s, 'Alerta: Dieta no consumida',
+                        %s, NOW(), 0)
+            """, (admin["idUsuario"], f"El animal NO comió la dieta: {descripcion_dieta}"))
+
+    # 6. Marcar notificación como leída
+    cur.execute("UPDATE notificacion SET leida=1 WHERE id=%s", (idNoti,))
+
+    conn.commit()
+    return jsonify({"success": True})
+
+# ======================================================================
+#      CHECK AUTOMÁTICO (scheduler) - SE EJECUTA CADA 1 MINUTO
+# ======================================================================
+def check_dietas_background(app):
+    with app.app_context():
+        print("CHECK DIETAS EJECUTADO", datetime.now())
+
+        conn = get_connection()
+        cur = conn.cursor(dictionary=True)
+
+        # Buscar dietas cuya hora YA pasó y que NO han sido notificadas
+        cur.execute("""
+            SELECT d.idDieta, d.descripcion, d.horaDieta, d.idCuidador, e.tipoEspecie
+            FROM dieta d
+            JOIN especie e ON d.idEspecie = e.idEspecie
+            WHERE d.horaDieta IS NOT NULL
+              AND d.notificada = 0
+              AND TIME(d.horaDieta) <= TIME(NOW())
+        """)
+        dietas = cur.fetchall()
+
+        for d in dietas:
+            # Crear NOTIFICACIÓN
+            cur.execute("""
+                INSERT INTO notificacion (idUsuario, titulo, descripcion, fecha, leida)
+                VALUES (%s, %s, %s, NOW(), 0)
+            """, (
+                d["idCuidador"],
+                "Confirmar alimentación",
+                f"Dieta {d['descripcion']} de especie {d['tipoEspecie']} — ¿El animal comió? |{d['idDieta']}",
+            ))
+
+            # Marcar como ya notificada
+            cur.execute("""
+                UPDATE dieta SET notificada = 1 WHERE idDieta = %s
+            """, (d["idDieta"],))
+
+        conn.commit()
+        cur.close()
+        conn.close()

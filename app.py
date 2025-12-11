@@ -18,16 +18,32 @@ from routes.tareas import tareas
 from routes.alimento import alimento_bp
 from routes.especies import especies_bp
 from routes.access import access_bp
+from apscheduler.schedulers.background import BackgroundScheduler
+from routes.dietas import check_dietas_background
+from routes.recordatorio import revisar_recordatorios
 
+def iniciar_scheduler(app):
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=lambda: check_dietas_background(app),
+                      trigger="interval", seconds=60)  # Cada 1 min
+    scheduler.start()
 
+def iniciar_scheduler(app):
+    scheduler = BackgroundScheduler()
+    
+    scheduler.add_job(revisar_recordatorios, 'cron', hour=6, minute=0)
 
+    # O para pruebas: cada 1 minuto
+    # scheduler.add_job(revisar_recordatorios, 'interval', minutes=1)
+
+    scheduler.start()
 
 
 app = Flask(__name__)
 app.secret_key = "super_clave_ultra_secreta_123"  
 app.config["UPLOAD_FOLDER"] = "static/uploads/usuarios"
 
-
+iniciar_scheduler(app)
 # Registrar blueprints
 app.register_blueprint(auth)
 app.register_blueprint(animales)
@@ -58,6 +74,7 @@ app.config['MAIL_PASSWORD'] = 'wrakngwivfpvffmb'   # <-- usa una "contraseña de
 app.config['MAIL_DEFAULT_SENDER'] = ('Granja Machis', 'santyenglish333@gmail.com')
 
 mail = Mail(app)
+
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@ from db import get_connection
 
 access_bp = Blueprint("access_bp", __name__)
 
-@access_bp.route("/accesos")
+@access_bp.route("/accesos", strict_slashes=False)
 def accesos():
 
     conn = get_connection()

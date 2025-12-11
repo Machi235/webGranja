@@ -10,14 +10,14 @@
 <div class="container mt-4">
   <h2 class="text-primary mb-4">🐾 Detalle del reporte ({{ tipo | capitalize }})</h2>
 
-  <div class="card p-4 shadow-sm">
-    {% for campo, valor in reporte.items() %}
-      {% if campo not in ['activo'] %}
-        <p><strong>{{ campo }}:</strong> {{ valor or '—' }}</p>
-      {% endif %}
-    {% endfor %}
-  </div>
+<div class="card p-4 shadow-sm">
+ {% for campo, valor in reporte.items() %}
+  {% if not campo.lower().startswith('id') and campo != 'activo' %}
+    <p><strong>{{ campo }}:</strong> {{ valor or '—' }}</p>
+  {% endif %}
+{% endfor %}
 
+</div>
   <div class="mt-4">
     <!-- Botón Editar usando id_registro pasado desde Flask -->
     <a href="{{ url_for('reporte.editar_reporte', id_registro=id_registro) }}" 

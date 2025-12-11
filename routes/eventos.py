@@ -7,7 +7,7 @@ eventos_general = Blueprint('eventos_general', __name__)
 def ver_eventos(id_animal):
     conexion = get_connection()
     cursor = conexion.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM vista_reportes WHERE id_animal = %s ORDER BY fecha DESC", (id_animal,))
+    cursor.execute("SELECT * FROM vista_reportes WHERE idAnimal = %s ORDER BY fecha DESC", (id_animal,))
     eventos = cursor.fetchall()
     cursor.close()
     conexion.close()

@@ -40,14 +40,13 @@ def ver_especies():
 @especies_bp.route('/especies', methods=['POST'])
 def registrar_especie():
     tipo = request.form.get('tipoEspecie')
-    limite = request.form.get('limite')
     periodo = request.form.get('periodo')
 
-    if tipo and limite and periodo:
+    if tipo and periodo:
         conn = get_connection()
         cur = conn.cursor()
-        cur.execute("INSERT INTO especie (tipoEspecie, limite, periodo) VALUES (%s, %s, %s)", 
-                    (tipo, limite, periodo))
+        cur.execute("INSERT INTO especie (tipoEspecie, periodo) VALUES (%s, %s)", 
+                    (tipo, periodo))
         conn.commit()
         conn.close()
         flash('Especie agregada correctamente', 'success')
@@ -64,11 +63,10 @@ def editar_especie(idEspecie):
     
     if request.method == 'POST':
         tipo = request.form.get('tipoEspecie')
-        limite = request.form.get('limite')
         periodo = request.form.get('periodo')
 
-        cur.execute("UPDATE especie SET tipoEspecie=%s, limite=%s, periodo=%s WHERE idEspecie=%s",
-                    (tipo, limite, periodo, idEspecie))
+        cur.execute("UPDATE especie SET tipoEspecie=%s, periodo=%s WHERE idEspecie=%s",
+                    (tipo, periodo, idEspecie))
         conn.commit()
         conn.close()
         flash('Especie actualizada', 'success')
