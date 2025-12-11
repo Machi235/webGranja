@@ -1,0 +1,18 @@
+{
+  "builds": [
+    { "src": "app.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "app.py" }
+  ],
+  "cron": [
+    {
+      "path": "/cron/revisar_recordatorios",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/cron/check_dietas",
+      "schedule": "*/5 * * * *"
+    }
+  ]
+}
