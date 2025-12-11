@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from routes.auth import auth
 from routes.animales import animales
 from routes.main import main
@@ -19,6 +19,7 @@ from routes.alimento import alimento_bp
 from routes.especies import especies_bp
 from routes.access import access_bp
 from routes.recordatorio import revisar_recordatorios
+from datetime import datetime
 
 # ---------------------------------------------
 #   CONFIGURACIÓN BASE DE LA APLICACIÓN
@@ -29,14 +30,14 @@ app.secret_key = "super_clave_ultra_secreta_123"
 app.config["UPLOAD_FOLDER"] = "static/uploads/usuarios"
 
 # ---------------------------------------------
-#   CONFIGURACIÓN MAIL
+#   CONFIGURACIÓN DE EMAIL
 # ---------------------------------------------
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'santyenglish333@gmail.com'
-app.config['MAIL_PASSWORD'] = 'wrakngwivfpvffmb'  # contraseña de aplicación Google
+app.config['MAIL_PASSWORD'] = 'wrakngwivfpvffmb'  # contraseña de aplicación
 app.config['MAIL_DEFAULT_SENDER'] = ('Granja Machis', 'santyenglish333@gmail.com')
 
 mail = Mail(app)
@@ -65,24 +66,43 @@ app.register_blueprint(especies_bp)
 app.register_blueprint(access_bp)
 
 # ---------------------------------------------
-#   RUTAS PARA CRONJOBS (Vercel)
+#   ENDPOINTS PARA CRON EXTERNOS (cron-job.org)
 # ---------------------------------------------
 
-@app.route("/cron/revisar_recordatorios")
+@app.route("/cron/revisar_recordatorios", methods=["GET"])
 def cron_revisar_recordatorios():
-    """Ruta llamada por Vercel Cron para ejecutar los recordatorios."""
-    revisar_recordatorios()
-    return "Recordatorios ejecutados"
+    """Ejecuta la función revisar_recordatorios vía un cron externo."""
+    try:
+        revisar_recordatorios()
+        return jsonify({
+            "status": "ok",
+            "action": "revisar_recordatorios",
+            "timestamp": datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
-@app.route("/cron/check_dietas")
+
+@app.route("/cron/check_dietas", methods=["GET"])
 def cron_check_dietas():
-    """Ruta llamada por Vercel Cron para revisar dietas."""
-    check_dietas_background(app)
-    return "Dietas revisadas"
+    """Ejecuta revisión de dietas desde cron externo."""
+    try:
+        check_dietas_background(app)
+        return jsonify({
+            "status": "ok",
+            "action": "check_dietas",
+            "timestamp": datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
 # ---------------------------------------------
-#   IMPORTANTE: Vercel NO usa app.run()
+#   IMPORTANTE PARA VERCEL
 # ---------------------------------------------
-# NO INCLUIR app.run(debug=True)
-
-# El archivo termina aquí.
+# No incluir app.run() — Vercel usa un servidor interno.
