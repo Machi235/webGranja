@@ -43,7 +43,7 @@ _Una serie de ejemplos paso a paso que te dice lo que debes ejecutar para tener 
 
 _Crear y activar el entorno virtual_
 
-   Genere un entorno virtual para aislar las dependencias del proyecto y actívelo:
+   >Genere un entorno virtual para aislar las dependencias del proyecto y actívelo:
 
 ```
 python -m venv venv
@@ -52,93 +52,47 @@ venv\Scripts\activate
 
 Instalar las dependencias
 
-   Instale todas las librerías necesarias para el funcionamiento del aplicativo:
+   >Instale todas las librerías necesarias para el funcionamiento del aplicativo:
 
 ```
 pip install -r requirements.txt
 ```
 Ejecutar la aplicación
 
-Inicie el servidor ejecutando el archivo principal del proyecto:
+>Exporta las variables de la base de datos guardadad en railway
 
 ```
-python servidor.py
+$env:DB_HOST = "ballast.proxy.rlwy.net"
+>> $env:DB_USER = "root"
+>> $env:DB_PASSWORD = "fiAqNZGlOOxQgWsWVOdPdfJWftiRiMdZ"
+>> $env:DB_NAME = "railway"
+>> $env:DB_PORT = "33844"
 ```
-Da un ejemplo
-Y repite
-hasta finalizar
-Finaliza con un ejemplo de cómo obtener datos del sistema o como usarlos para una pequeña demo
+>Inicie el servidor ejecutando el archivo flask:
+```
+set FLASK_APP=app.py                   
+>> set FLASK_ENV=development
+>> flask run
+```
+### Despliegue 📦
+>Desplegado con:
+```
+Vercel - Frontend y Backend
+Railway - Base de datos MySql
+```
+Cada commit hecho y cada push hecho hace un nuevo deploy automático en vercel
 
-Ejecutando las pruebas ⚙️
-Explica como ejecutar las pruebas automatizadas para este sistema
+#### Construido con 🛠️
 
-Analice las pruebas end-to-end 🔩
-Explica que verifican estas pruebas y por qué
-
-Da un ejemplo
-Y las pruebas de estilo de codificación ⌨️
-Explica que verifican estas pruebas y por qué
-
-Da un ejemplo
-Despliegue 📦
-Agrega notas adicionales sobre como hacer deploy
-
-Construido con 🛠️
-Menciona las herramientas que utilizaste para crear tu proyecto
-
-Dropwizard - El framework web usado
-Maven - Manejador de dependencias
-ROME - Usado para generar RSS
-Contribuyendo 🖇️
-Por favor lee el CONTRIBUTING.md para detalles de nuestro código de conducta, y el proceso para enviarnos pull requests.
-
-Wiki 📖
-Puedes encontrar mucho más de cómo utilizar este proyecto en nuestra Wiki
-
-Versionado 📌
-Usamos SemVer para el versionado. Para todas las versiones disponibles, mira los tags en este repositorio.
-
-Autores ✒️
-Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios
-
-Andrés Villanueva - Trabajo Inicial - villanuevand
-Fulanito Detal - Documentación - fulanitodetal
-También puedes mirar la lista de todos los contribuyentes quíenes han participado en este proyecto.
-
-Licencia 📄
-Este proyecto está bajo la Licencia (Tu Licencia) - mira el archivo LICENSE.md para detalles
-
-Expresiones de Gratitud 🎁
-Comenta a otros sobre este proyecto 📢
-Invita una cerveza 🍺 o un café ☕ a alguien del equipo.
-Da las gracias públicamente 🤓.
-Dona con cripto a esta dirección: 0xf253fc233333078436d111175e5a76a649890000
-etc.
-
-
-
-
-
-
-
-
-
-#proyecto de gestion con flask
-
-Este proyecto está organizado en app.py, templates, static, db y docs.
-Actualmente, el backend usa Flask en Python y el frontend usa HTML, CSS, Bootstrap 5 y JavaScript.
-
-#Como ejecutar el proyecto
-1.**clonar repositorio**
-```bash git clone https://github.com/Machi235/webGranja.git
-cd webGranja ```
-2.**crear y activar el entorno virtual**
-```python -m venv venv
-venv\Scripts\activate```
-3.**instalar dependencias**
-```pip install -r requirements.txt```
-4.**ejecutar aplicacion**
-```python servidor.py```
-
-
+Flask - El framework web usado,
+Python - Lenguaje de programación Backend,
+Html, Css y bootstrap - Frontend
+>Dominio del proyecto:
+```
+https://web-granja.vercel.app/
+```
+#### Autores ✒️
+_Michell Ruiz_,
+_Laura Mayorga_,
+_Jimmy Cano_
 
